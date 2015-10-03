@@ -4,6 +4,8 @@ import javax.validation.constraints.Null;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
@@ -12,10 +14,12 @@ public class CharacterSheet {
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
     public Map<String, Integer> abilities;
+	public Map<Integer, Integer> skills;
 	public Vector<Integer> featID;
 
     public CharacterSheet() {
 	    this.resetAbilities();
+	    this.resetSkills();
 	    this.featID = new Vector<>();
 	    this.classID = new HashMap<>();
 	    this.raceID = null;
@@ -63,6 +67,18 @@ public class CharacterSheet {
 		this.featID.add(id);
 	}
 
+	/*
+	 * Utilities for skill manipulation
+	 */
+
+	public void resetSkills() {
+		this.skills = new HashMap<>();
+		IntStream skillList = IntStream.range(1, 10); // TODO: Make these items load from database
+		skillList.forEach(skill -> {
+			this.skills.put(skill, 0);
+		});
+	}
+
     public static void main(String[] args) {
         CharacterSheet c = new CharacterSheet();
 	    c.incrementAbility("STR");
@@ -74,6 +90,7 @@ public class CharacterSheet {
 	    c.levelUp(2);
 	    c.levelUp(2);
 	    System.out.println(c.classID);
+	    System.out.println(c.skills);
     }
 }
 
