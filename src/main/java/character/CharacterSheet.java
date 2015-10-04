@@ -11,12 +11,41 @@ import java.util.stream.IntStream;
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
+	class Skill {
+		String name;
+		String baseSkill;
+		int id;
+		boolean trainedOnly;
+		boolean armorPenalty;
+
+		int ranks;
+
+		public Skill(int id) {
+			this.id = id;
+			// TODO: This should load the correct values from database
+			this.name = "Appraise";
+			this.baseSkill = "INT";
+			this.trainedOnly = false;
+			this.armorPenalty = false;
+
+			this.ranks = 0;
+		}
+
+		@Override
+		public String toString() {
+			return "Skill{" +
+					       "name='" + name + '\'' +
+					       ", ranks=" + ranks +
+					       '}';
+		}
+	}
+
 	public final String[] abilities = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
 
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
     public Map<String, Integer> abilityScores;
-	public Map<Integer, Integer> skills;
+	public Vector<Skill> skills;
 	public Vector<Integer> featID;
 
     public CharacterSheet() {
@@ -71,10 +100,10 @@ public class CharacterSheet {
 	 */
 
 	public void resetSkills() {
-		this.skills = new HashMap<>();
+		this.skills = new Vector<>();
 		IntStream skillList = IntStream.range(1, 10); // TODO: Make these items load from database
-		skillList.forEach(skill -> {
-			this.skills.put(skill, 0);
+		skillList.forEach(skillID -> {
+			this.skills.add(new Skill(skillID));
 		});
 	}
 
