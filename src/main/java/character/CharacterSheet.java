@@ -11,9 +11,11 @@ import java.util.stream.IntStream;
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
+	public final String[] abilities = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
-    public Map<String, Integer> abilities;
+    public Map<String, Integer> abilityScores;
 	public Map<Integer, Integer> skills;
 	public Vector<Integer> featID;
 
@@ -35,27 +37,24 @@ public class CharacterSheet {
 	 */
 
 	public void resetAbilities() {
-	    this.abilities = new HashMap<>();
-        this.abilities.put("STR", 10);
-        this.abilities.put("DEX", 10);
-        this.abilities.put("CON", 10);
-        this.abilities.put("INT", 10);
-        this.abilities.put("WIS", 10);
-        this.abilities.put("CHA", 10);
+	    this.abilityScores = new HashMap<>();
+		for (String name : abilities) {
+			this.abilityScores.put(name, 10);
+		}
 	}
 
     public void setAbility(String abilityName, int value) {
-        this.abilities.replace(abilityName, value);
+        this.abilityScores.replace(abilityName, value);
     }
 
     public void incrementAbility(String abilityName) {
 	    // Increments ability abilityName by 1
-        this.abilities.computeIfPresent(abilityName, (x, oldValue) -> oldValue + 1);
+        this.abilityScores.computeIfPresent(abilityName, (x, oldValue) -> oldValue + 1);
     }
 
 	public void decrementAbility(String abilityName) {
 		// Decrements ability abilityName by 1
-		this.abilities.computeIfPresent(abilityName, (x, oldValue) -> oldValue - 1);
+		this.abilityScores.computeIfPresent(abilityName, (x, oldValue) -> oldValue - 1);
 	}
 
 	/*
@@ -84,7 +83,7 @@ public class CharacterSheet {
 	    c.incrementAbility("STR");
 	    c.setAbility("INT", 14);
 	    c.acquireFeat(2);
-        System.out.println(c.abilities);
+        System.out.println(c.abilityScores);
 	    System.out.println(c.featID);
 	    c.levelUp(1);
 	    c.levelUp(2);
