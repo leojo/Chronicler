@@ -1,16 +1,18 @@
 package character;
 
-import javax.validation.constraints.Null;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
+	// TODO: Make this enum
+	public final String[] abilities = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+	public enum SavingThrowID {FORT, REF, WILL}
+
 	class Skill {
 		String name;
 		String baseSkill;
@@ -18,7 +20,8 @@ public class CharacterSheet {
 		boolean trainedOnly;
 		boolean armorPenalty;
 
-		int ranks;
+		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
+		int totalValue;
 
 		public Skill(int id) {
 			this.id = id;
@@ -28,37 +31,108 @@ public class CharacterSheet {
 			this.trainedOnly = false;
 			this.armorPenalty = false;
 
-			this.ranks = 0;
+			this.totalValue = 0;
+			this.bonuses = new HashMap<>();
+			this.bonuses.put("Ranks", 0); // TODO: Make this more general, probably with a final list of sources
+		}
+
+		public void update(CharacterSheet character) {
+			this.totalValue = 0;
+			for (int v : this.bonuses.values()) {
+				this.totalValue += v;
+			}
 		}
 
 		@Override
 		public String toString() {
 			return "Skill{" +
 					       "name='" + name + '\'' +
-					       ", ranks=" + ranks +
 					       '}';
 		}
 	}
 
-	public final String[] abilities = {"STR", "DEX", "CON", "INT", "WIS", "CHA"};
+	class SavingThrow {
+		String name;
+		String baseSkill;
+		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
+		int totalValue;
+
+		public SavingThrow(SavingThrowID id) {
+			// id is the enum value
+			switch (id) {
+				case FORT:
+					this.name = "Fortitude";
+					this.baseSkill = "CON";
+					break;
+				case REF:
+					this.name = "Reflex";
+					this.baseSkill = "DEX";
+					break;
+				case WILL:
+					this.name = "Will";
+					this.baseSkill = "WIS";
+					break;
+			}
+
+			this.bonuses = new HashMap<>();
+			this.bonuses.put("Base Save", 0);
+			this.bonuses.put("Ability Modifier", 0);
+		}
+
+		public void update(CharacterSheet character) {
+			this.totalValue = 0;
+			for (int v : this.bonuses.values()) {
+				this.totalValue += v;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "SavingThrow{" +
+					       "totalValue=" + totalValue +
+					       ", name='" + name + '\'' +
+					       ", bonuses=" + bonuses +
+					       '}';
+		}
+	}
+
 
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
     public Map<String, Integer> abilityScores;
 	public Vector<Skill> skills;
 	public Vector<Integer> featID;
+	public Vector<SavingThrow> savingThrows;
 
     public CharacterSheet() {
 	    this.resetAbilities();
 	    this.resetSkills();
-	    this.featID = new Vector<>();
 	    this.classID = new HashMap<>();
+	    this.featID = new Vector<>();
+	    this.savingThrows = new Vector<>();
 	    this.raceID = null;
+	    this.update();
     }
 
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
 		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1);
+	}
+
+	/*
+	 * Functions to update calculated fields
+	 */
+
+	public void update() {
+		this.calculateSavingThrowID();
+	}
+
+	public void calculateSavingThrowID() {
+		// getBaseSave();
+	}
+
+	public void calculateSavingThrow() {
+
 	}
 
 	/*
