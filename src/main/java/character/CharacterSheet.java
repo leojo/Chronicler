@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
  */
 public class CharacterSheet {
 	// TODO: Make this enum
+	// Maybe these should be global
 	public enum AbilityID {STR, DEX, CON, INT, WIS, CHA}
 	public enum SavingThrowID {FORT, REF, WILL}
 
@@ -164,6 +165,12 @@ public class CharacterSheet {
 	public Map<Integer, Skill> skills;
 	public Vector<Integer> featID; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
+	public String name;
+	public String gender;
+	public int age; // Should we incorporate aging rules?
+	public String height; // Maybe do something more with this?
+	public String bio;
+	public String appearance;
 
     public CharacterSheet() {
 	    this.resetAbilities();
@@ -172,6 +179,14 @@ public class CharacterSheet {
 	    this.featID = new Vector<>();
 	    this.resetSavingThrows();
 	    this.raceID = null;
+
+	    this.name = "";
+	    this.gender = "";
+	    this.age = 0;
+	    this.height = "";
+	    this.bio = "";
+	    this.appearance = "";
+
 	    this.update();
     }
 
