@@ -158,6 +158,7 @@ public class CharacterSheet {
 		}
 	}
 
+	public int level;
 
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
@@ -165,14 +166,26 @@ public class CharacterSheet {
 	public Map<Integer, Skill> skills;
 	public Vector<Integer> featID; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
+
+	// Combat stats
+	public Map<Integer, Integer> hitDice;
+	public int maxHP;
+	public int currentHP;
+	public int tempHP;
+
+	public Vector<Integer> BAB;
+
+	// Fluff stuff
 	public String name;
 	public String gender;
-	public int age; // Should we incorporate aging rules?
+	public Integer age; // Should we incorporate aging rules?
 	public String height; // Maybe do something more with this?
 	public String bio;
 	public String appearance;
 
     public CharacterSheet() {
+	    this.level = 1;
+
 	    this.resetAbilities();
 	    this.resetSkills();
 	    this.classID = new HashMap<>();
@@ -180,9 +193,16 @@ public class CharacterSheet {
 	    this.resetSavingThrows();
 	    this.raceID = null;
 
+	    this.hitDice = new HashMap<>();
+	    this.maxHP = 0;
+	    this.currentHP = 0;
+	    this.tempHP = 0;
+
+	    this.BAB = new Vector<>();
+
 	    this.name = "";
 	    this.gender = "";
-	    this.age = 0;
+	    this.age = null;
 	    this.height = "";
 	    this.bio = "";
 	    this.appearance = "";
