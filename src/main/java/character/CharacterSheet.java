@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
-	// TODO: Make this enum
 	// Maybe these should be global
 	public enum AbilityID {STR, DEX, CON, INT, WIS, CHA}
 	public enum SavingThrowID {FORT, REF, WILL}
@@ -167,6 +166,8 @@ public class CharacterSheet {
 	public Vector<Integer> featID; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 
+	public Vector<String> inventory; // TODO: Change this to use an Item class
+
 	// Combat stats
 	public Map<Integer, Integer> hitDice;
 	public int maxHP;
@@ -192,6 +193,8 @@ public class CharacterSheet {
 	    this.featID = new Vector<>();
 	    this.resetSavingThrows();
 	    this.raceID = null;
+
+	    this.inventory = new Vector<>();
 
 	    this.hitDice = new HashMap<>();
 	    this.maxHP = 0;
