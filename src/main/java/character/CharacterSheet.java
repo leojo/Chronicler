@@ -113,6 +113,7 @@ public class CharacterSheet {
 
 	class SavingThrow {
 		String name;
+		String shortName;
 		AbilityID baseSkill;
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
@@ -122,14 +123,17 @@ public class CharacterSheet {
 			switch (id) {
 				case FORT:
 					this.name = "Fortitude";
+					this.shortName = "FORT";
 					this.baseSkill = AbilityID.CON;
 					break;
 				case REF:
 					this.name = "Reflex";
+					this.shortName = "REF";
 					this.baseSkill = AbilityID.DEX;
 					break;
 				case WILL:
 					this.name = "Will";
+					this.shortName = "WILL";
 					this.baseSkill = AbilityID.WIS;
 					break;
 			}
