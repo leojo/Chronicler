@@ -1,17 +1,14 @@
 package dbLookup;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class Lookup {
 
-    private final ResultSet content;
     private Connection c;
 
-    public Lookup(String searchString, String dbUrl) {
+    public Lookup(String dbUrl) {
         this.c = connect(dbUrl);
-        ResultSet sr = skill(searchString);
-        //if(sr == null) sr = "Sorry, your search didn't match any skill";
-        this.content = sr;
     }
 
     private Connection connect(String dbUrl){
@@ -35,23 +32,23 @@ public class Lookup {
         System.out.println("Searching for class: "+className+"\n Using SQL query :"+query);
         ResultSet rs = search(query);
         if(rs != null){
-            String rs_string = rs2string(rs);
-            return rs_string;
+            return rs2string(rs);
         }
         return null;
     }
 
     public ResultSet skill(String searchTerm){
         // TODO: Needs more work, this is just a prototype!
-        String query_template = "SELECT * FROM dnd_skill AS a JOIN dnd_skillvariant AS b ON a.id = b.skill_id WHERE  " +
-                "\"name\" LIKE '%1$s' OR " +
-                "\"description\" LIKE '%1$s' OR " +
-                "\"check\" LIKE '%1$s' OR " +
-                "\"special\" LIKE '%1$s' OR " +
-                "\"synergy\" LIKE '%1$s';";
-        String query = String.format(query_template,"%"+searchTerm+"%");
-        System.out.println("query = " + query);
-        ResultSet rs = search(query);
+        // This is the order in which we want to search through the fields of the skills
+        String[] field = {"name","description","check","action","special","synergy","untrained"};
+        String query_template = "SELECT * FROM dnd_skill AS a JOIN dnd_skillvariant AS b ON a.id = b.skill_id WHERE \"%2$s\" LIKE '%1$s';";
+        ResultSet rs = null;
+        int i = 0;
+        while(rs == null && i<field.length) {
+            String query = String.format(query_template, "%"+searchTerm+"%", field[i]);
+            rs = search(query);
+            i++;
+        }
         return rs;
     }
 
@@ -60,6 +57,8 @@ public class Lookup {
         try{
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+            if(!rs.next()) return null;
+            rs = stmt.executeQuery(query);
             return rs;
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
@@ -81,12 +80,10 @@ public class Lookup {
                 for (int i = 1; i <= columnsNumber; i++) {
                     String columnValue = rs.getString(i);
                     if(columnValue == null) columnValue = "          ";
-                    System.out.println("columnValue = " + columnValue);
                     if(columnValue.length() > 10) columnValue = columnValue.substring(0,7)+"...";
                     else{
                         while(columnValue.length() < 10) columnValue+=" ";
                     }
-                    System.out.println("columnValue = " + columnValue.replace(' ','_'));
                     if (i > 1) columnValue = ",  "+columnValue;
                     retString+=columnValue;
                 }
@@ -96,11 +93,6 @@ public class Lookup {
             System.err.println("Error in printResultSet: "+e.getClass().getName() + ": " + e.getMessage());
         }
         return retString;
-    }
-
-
-    public ResultSet getContent() {
-        return content;
     }
 
 //Working on creating our own "result-set" type object
@@ -127,4 +119,26 @@ public class Lookup {
 //            public final String name;
 //        }
 //    }
+
+    public static void main(String[] args) {
+        Lookup lu = new Lookup("data/dnd.sqlite");
+        Scanner scan = new Scanner(System.in);
+        Boolean b = true;
+        while(b){
+            System.out.println("\n\nSearch for skill: ");
+            String searchString = scan.nextLine();
+            if(searchString.equalsIgnoreCase("exit")) b = false;
+            else {
+                ResultSet sr = lu.skill(searchString);
+                try {
+                    System.out.println("\nFound skill(s): ");
+                    while (sr.next()) {
+                        System.out.println(sr.getString("name"));
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error in main: " + e.getMessage());
+                }
+            }
+        }
+    }
 }
