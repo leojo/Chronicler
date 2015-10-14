@@ -10,7 +10,8 @@ public class SearchController {
     private static final String template = "Searching for a %s";
 
     @RequestMapping("/search")
-    public SearchResult greeting(@RequestParam(value="s", defaultValue="") String searchString) {
-        return new SearchResult(searchString);
+    public String greeting(@RequestParam(value="s", defaultValue="") String searchString) {
+        Lookup sr = new Lookup(searchString, "data/dnd.sqlite");
+        return sr.getContent();
     }
 }
