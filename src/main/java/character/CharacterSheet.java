@@ -1,22 +1,28 @@
 package character;
 
+import dbLookup.Lookup;
+import globals.AbilityID;
+import globals.SavingThrowID;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import java.util.stream.IntStream;
+import java.util.function.IntSupplier;
+
+import static globals.AbilityID.*;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
-	// Maybe these should be global
-	public enum AbilityID {STR, DEX, CON, INT, WIS, CHA}
-	public enum SavingThrowID {FORT, REF, WILL}
 
 	class AbilityScore {
 		String name;
 		String shortName;
 
+		int baseValue;
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
 		int modifier;
@@ -75,7 +81,7 @@ public class CharacterSheet {
 
 	class Skill {
 		String name;
-		AbilityID baseSkill;
+		AbilityScore baseSkill;
 		int id;
 		boolean trainedOnly;
 		boolean armorPenalty;
@@ -83,17 +89,18 @@ public class CharacterSheet {
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
 
-		public Skill(int id) {
-			this.id = id;
-			// TODO: This should load the correct values from database
-			this.name = "Appraise";
-			this.baseSkill = AbilityID.INT;
-			this.trainedOnly = false;
-			this.armorPenalty = false;
+		public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
+			this.id = skillInfo.getInt("id");
+			System.out.println("Created skill "+ skillInfo.getString("name") +" with id "+id);
+			this.name = skillInfo.getString("name");
+			this.baseSkill = character.abilityScores.get(fromString(skillInfo.getString("base_skill")));
+			this.trainedOnly = skillInfo.getBoolean("trained_only");
+			this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
 
 			this.totalValue = 0;
 			this.bonuses = new HashMap<>();
 			this.bonuses.put("Ranks", 0); // TODO: Make this more general, probably with a final list of sources
+			if (this.baseSkill != null) this.bonuses.put("Ability Mod", this.baseSkill.totalValue);
 		}
 
 		public void update(CharacterSheet character) {
@@ -105,8 +112,10 @@ public class CharacterSheet {
 
 		@Override
 		public String toString() {
-			return "Ability{" +
-					       "name='" + name + '\'' +
+			return "Skill{" +
+					       "totalValue=" + totalValue +
+					       ", name='" + name + '\'' +
+					       ", baseSkill=" + baseSkill +
 					       '}';
 		}
 	}
@@ -124,17 +133,17 @@ public class CharacterSheet {
 				case FORT:
 					this.name = "Fortitude";
 					this.shortName = "FORT";
-					this.baseSkill = AbilityID.CON;
+					this.baseSkill = CON;
 					break;
 				case REF:
 					this.name = "Reflex";
 					this.shortName = "REF";
-					this.baseSkill = AbilityID.DEX;
+					this.baseSkill = DEX;
 					break;
 				case WILL:
 					this.name = "Will";
 					this.shortName = "WILL";
-					this.baseSkill = AbilityID.WIS;
+					this.baseSkill = WIS;
 					break;
 			}
 
@@ -172,6 +181,8 @@ public class CharacterSheet {
 
 	public Vector<String> inventory; // TODO: Change this to use an Item class
 
+	public Lookup find;
+
 	// Combat stats
 	public Map<Integer, Integer> hitDice;
 	public int maxHP;
@@ -189,10 +200,16 @@ public class CharacterSheet {
 	public String appearance;
 
     public CharacterSheet() {
+	    this.find = new Lookup("data/dnd.sqlite");
+
 	    this.level = 1;
 
 	    this.resetAbilities();
-	    this.resetSkills();
+	    try {
+		    this.resetSkills();
+	    } catch (SQLException e) {
+		    e.printStackTrace();
+	    }
 	    this.classID = new HashMap<>();
 	    this.featID = new Vector<>();
 	    this.resetSavingThrows();
@@ -229,6 +246,7 @@ public class CharacterSheet {
 	public void update() {
 		this.abilityScores.values().stream().forEach(v -> v.update(this));
 		this.savingThrows.values().stream().forEach(v -> v.update(this));
+		this.skills.values().stream().forEach(v -> v.update(this));
 	}
 
 	/*
@@ -237,7 +255,7 @@ public class CharacterSheet {
 
 	public void resetAbilities() {
 	    this.abilityScores = new HashMap<>();
-		for (AbilityID id : AbilityID.values()) {
+		for (AbilityID id : values()) {
 			this.abilityScores.put(id, new AbilityScore(id));
 		}
 	}
@@ -266,25 +284,29 @@ public class CharacterSheet {
 	 * Skills
 	 */
 
-	public void resetSkills() {
+	public void resetSkills() throws SQLException {
 		this.skills = new HashMap<>();
-		IntStream skillList = IntStream.range(1, 10); // TODO: Make these items load from database
-		skillList.forEach(skillID -> {
-			this.skills.put(skillID, new Skill(skillID));
-		});
+		ResultSet rs = this.find.skill("*");
+
+		while (rs.next()) {
+			int skillID = rs.getInt("id");
+			this.skills.put(skillID, new Skill(this, rs));
+		}
 	}
 
     public static void main(String[] args) {
         CharacterSheet c = new CharacterSheet();
 	    c.acquireFeat(2);
-        System.out.println(c.abilityScores.get(AbilityID.STR));
+	    c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
+        System.out.println(c.abilityScores.get(STR));
 	    System.out.println(c.savingThrows.get(SavingThrowID.FORT));
 	    System.out.println(c.featID);
 	    c.levelUp(1);
 	    c.levelUp(2);
 	    c.levelUp(2);
 	    System.out.println(c.classID);
-	    System.out.println(c.skills);
+	    c.update();
+	    c.skills.forEach((k, v) -> System.out.println(v));
     }
 }
 
