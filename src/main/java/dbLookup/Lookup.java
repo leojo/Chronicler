@@ -45,7 +45,7 @@ public class Lookup {
         ResultSet rs = null;
         int i = 0;
         while(rs == null && i<field.length) {
-            String query = String.format(query_template, "%"+searchTerm.replace('*','%')+"%", field[i]);
+            String query = String.format(query_template, searchTerm.replace('*','%'), field[i]);
             rs = search(query);
             i++;
         }
@@ -121,7 +121,7 @@ public class Lookup {
 //    }
 
     public static void main(String[] args) {
-        Lookup lu = new Lookup("data/dnd.sqlite");
+        Lookup find = new Lookup("data/dnd.sqlite");
         Scanner scan = new Scanner(System.in);
         Boolean b = true;
         while(b){
@@ -129,7 +129,7 @@ public class Lookup {
             String searchString = scan.nextLine();
             if(searchString.equalsIgnoreCase("exit")) b = false;
             else {
-                ResultSet sr = lu.skill(searchString);
+                ResultSet sr = find.skill(searchString);
                 try {
                     System.out.println("\nFound skill(s): ");
                     while (sr.next()) {
