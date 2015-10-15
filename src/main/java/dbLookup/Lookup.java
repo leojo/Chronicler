@@ -45,7 +45,7 @@ public class Lookup {
         ResultSet rs = null;
         int i = 0;
         while(rs == null && i<field.length) {
-            String query = String.format(query_template, "%"+searchTerm+"%", field[i]);
+            String query = String.format(query_template, "%"+searchTerm.replace('*','%')+"%", field[i]);
             rs = search(query);
             i++;
         }
@@ -57,9 +57,9 @@ public class Lookup {
         try{
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(!rs.next()) return null;
-            rs = stmt.executeQuery(query);
-            return rs;
+            if(!rs.next()) return null; // This advances the cursor forward
+            rs = stmt.executeQuery(query); // So we must redo the query in order not to miss the first line
+            return rs; // (There is a function that should do this, but it's not supported for sqlite :[ )
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
