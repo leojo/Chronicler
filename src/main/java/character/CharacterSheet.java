@@ -181,7 +181,7 @@ public class CharacterSheet {
 	public Integer raceID;
     public Map<AbilityID, AbilityScore> abilityScores;
 	public Map<Integer, Skill> skills;
-	public Vector<Integer> featID; // TODO: Refactor to map for consistency
+	public Map<Integer, ResultSet> feats; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 
 	public Vector<String> inventory; // TODO: Change this to use an Item class
@@ -216,7 +216,7 @@ public class CharacterSheet {
 		    e.printStackTrace();
 	    }
 	    this.classID = new HashMap<>();
-	    this.featID = new Vector<>();
+	    this.feats = new HashMap<>();
 	    this.resetSavingThrows();
 	    this.raceID = null;
 
@@ -280,9 +280,13 @@ public class CharacterSheet {
 	 * Feats
 	 */
 
-	public void acquireFeat(int id) {
+	public void acquireFeat(ResultSet feat) {
 		// TODO: check for prerequisites
-		this.featID.add(id);
+		try {
+			this.feats.put(feat.getInt("id"), feat);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -301,11 +305,12 @@ public class CharacterSheet {
 
     public static void main(String[] args) {
         CharacterSheet c = new CharacterSheet();
-	    c.acquireFeat(2);
 	    c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
         System.out.println(c.abilityScores.get(STR));
 	    System.out.println(c.savingThrows.get(SavingThrowID.FORT));
-	    System.out.println(c.featID);
+	    ResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
+	    c.acquireFeat(ImprovedInitiative);
+	    System.out.println(c.feats.keySet());
 	    c.levelUp(1);
 	    c.levelUp(2);
 	    c.levelUp(2);
