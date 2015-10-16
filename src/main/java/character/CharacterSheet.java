@@ -185,6 +185,7 @@ public class CharacterSheet {
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 
 	public Vector<String> inventory; // TODO: Change this to use an Item class
+	public Vector<String> equipped;
 
 	public Lookup find;
 
@@ -302,6 +303,34 @@ public class CharacterSheet {
 			this.skills.put(skillID, new Skill(this, rs));
 		}
 	}
+
+	/*
+	 * Inventory
+	 */
+
+	// NOTE: THIS IS ALL SUBJECT TO CHANGE AS SOON AS I FIND A BETTER WAY TO DO THIS
+	// TODO: Find a better way to do this
+
+	public void pickupItem(ResultSet item) {
+		try {
+			this.inventory.add(item.getString("name"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void pickupItem(String itemName) {
+		this.inventory.add(itemName);
+	}
+
+	public void dropItem(String itemName) {
+		this.inventory.remove(itemName);
+	}
+
+	public void equipItem(String itemName) {
+		this.equipped.add(itemName);
+	}
+
 
     public static void main(String[] args) {
         CharacterSheet c = new CharacterSheet();
