@@ -85,25 +85,28 @@ public class CharacterSheet {
 		int id;
 		boolean trainedOnly;
 		boolean armorPenalty;
+		int ranks;
 
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
 
 		public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
 			this.id = skillInfo.getInt("id");
-			System.out.println("Created skill "+ skillInfo.getString("name") +" with id "+id);
 			this.name = skillInfo.getString("name");
 			this.baseSkill = character.abilityScores.get(fromString(skillInfo.getString("base_skill")));
 			this.trainedOnly = skillInfo.getBoolean("trained_only");
 			this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
 
+			this.ranks = 0;
 			this.totalValue = 0;
 			this.bonuses = new HashMap<>();
-			this.bonuses.put("Ranks", 0); // TODO: Make this more general, probably with a final list of sources
-			if (this.baseSkill != null) this.bonuses.put("Ability Mod", this.baseSkill.totalValue);
+			this.update(character);
 		}
 
 		public void update(CharacterSheet character) {
+			this.bonuses.put("Ranks", this.ranks);
+			if (this.baseSkill != null) this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
+
 			this.totalValue = 0;
 			for (int v : this.bonuses.values()) {
 				this.totalValue += v;
@@ -123,37 +126,39 @@ public class CharacterSheet {
 	class SavingThrow {
 		String name;
 		String shortName;
-		AbilityID baseSkill;
+		AbilityScore baseSkill;
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
 
-		public SavingThrow(SavingThrowID id) {
+		public SavingThrow(CharacterSheet character, SavingThrowID id) {
 			// id is the enum value
 			switch (id) {
 				case FORT:
 					this.name = "Fortitude";
 					this.shortName = "FORT";
-					this.baseSkill = CON;
+					this.baseSkill = character.abilityScores.get(AbilityID.CON);
 					break;
 				case REF:
 					this.name = "Reflex";
 					this.shortName = "REF";
-					this.baseSkill = DEX;
+					this.baseSkill = character.abilityScores.get(AbilityID.DEX);
 					break;
 				case WILL:
 					this.name = "Will";
 					this.shortName = "WILL";
-					this.baseSkill = WIS;
+					this.baseSkill = character.abilityScores.get(AbilityID.WIS);
 					break;
 			}
 
 			this.bonuses = new HashMap<>();
-			// Probably take all this out and do this in the update function
-			this.bonuses.put("Base Save", 0);
-			this.bonuses.put("Ability Modifier", 0);
+			this.update(character);
 		}
 
 		public void update(CharacterSheet character) {
+			// TODO: Load base save from class template
+			this.bonuses.put("Base Save", 0);
+			this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
+
 			this.totalValue = 0;
 			for (int v : this.bonuses.values()) {
 				this.totalValue += v;
@@ -267,7 +272,7 @@ public class CharacterSheet {
 	public void resetSavingThrows() {
 		this.savingThrows = new HashMap<>();
 		for (SavingThrowID id: SavingThrowID.values()) {
-			this.savingThrows.put(id, new SavingThrow(id));
+			this.savingThrows.put(id, new SavingThrow(this, id));
 		}
 	}
 
