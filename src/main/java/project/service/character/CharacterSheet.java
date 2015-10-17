@@ -1,8 +1,8 @@
-package character;
+package service.character;
 
-import dbLookup.Lookup;
-import globals.AbilityID;
-import globals.SavingThrowID;
+import service.dbLookup.Lookup;
+import service.globals.AbilityID;
+import service.globals.SavingThrowID;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.function.IntSupplier;
 
-import static globals.AbilityID.*;
+import static service.globals.AbilityID.*;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.

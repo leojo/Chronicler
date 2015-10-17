@@ -1,4 +1,4 @@
-package dbLookup;
+package service.dbLookup;
 
 import java.sql.*;
 import java.util.Scanner;
