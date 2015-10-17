@@ -1,6 +1,7 @@
-# Build files #
-###############
+# entire directories#
+#####################
 build/
+.gradle/
 
 
 # IDE specific files #
