@@ -17,18 +17,19 @@ public class Lookup {
             System.out.println("Establishing connection to "+dbUrl+"...");
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:"+dbUrl);
+            System.out.println("Connection established!");
             c.setAutoCommit(false);
         } catch ( Exception e ) {
             System.err.println("Error in connect: "+e.getClass().getName() + ": " + e.getMessage() );
         }
-        System.out.println("Connection established!");
         return c;
     }
 
     // TODO: These are not final!
     public ResultSet playerClass(String searchTerm){
         String[] field = {"name","short_description","class_features"}; // Priority order of search fields
-        String query_template = "SELECT * FROM dnd_characterclass AS a JOIN dnd_characterclassvariant AS b ON a.id=b.character_class_id " +
+        String query_template = "SELECT * FROM dnd_characterclass AS a LEFT JOIN dnd_characterclassvariant AS b ON" +
+                " a.id=b.character_class_id " +
                 "WHERE advancement<>\"\" AND \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
@@ -36,15 +37,24 @@ public class Lookup {
     public ResultSet skill(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
         String[] field = {"name","description","check","action","special","synergy","untrained"};
-        String query_template = "SELECT * FROM dnd_skill AS a JOIN dnd_skillvariant AS b ON a.id = b.skill_id WHERE \"%2$s\" LIKE '%1$s';";
+        String query_template = "SELECT * FROM dnd_skill AS a LEFT JOIN dnd_skillvariant AS b ON a.id =" +
+                " b.skill_id WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
     public ResultSet spell(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
         String[] field = {"name","description"};
-        String query_template = "SELECT * FROM dnd_spell WHERE \"%2$s\" LIKE '%1$s';";
+        String query_template = "SELECT * FROM spells WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
+    }
+
+    public ResultSet spellList(int classId, int level){
+        // This is the order in which we want to search through the fields of the skills
+        String[] field = {"name","description"};
+        String query= "SELECT * FROM dnd_spellclasslevel WHERE" +
+                " character_class_id = "+classId+" AND \"level\" = "+level+";";
+        return searchRaw(query);
     }
 
     public ResultSet feat(String searchTerm){
@@ -61,9 +71,10 @@ public class Lookup {
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    // Search the database using s query template where %2$s will be replaced with the field and %1$s will be replaced with the search term
+    // Search the database using s query template where %2$s will be replaced with the field and %1$s will
+    // be replaced with the search term
     // if the search term ends with a recognized /[command] it will be implemented, otherwize discarded.
-    private ResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
+    public ResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
         ResultSet rs = null;
         String term = "";
         if(searchTerm.toLowerCase().endsWith("/exact")) term = searchTerm.replace('*','%').split("/")[0];
@@ -72,20 +83,21 @@ public class Lookup {
         int i = 0;
         while(rs == null && i<field.length) {
             String query = String.format(query_template, term, field[i]);
-            rs = search(query);
+            rs = searchRaw(query);
             i++;
         }
         return rs;
     }
 
     // General search function, that query's the database with any select statement and gives back the resultset
-    private ResultSet search(String query){
+    public ResultSet searchRaw(String query){
         try{
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.next()) return null; // This advances the cursor forward
-            rs = stmt.executeQuery(query); // So we must redo the query in order not to miss the first line
-            return rs; // (There is a function that should do this, but it's not supported for sqlite :[ )
+            // So we must redo the query in order not to miss the first line
+            // (There is a function that should do this, but it's not supported for sqlite :[ )
+            rs = stmt.executeQuery(query);
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
@@ -151,15 +163,15 @@ public class Lookup {
         Scanner scan = new Scanner(System.in);
         Boolean b = true;
         while(b){
-            System.out.println("\n\nSearch for class: ");
+            System.out.println("\n\nSearch for spell: ");
             String searchString = scan.nextLine();
             if(searchString.equalsIgnoreCase("exit")) b = false;
             else {
-                ResultSet sr = find.playerClass(searchString);
+                ResultSet sr = find.spell(searchString);
                 try {
-                    System.out.println("\nFound class(es): ");
+                    System.out.println("\nFound spell(s): ");
                     while (sr.next()) {
-                        System.out.println(sr.getString("name"));
+                        System.out.println(sr.getString("name")+" (id: "+sr.getString("id: ")+")");
                     }
                 } catch (Exception e) {
                     // Suppress exceptions
