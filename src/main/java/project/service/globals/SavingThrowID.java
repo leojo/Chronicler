@@ -1,4 +1,4 @@
-package service.globals;
+package project.service.globals;
 
 /**
  * Created by whiskeyjack on 10/15/15.
