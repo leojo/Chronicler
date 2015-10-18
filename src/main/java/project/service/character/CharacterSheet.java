@@ -184,8 +184,8 @@ public class CharacterSheet {
 	public Map<Integer, ResultSet> feats; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 
-	public Vector<String> inventory; // TODO: Change this to use an Item class
-	public Vector<String> equipped;
+	public Vector<ResultSet> inventory; // TODO: Change this to use an Item class
+	public Vector<ResultSet> equipped;
 
 	public Lookup find;
 
@@ -308,27 +308,50 @@ public class CharacterSheet {
 	 * Inventory
 	 */
 
-	// NOTE: THIS IS ALL SUBJECT TO CHANGE AS SOON AS I FIND A BETTER WAY TO DO THIS
-	// TODO: Find a better way to do this
-
 	public void pickupItem(ResultSet item) {
-		try {
-			this.inventory.add(item.getString("name"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.inventory.add(item);
 	}
 
 	public void pickupItem(String itemName) {
-		this.inventory.add(itemName);
+		ResultSet rs = this.find.item(itemName+"/exact");
+		this.pickupItem(rs);
 	}
 
 	public void dropItem(String itemName) {
-		this.inventory.remove(itemName);
+		for (ResultSet item : inventory) {
+			try {
+				if (item.getString("name") == itemName) {
+					this.inventory.remove(item);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	public void equipItem(String itemName) {
-		this.equipped.add(itemName);
+		for (ResultSet item : inventory) {
+			try {
+				if (item.getString("name") == itemName) {
+					this.equipped.add(item);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void unequipItem(String itemName) {
+		for (ResultSet item : inventory) {
+			try {
+				if (item.getString("name") == itemName) {
+					this.equipped.remove(item);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 
