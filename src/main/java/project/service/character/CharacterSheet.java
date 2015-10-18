@@ -1,15 +1,17 @@
 package project.service.character;
 
+import org.json.JSONObject;
 import project.service.dbLookup.Lookup;
 import project.service.globals.AbilityID;
+import project.service.globals.AdvancementTable;
 import project.service.globals.SavingThrowID;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import java.util.function.IntSupplier;
 
 import static project.service.globals.AbilityID.*;
 
@@ -195,7 +197,7 @@ public class CharacterSheet {
 	public int currentHP;
 	public int tempHP;
 
-	public Vector<Integer> BAB;
+	public int BAB;
 
 	// Fluff stuff
 	public String name;
@@ -228,8 +230,6 @@ public class CharacterSheet {
 	    this.currentHP = 0;
 	    this.tempHP = 0;
 
-	    this.BAB = new Vector<>();
-
 	    this.name = "";
 	    this.gender = "";
 	    this.age = null;
@@ -242,7 +242,36 @@ public class CharacterSheet {
 
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
-		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1);
+		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); //Increment level counter
+	}
+
+	public Integer updateBAB() {
+		this.BAB = 0;
+
+		for (int i : this.classID.keySet()) {
+			AdvancementTable advancement = this.find.advTableByClassID(i);
+
+			Integer ClassBAB = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
+					              .getJSONObject(String.valueOf(this.classID.get(i)))   // Get the JSON for this level only
+					              .getString("BAB")                                     // Get the BAB for this level
+					              .split("/")[0]);                                      // Get the first number
+
+			this.BAB += ClassBAB;
+		}
+
+		return this.BAB;
+	}
+
+	public Vector<Integer> getBAB() {
+		Vector<Integer> BAB = new Vector<>();
+		int currentBAB = this.BAB;
+
+		while (currentBAB > 0) {
+			BAB.add(currentBAB);
+			currentBAB -= 5;
+		}
+
+		return BAB;
 	}
 
 	/*
@@ -253,6 +282,7 @@ public class CharacterSheet {
 		this.abilityScores.values().stream().forEach(v -> v.update(this));
 		this.savingThrows.values().stream().forEach(v -> v.update(this));
 		this.skills.values().stream().forEach(v -> v.update(this));
+		this.updateBAB();
 	}
 
 	/*
@@ -355,20 +385,19 @@ public class CharacterSheet {
 	}
 
 
-    public static void main(String[] args) {
-        CharacterSheet c = new CharacterSheet();
-	    c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
-        System.out.println(c.abilityScores.get(STR));
-	    System.out.println(c.savingThrows.get(SavingThrowID.FORT));
-	    ResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
-	    c.acquireFeat(ImprovedInitiative);
-	    System.out.println(c.feats.keySet());
-	    c.levelUp(1);
-	    c.levelUp(2);
-	    c.levelUp(2);
-	    System.out.println(c.classID);
-	    c.update();
-	    c.skills.forEach((k, v) -> System.out.println(v));
+	public static void main(String[] args) {
+		CharacterSheet c = new CharacterSheet();
+		c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
+		System.out.println(c.abilityScores.get(STR));
+		System.out.println(c.savingThrows.get(SavingThrowID.FORT));
+		ResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
+		c.acquireFeat(ImprovedInitiative);
+		System.out.println(c.feats.keySet());
+		c.classID.put(9, 10);
+		c.classID.put(8, 1);
+		c.update();
+		//c.skills.forEach((k, v) -> System.out.println(v));
+		System.out.println(c.getBAB());
     }
 }
 
