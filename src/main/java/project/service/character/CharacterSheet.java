@@ -137,17 +137,17 @@ public class CharacterSheet {
 			switch (id) {
 				case FORT:
 					this.name = "Fortitude";
-					this.shortName = "FORT";
+					this.shortName = "Fort";
 					this.baseSkill = character.abilityScores.get(AbilityID.CON);
 					break;
 				case REF:
 					this.name = "Reflex";
-					this.shortName = "REF";
+					this.shortName = "Ref";
 					this.baseSkill = character.abilityScores.get(AbilityID.DEX);
 					break;
 				case WILL:
 					this.name = "Will";
-					this.shortName = "WILL";
+					this.shortName = "Will";
 					this.baseSkill = character.abilityScores.get(AbilityID.WIS);
 					break;
 			}
@@ -157,9 +157,19 @@ public class CharacterSheet {
 		}
 
 		public void update(CharacterSheet character) {
-			// TODO: Load base save from class template
-			this.bonuses.put("Base Save", 0);
-			this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
+			int BaseSave = 0;
+			for (int c : character.classID.keySet()) {
+				// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
+				AdvancementTable advancement = character.find.advTableByClassID(c);
+
+				Integer ClassSave = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
+					              .getJSONObject(String.valueOf(character.classID.get(c)))   // Get the JSON for this level only
+					              .getString(this.shortName));                                          // Get the BAB for this level
+
+				BaseSave += ClassSave;
+			}
+			this.bonuses.put("Base Save", BaseSave);
+			this.bonuses.put("Ability Modifier", this.baseSkill.modifier);
 
 			this.totalValue = 0;
 			for (int v : this.bonuses.values()) {
@@ -398,6 +408,9 @@ public class CharacterSheet {
 		c.update();
 		//c.skills.forEach((k, v) -> System.out.println(v));
 		System.out.println(c.getBAB());
+		System.out.println("Fort: "+c.savingThrows.get(SavingThrowID.FORT).totalValue);
+		System.out.println("Ref: "+c.savingThrows.get(SavingThrowID.REF).totalValue);
+		System.out.println("Will: "+c.savingThrows.get(SavingThrowID.WILL).totalValue);
     }
 }
 
