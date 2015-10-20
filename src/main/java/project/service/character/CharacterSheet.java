@@ -63,10 +63,7 @@ public class CharacterSheet {
 		}
 
 		public void update(CharacterSheet character) {
-			this.totalValue = 0;
-			for (int v : this.bonuses.values()) {
-				this.totalValue += v;
-			}
+			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
 
 			this.modifier = (this.totalValue / 2) - 5;
 		}
@@ -109,10 +106,7 @@ public class CharacterSheet {
 			this.bonuses.put("Ranks", this.ranks);
 			if (this.baseSkill != null) this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
 
-			this.totalValue = 0;
-			for (int v : this.bonuses.values()) {
-				this.totalValue += v;
-			}
+			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
 		}
 
 		@Override
@@ -207,6 +201,7 @@ public class CharacterSheet {
 
 	public int BAB;
 	public Map<String, Integer> AC;
+	public Map<String, Integer> Grapple;
 
 	// Fluff stuff
 	public String name;
@@ -236,6 +231,9 @@ public class CharacterSheet {
 	    this.maxHP = 0;
 	    this.currentHP = 0;
 	    this.tempHP = 0;
+
+	    this.AC = new HashMap<>();
+	    this.Grapple = new HashMap<>();
 
 	    this.name = "";
 	    this.gender = "";
@@ -294,13 +292,7 @@ public class CharacterSheet {
 
 	public int getAC() {
 		// TODO: Make this factor in item dex caps
-		int ac = 0;
-
-		for (int i : this.AC.values()) {
-			ac += i;
-		}
-
-		return ac;
+		return this.AC.values().stream().reduce(0, (a, b) -> a + b);
 	}
 
 	public int getTouchAC() {
@@ -309,6 +301,12 @@ public class CharacterSheet {
 
 	public int getFlatFootedAC() {
 		return this.getAC() - this.abilityScores.get(AbilityID.DEX).modifier;
+	}
+
+	public int getGrappleModifier() {
+		return this.Grapple.values()
+				       .stream()
+				       .reduce(0, (a, b) -> a + b);
 	}
 
 	/*
