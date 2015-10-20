@@ -410,6 +410,17 @@ public class CharacterSheet {
 		}
 	}
 
+	/*
+	 * Convenience functions for retrieving values from containers
+	 */
+
+	public int get(AbilityID id) {
+		return this.abilityScores.get(id).modifier;
+	}
+
+	public int get(SavingThrowID id) {
+		return this.savingThrows.get(id).totalValue;
+	}
 
 	public static void main(String[] args) {
 		CharacterSheet c = new CharacterSheet();
