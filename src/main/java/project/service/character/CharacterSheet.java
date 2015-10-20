@@ -187,8 +187,6 @@ public class CharacterSheet {
 		}
 	}
 
-	public int level;
-
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
     public Map<AbilityID, AbilityScore> abilityScores;
@@ -208,6 +206,7 @@ public class CharacterSheet {
 	public int tempHP;
 
 	public int BAB;
+	public Map<String, Integer> AC;
 
 	// Fluff stuff
 	public String name;
@@ -219,8 +218,6 @@ public class CharacterSheet {
 
     public CharacterSheet() {
 	    this.find = new Lookup("data/dnd.sqlite");
-
-	    this.level = 1;
 
 	    this.resetAbilities();
 	    try {
@@ -255,6 +252,17 @@ public class CharacterSheet {
 		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); //Increment level counter
 	}
 
+	/*
+	 * Functions to update calculated fields
+	 */
+
+	public void update() {
+		this.abilityScores.values().stream().forEach(v -> v.update(this));
+		this.savingThrows.values().stream().forEach(v -> v.update(this));
+		this.skills.values().stream().forEach(v -> v.update(this));
+		this.updateBAB();
+	}
+
 	public Integer updateBAB() {
 		this.BAB = 0;
 
@@ -284,15 +292,23 @@ public class CharacterSheet {
 		return BAB;
 	}
 
-	/*
-	 * Functions to update calculated fields
-	 */
+	public int getAC() {
+		// TODO: Make this factor in item dex caps
+		int ac = 0;
 
-	public void update() {
-		this.abilityScores.values().stream().forEach(v -> v.update(this));
-		this.savingThrows.values().stream().forEach(v -> v.update(this));
-		this.skills.values().stream().forEach(v -> v.update(this));
-		this.updateBAB();
+		for (int i : this.AC.values()) {
+			ac += i;
+		}
+
+		return ac;
+	}
+
+	public int getTouchAC() {
+		return 10 + this.abilityScores.get(AbilityID.DEX).modifier;
+	}
+
+	public int getFlatFootedAC() {
+		return this.getAC() - this.abilityScores.get(AbilityID.DEX).modifier;
 	}
 
 	/*
