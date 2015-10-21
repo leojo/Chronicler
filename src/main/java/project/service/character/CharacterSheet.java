@@ -1,6 +1,5 @@
 package project.service.character;
 
-import org.json.JSONObject;
 import project.service.dbLookup.Lookup;
 import project.service.globals.AbilityID;
 import project.service.globals.AdvancementTable;
@@ -8,12 +7,9 @@ import project.service.globals.SavingThrowID;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-
-import static project.service.globals.AbilityID.*;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
@@ -92,7 +88,7 @@ public class CharacterSheet {
 		public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
 			this.id = skillInfo.getInt("id");
 			this.name = skillInfo.getString("name");
-			this.baseSkill = character.abilityScores.get(fromString(skillInfo.getString("base_skill")));
+			this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillInfo.getString("base_skill")));
 			this.trainedOnly = skillInfo.getBoolean("trained_only");
 			this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
 
@@ -315,7 +311,7 @@ public class CharacterSheet {
 
 	public void resetAbilities() {
 	    this.abilityScores = new HashMap<>();
-		for (AbilityID id : values()) {
+		for (AbilityID id : AbilityID.values()) {
 			this.abilityScores.put(id, new AbilityScore(id));
 		}
 	}
@@ -423,7 +419,7 @@ public class CharacterSheet {
 	public static void main(String[] args) {
 		CharacterSheet c = new CharacterSheet();
 		c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
-		System.out.println(c.abilityScores.get(STR));
+		System.out.println(c.abilityScores.get(AbilityID.STR));
 		System.out.println(c.savingThrows.get(SavingThrowID.FORT));
 		ResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
 		c.acquireFeat(ImprovedInitiative);
