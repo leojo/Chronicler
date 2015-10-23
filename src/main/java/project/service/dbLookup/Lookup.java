@@ -1,5 +1,8 @@
 package project.service.dbLookup;
 
+import org.json.JSONObject;
+import project.service.globals.AdvancementTable;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -27,11 +30,21 @@ public class Lookup {
 
     // TODO: These are not final!
     public ResultSet playerClass(String searchTerm){
-        String[] field = {"name","short_description","class_features"}; // Priority order of search fields
-        String query_template = "SELECT * FROM dnd_characterclass AS a LEFT JOIN dnd_characterclassvariant AS b ON" +
-                " a.id=b.character_class_id " +
-                "WHERE advancement<>\"\" AND \"%2$s\" LIKE '%1$s';";
+        String[] field = {"class_id","name","description","class_features"}; // Priority order of search fields
+        String query_template = "SELECT * FROM dnd_characterclass WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
+    }
+
+    public AdvancementTable advTableByClassID(int classID){
+        ResultSet rs = playerClass(classID+"/exact");
+        String table_html = "";
+        try {
+            table_html = rs.getString("advancement_html");
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return new AdvancementTable(table_html);
     }
 
     public ResultSet skill(String searchTerm){
@@ -79,7 +92,6 @@ public class Lookup {
         String term = "";
         if(searchTerm.toLowerCase().endsWith("/exact")) term = searchTerm.replace('*','%').split("/")[0];
         else term = "%"+searchTerm.replace('*','%').split("/")[0]+"%"; // % is the SQL wildcard
-        System.out.println("Searching for term "+term);
         int i = 0;
         while(rs == null && i<field.length) {
             String query = String.format(query_template, term, field[i]);
@@ -97,7 +109,7 @@ public class Lookup {
             if(!rs.next()) return null; // This advances the cursor forward
             // So we must redo the query in order not to miss the first line
             // (There is a function that should do this, but it's not supported for sqlite :[ )
-            rs = stmt.executeQuery(query);
+            return stmt.executeQuery(query);
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
@@ -163,18 +175,22 @@ public class Lookup {
         Scanner scan = new Scanner(System.in);
         Boolean b = true;
         while(b){
-            System.out.println("\n\nSearch for spell: ");
+            System.out.println("\n\nSearch for class: ");
             String searchString = scan.nextLine();
             if(searchString.equalsIgnoreCase("exit")) b = false;
             else {
-                ResultSet sr = find.spell(searchString);
-                try {
-                    System.out.println("\nFound spell(s): ");
-                    while (sr.next()) {
-                        System.out.println(sr.getString("name")+" (id: "+sr.getString("id: ")+")");
+                ResultSet rs = find.playerClass(searchString);
+                if(rs==null) System.out.println("the result is null :S");
+                else {
+                    try {
+                        System.out.println("\nTop hit: ");
+                        if (!rs.next()) System.exit(0);
+                        int id = Integer.parseInt(rs.getString("class_id"));
+                        System.out.println(rs.getString("name") + " (id: " + id + ")");
+                        System.out.println(find.advTableByClassID(id).toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    // Suppress exceptions
                 }
             }
         }
