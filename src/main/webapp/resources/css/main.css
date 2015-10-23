@@ -1,0 +1,100 @@
+/* THESE BE THEME COLORS */
+* {
+  margin: 0;
+  padding: 0; }
+
+header {
+  position: relative;
+  top: 0;
+  left: 4%;
+  height: 150px;
+  background: #37371F;
+  color: #f6f1ed;
+  font-family: "Montserrat", sans-serif; }
+  header h1, header h3 {
+    margin-left: 16px; }
+
+header.open {
+  left: 15%;
+  width: 85%; }
+
+.dashboard {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #f99531;
+  width: 15%;
+  color: font;
+  font-family: "Montserrat", sans-serif;
+  border-right: 1px solid #f6f1ed;
+  box-shadow: 0px 0px 5px #37371F; }
+  .dashboard nav ul {
+    margin-top: 0.2em;
+    margin-left: 0.1em; }
+    .dashboard nav ul li {
+      margin: 0.3em;
+      float: down; }
+
+.dashboard.closed {
+  width: 4%; }
+  .dashboard.closed nav {
+    visibility: hidden; }
+
+.tabs:before {
+  z-index: 1; }
+
+.tabs {
+  position: relative;
+  color: #37371F;
+  text-align: center;
+  height: 37px; }
+  .tabs .tab {
+    position: relative;
+    z-index: 0;
+    display: inline-block;
+    margin: 0 10px;
+    float: left;
+    padding: 0.5em;
+    border: 1px solid #EAEFBD;
+    background: #C9E3AC;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px; }
+    .tabs .tab a:link, .tabs .tab a:visited, .tabs .tab a:hover, .tabs .tab a:active {
+      color: #37371F;
+      text-decoration: none; }
+  .tabs .tab.selected:before {
+    box-shadow: 2px 2px 0 #f6f1ed; }
+  .tabs .tab.selected {
+    z-index: 2;
+    border-bottom-color: #f6f1ed;
+    background: #f6f1ed; }
+  .tabs .tab.selected:after {
+    box-shadow: -2px 2px 0 #f6f1ed; }
+
+.tabs:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  border-bottom: 3px solid #EAEFBD;
+  z-index: 1; }
+
+body .container {
+  position: absolute;
+  top: 113px;
+  bottom: 0;
+  left: 4%;
+  width: 96%;
+  font-family: "Montserrat", sans-serif; }
+  body .container .sheetContent {
+    position: absolute;
+    width: 100%;
+    top: 37px;
+    bottom: 0;
+    background: #f6f1ed; }
+body .container.open {
+  left: 15%;
+  width: 85%; }
+
+/*# sourceMappingURL=main.css.map */

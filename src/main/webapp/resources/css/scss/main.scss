@@ -1,0 +1,60 @@
+
+
+/* THESE BE THEME COLORS */
+$light: #f6f1ed;
+$dark: #37371F;
+$highlight: #EAEFBD;
+$warmContrast: #f99531;
+$coolContrast: #C9E3AC;
+
+
+$headerBackground: $dark;
+$dashboardBackground: $warmContrast;
+$mainBackground: $light;
+
+$tabsOutline: $highlight;
+$tabsBackground: $coolContrast;
+$tabSelected: $light;
+$tabHeight: 37px;
+
+$font: 'Montserrat', sans-serif;
+$accentColor: $light;
+$fontColor: $dark;
+
+$openDshbrdWidth: 15%;
+$closedDshbrdWidth: 4%;
+$headerHeight: 150px;
+
+* { margin: 0; padding: 0;}
+
+@import 'header';
+@import 'dashboard';
+@import 'tabs';
+@import 'combatTab';
+
+body {
+
+    .container {
+        position: absolute;
+        top: $headerHeight - $tabHeight;
+        bottom: 0;
+        left: $closedDshbrdWidth;
+        width: 100% - $closedDshbrdWidth;
+        font-family: $font;
+
+        .sheetContent {
+            position: absolute;
+            width: 100%;
+            top: $tabHeight;
+            bottom: 0;
+            background: $light;
+
+        }
+    }
+
+    .container.open {
+        left: $openDshbrdWidth;
+        width: 100% - $openDshbrdWidth;
+    }
+
+}

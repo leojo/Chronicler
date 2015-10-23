@@ -1,0 +1,18 @@
+header {
+    position: relative;
+    top: 0;
+    left: $closedDshbrdWidth;
+    height: $headerHeight;
+    background: $headerBackground;
+    color: $accentColor;
+    font-family: $font;
+
+    h1, h3{
+        margin-left: 16px;
+    }
+}
+
+header.open {
+    left: $openDshbrdWidth;
+    width: 100% - $openDshbrdWidth;
+}

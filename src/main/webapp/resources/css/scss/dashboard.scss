@@ -1,0 +1,31 @@
+.dashboard {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: $dashboardBackground;
+    width: $openDshbrdWidth;
+    color: font;
+    font-family: $font;
+    border-right: 1px solid $light;
+    box-shadow: 0px 0px 5px $dark;
+
+
+    nav {
+        ul {
+            margin-top: 0.2em;
+            margin-left: 0.1em;
+            li {
+                margin: 0.3em;
+                float: down;
+            }
+        }
+    }
+}
+
+.dashboard.closed {
+    width: $closedDshbrdWidth;
+
+    nav {
+        visibility: hidden;
+    }
+}

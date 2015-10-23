@@ -18,12 +18,12 @@ import static project.service.globals.AbilityID.*;
  */
 public class CharacterSheet {
 
-	class AbilityScore {
+	public class AbilityScore {
 		String name;
 		String shortName;
 
 		int baseValue;
-		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
+		public Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 		int totalValue;
 		int modifier;
 

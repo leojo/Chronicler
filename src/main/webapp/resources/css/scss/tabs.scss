@@ -1,0 +1,60 @@
+        .tabs:before {
+            z-index: 1;
+        }
+
+        .tabs {
+            position: relative;
+            color: $fontColor;
+            text-align: center;
+            height: $tabHeight;
+
+
+
+
+            .tab {
+                position: relative;
+                z-index: 0;
+                display: inline-block;
+                margin: 0 10px;
+                float: left;
+                padding: 0.5em;
+                border: 1px solid $tabsOutline;
+                background: $tabsBackground;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+
+                a:link, a:visited, a:hover, a:active {
+                    color: $fontColor;
+                    text-decoration: none;
+                }
+            }
+
+
+
+            .tab.selected:before {
+                box-shadow: 2px 2px 0 $tabSelected;
+            }
+            .tab.selected {
+                z-index: 2;
+                border-bottom-color: $mainBackground;
+                background: $tabSelected;
+            }
+
+            .tab.selected:after {
+                box-shadow: -2px 2px 0 $tabSelected;
+            }
+
+
+
+        }
+
+        .tabs:after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            border-bottom: 3px solid $tabsOutline;
+            z-index: 1;
+
+        }
