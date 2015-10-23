@@ -18,7 +18,7 @@
 
     <header>
         <h1>${name}</h1>
-        <h3>Level ${level}</h3>
+        <h3>Level ?</h3>
         <h3>${raceID}+' '+${classID}</h3>
     </header>
 

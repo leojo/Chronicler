@@ -115,12 +115,12 @@ public class CharacterSheet {
 		}
 	}
 
-	class SavingThrow {
+	public class SavingThrow {
 		String name;
 		String shortName;
 		AbilityScore baseSkill;
 		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		int totalValue;
+		public int totalValue;
 
 		public SavingThrow(CharacterSheet character, SavingThrowID id) {
 			// id is the enum value
@@ -430,8 +430,8 @@ public class CharacterSheet {
 		//c.skills.forEach((k, v) -> System.out.println(v));
 		System.out.println(c.getBAB());
 		System.out.println("Fort: "+c.savingThrows.get(SavingThrowID.FORT).totalValue);
-		System.out.println("Ref: "+c.savingThrows.get(SavingThrowID.REF).totalValue);
-		System.out.println("Will: "+c.savingThrows.get(SavingThrowID.WILL).totalValue);
+		System.out.println("Ref: " + c.savingThrows.get(SavingThrowID.REF).totalValue);
+		System.out.println("Will: " + c.savingThrows.get(SavingThrowID.WILL).totalValue);
     }
 }
 

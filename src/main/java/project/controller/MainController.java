@@ -28,19 +28,18 @@ public class MainController {
     public String characterSheet(Model sheetModel) {
         CharacterSheet c = new CharacterSheet();
         c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
-        c.levelUp(1);
-        c.levelUp(2);
-        c.levelUp(2);
+        c.classID.put(9, 10);
+        c.classID.put(8, 1);
         c.update();
+
 
         sheetModel.addAttribute("classID", c.classID);
         sheetModel.addAttribute("raceID", c.raceID);
         sheetModel.addAttribute("hitPoints", c.currentHP);
-        sheetModel.addAttribute("BAB", c.BAB);
-        sheetModel.addAttribute("saveFort", c.savingThrows.get(SavingThrowID.FORT));
-        sheetModel.addAttribute("saveWill", c.savingThrows.get(SavingThrowID.WILL));
-        sheetModel.addAttribute("saveReflex", c.savingThrows.get(SavingThrowID.REF));
-        sheetModel.addAttribute("level", c.level);
+        sheetModel.addAttribute("BAB", c.getBAB());
+        sheetModel.addAttribute("saveFort", c.savingThrows.get(SavingThrowID.FORT).totalValue);
+        sheetModel.addAttribute("saveWill", c.savingThrows.get(SavingThrowID.WILL).totalValue);
+        sheetModel.addAttribute("saveReflex", c.savingThrows.get(SavingThrowID.REF).totalValue);
         sheetModel.addAttribute("name", c.name);
 
         return "index";
