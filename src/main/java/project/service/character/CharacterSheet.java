@@ -1,5 +1,6 @@
 package project.service.character;
 
+import org.json.simple.JSONObject;
 import project.service.dbLookup.Lookup;
 import project.service.globals.AbilityID;
 import project.service.globals.AdvancementTable;
@@ -179,7 +180,7 @@ public class CharacterSheet {
 
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
-    public Map<AbilityID, AbilityScore> abilityScores;
+	public Map<AbilityID, AbilityScore> abilityScores;
 	public Map<Integer, Skill> skills;
 	public Map<Integer, ResultSet> feats; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
@@ -197,7 +198,7 @@ public class CharacterSheet {
 
 	public int BAB;
 	public Map<String, Integer> AC;
-	public Map<String, Integer> Grapple;
+	public Map<String, Integer> grapple;
 
 	// Fluff stuff
 	public String name;
@@ -229,7 +230,7 @@ public class CharacterSheet {
 	    this.tempHP = 0;
 
 	    this.AC = new HashMap<>();
-	    this.Grapple = new HashMap<>();
+	    this.grapple = new HashMap<>();
 
 	    this.name = "";
 	    this.gender = "";
@@ -240,6 +241,8 @@ public class CharacterSheet {
 
 	    this.update();
     }
+
+	// TODO: Construct sheet from JSON
 
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
@@ -300,7 +303,7 @@ public class CharacterSheet {
 	}
 
 	public int getGrappleModifier() {
-		return this.Grapple.values()
+		return this.grapple.values()
 				       .stream()
 				       .reduce(0, (a, b) -> a + b);
 	}
@@ -405,6 +408,50 @@ public class CharacterSheet {
 	}
 
 	/*
+	 * JSON dumper
+	 */
+	public JSONObject toJSON() {
+		JSONObject sheet = new JSONObject();
+		sheet.put("name", this.name);
+		sheet.put("gender", this.gender);
+		sheet.put("age", this.age);
+		sheet.put("height", this.height);
+		sheet.put("bio", this.bio);
+		sheet.put("appearance", this.appearance);
+		sheet.put("classes", this.classID);
+		sheet.put("race", this.raceID);
+
+		JSONObject abilityJSON = new JSONObject();
+		for (AbilityScore ab : this.abilityScores.values()) {
+			abilityJSON.put(ab.shortName, ab.bonuses);
+		}
+		sheet.put("abilityScores", abilityJSON);
+
+		JSONObject saveJSON = new JSONObject();
+		for (SavingThrow st : this.savingThrows.values()) {
+			saveJSON.put(st.shortName, st.bonuses);
+		}
+		sheet.put("savingThrows", saveJSON);
+
+		JSONObject skillJSON = new JSONObject();
+		for (Skill s : this.skills.values()) {
+			skillJSON.put(s.name, s.bonuses);
+		}
+		sheet.put("skills", skillJSON);
+
+		sheet.put("feats", this.feats.keySet());
+		sheet.put("items", this.inventory);
+		sheet.put("equipped", this.equipped);
+		sheet.put("maxHP", this.maxHP);
+		sheet.put("currentHP", this.currentHP);
+		sheet.put("tempHP", this.tempHP);
+		sheet.put("AC", this.AC);
+		sheet.put("grapple", this.grapple);
+		System.out.println(sheet.toJSONString());
+		return sheet;
+	}
+
+	/*
 	 * Convenience functions for retrieving values from containers
 	 */
 
@@ -434,6 +481,7 @@ public class CharacterSheet {
 		System.out.println("Fort: "+c.savingThrows.get(SavingThrowID.FORT).totalValue);
 		System.out.println("Ref: " + c.savingThrows.get(SavingThrowID.REF).totalValue);
 		System.out.println("Will: " + c.savingThrows.get(SavingThrowID.WILL).totalValue);
+		c.toJSON();
     }
 }
 
