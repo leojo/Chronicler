@@ -40,7 +40,8 @@ public class Login {
     public CharacterBean getCharacter() throws Exception{
         String jsonCharacter = find.searchCharacter("Nyx", "andrea");
         CharacterBean cb = mapper.readValue(jsonCharacter, CharacterBean.class);
-
+        System.out.println("Working?");
+        System.out.println(cb.getMaxHp());
         return cb;
     }
 }

@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 public class CharacterBean {
 
     // combat vars
-    private int maxHp, currHp, ac, touchAc, flatAc, initative, speed, grapple, spellRes, arcSpellFail;
+    private int maxHp, currHp, ac, touchAc, flatAc, initiative, speed, grapple, spellRes, arcSpellFail, bab;
     // currency vars
     private int gp, sp, cp, pp; //gold, silver, copper, platinum
     // save vars
@@ -20,6 +20,9 @@ public class CharacterBean {
     // stat vars
     private int str, dex, con, intel, wis, cha;
     // fluff vars
+
+
+
     private String name, className, level, race, alignment, deity, size, age, gender, height, weight, eyes, hair, skin;
     // spells
     private String[] spells;
@@ -79,12 +82,12 @@ public class CharacterBean {
         this.flatAc = flatAc;
     }
 
-    public int getInitative() {
-        return initative;
+    public int getInitiative() {
+        return initiative;
     }
 
-    public void setInitative(int initative) {
-        this.initative = initative;
+    public void setInitiative(int Initiative) {
+        this.initiative = Initiative;
     }
 
     public int getSpeed() {
@@ -358,6 +361,15 @@ public class CharacterBean {
     public void setLanguages(String languages) {
         this.languages = languages;
     }
+
+    public int getBab() {
+        return bab;
+    }
+
+    public void setBab(int bab) {
+        this.bab = bab;
+    }
+
 /*
     public Skill[] getSkills() {
         return skills;
@@ -427,10 +439,11 @@ public class CharacterBean {
         cb.setLevel("7");
         cb.setMaxHp(32);
         cb.setCurrHp(17);
-        cb.setInitative(5);
+        cb.setInitiative(5);
         cb.setSpeed(30);
         cb.setGrapple(5);
         cb.setArcSpellFail(1);
+        cb.setBab(6);
 
         // stats
         cb.setCon(16);

@@ -7,10 +7,10 @@
 
 <body>
 
-<h1>Form</h1>
+<h1>Login</h1>
 <form action="#" th:action="@{/login}" th:object="${user}" method="post">
-    <p>Id: <input type="text" th:field="*{userID}" /></p>
-    <p>e-Mail: <input type="text" th:field="*{password}" /></p>
+    <p>Username: <input type="text" th:field="*{userID}" /></p>
+    <p>Password: <input type="password" th:field="*{password}" /></p>
     <p><input type="submit" value="Submit" /> <input type="reset" value="Reset"/></p>
 </form>
 

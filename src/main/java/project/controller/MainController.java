@@ -63,13 +63,13 @@ public class MainController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException{
         model.addAttribute("user", user);
-        System.out.println("Making sure userInfo is working" + user.getUserID());
         Login login = new Login();
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             try {
                 System.out.println("login successful, getting character");
                 CharacterBean cb = login.getCharacter();
+                model.addAttribute("character", cb);
                 System.out.println(cb.getName());
             } catch(Exception e) {
               System.out.println("Something went wrong");
