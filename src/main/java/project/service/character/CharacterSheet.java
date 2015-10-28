@@ -1,6 +1,5 @@
 package project.service.character;
 
-import org.json.simple.JSONObject;
 import project.service.dbLookup.Lookup;
 import project.service.globals.AbilityID;
 import project.service.globals.AdvancementTable;
@@ -16,167 +15,6 @@ import java.util.Vector;
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
-
-	public class AbilityScore {
-		String name;
-		String shortName;
-
-		int baseValue;
-		public Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		int totalValue;
-		int modifier;
-
-		public AbilityScore(AbilityID id) {
-			switch (id) {
-				case STR:
-					this.name = "Strength";
-					this.shortName = "STR";
-					break;
-				case DEX:
-					this.name = "Dexterity";
-					this.shortName = "DEX";
-					break;
-				case CON:
-					this.name = "Constitution";
-					this.shortName = "CON";
-					break;
-				case INT:
-					this.name = "Intelligence";
-					this.shortName = "INT";
-					break;
-				case WIS:
-					this.name = "Wisdom";
-					this.shortName = "WIS";
-					break;
-				case CHA:
-					this.name = "Charisma";
-					this.shortName = "CHA";
-					break;
-			}
-			this.totalValue = 0;
-			this.modifier = 0;
-			this.bonuses = new HashMap<>();
-			this.bonuses.put("Base Score", 10);
-		}
-
-		public void update(CharacterSheet character) {
-			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
-
-			this.modifier = (this.totalValue / 2) - 5;
-		}
-
-		@Override
-		public String toString() {
-			return "AbilityScore{" +
-					       "shortName='" + shortName + '\'' +
-					       ", totalValue=" + totalValue +
-					       ", bonuses=" + bonuses +
-					       '}';
-		}
-	}
-
-	class Skill {
-		String name;
-		AbilityScore baseSkill;
-		int id;
-		boolean trainedOnly;
-		boolean armorPenalty;
-		int ranks;
-
-		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		int totalValue;
-
-		public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
-			this.id = skillInfo.getInt("id");
-			this.name = skillInfo.getString("name");
-			this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillInfo.getString("base_skill")));
-			this.trainedOnly = skillInfo.getBoolean("trained_only");
-			this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
-
-			this.ranks = 0;
-			this.totalValue = 0;
-			this.bonuses = new HashMap<>();
-			this.update(character);
-		}
-
-		public void update(CharacterSheet character) {
-			this.bonuses.put("Ranks", this.ranks);
-			if (this.baseSkill != null) this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
-
-			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
-		}
-
-		@Override
-		public String toString() {
-			return "Skill{" +
-					       "totalValue=" + totalValue +
-					       ", name='" + name + '\'' +
-					       ", baseSkill=" + baseSkill +
-					       '}';
-		}
-	}
-
-	public class SavingThrow {
-		String name;
-		String shortName;
-		AbilityScore baseSkill;
-		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		public int totalValue;
-
-		public SavingThrow(CharacterSheet character, SavingThrowID id) {
-			// id is the enum value
-			switch (id) {
-				case FORT:
-					this.name = "Fortitude";
-					this.shortName = "Fort";
-					this.baseSkill = character.abilityScores.get(AbilityID.CON);
-					break;
-				case REF:
-					this.name = "Reflex";
-					this.shortName = "Ref";
-					this.baseSkill = character.abilityScores.get(AbilityID.DEX);
-					break;
-				case WILL:
-					this.name = "Will";
-					this.shortName = "Will";
-					this.baseSkill = character.abilityScores.get(AbilityID.WIS);
-					break;
-			}
-
-			this.bonuses = new HashMap<>();
-			this.update(character);
-		}
-
-		public void update(CharacterSheet character) {
-			int BaseSave = 0;
-			for (int c : character.classID.keySet()) {
-				// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
-				AdvancementTable advancement = character.find.advTableByClassID(c);
-
-				Integer ClassSave = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
-					              .getJSONObject(String.valueOf(character.classID.get(c)))   // Get the JSON for this level only
-					              .getString(this.shortName));                                          // Get the BAB for this level
-
-				BaseSave += ClassSave;
-			}
-			this.bonuses.put("Base Save", BaseSave);
-			this.bonuses.put("Ability Modifier", this.baseSkill.modifier);
-
-			this.totalValue = 0;
-			for (int v : this.bonuses.values()) {
-				this.totalValue += v;
-			}
-		}
-
-		@Override
-		public String toString() {
-			return "SavingThrow{" +
-					       "totalValue=" + totalValue +
-					       ", name='" + name + '\'' +
-					       ", bonuses=" + bonuses +
-					       '}';
-		}
-	}
 
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
@@ -408,50 +246,6 @@ public class CharacterSheet {
 	}
 
 	/*
-	 * JSON dumper
-	 */
-	public JSONObject toJSON() {
-		JSONObject sheet = new JSONObject();
-		sheet.put("name", this.name);
-		sheet.put("gender", this.gender);
-		sheet.put("age", this.age);
-		sheet.put("height", this.height);
-		sheet.put("bio", this.bio);
-		sheet.put("appearance", this.appearance);
-		sheet.put("classes", this.classID);
-		sheet.put("race", this.raceID);
-
-		JSONObject abilityJSON = new JSONObject();
-		for (AbilityScore ab : this.abilityScores.values()) {
-			abilityJSON.put(ab.shortName, ab.bonuses);
-		}
-		sheet.put("abilityScores", abilityJSON);
-
-		JSONObject saveJSON = new JSONObject();
-		for (SavingThrow st : this.savingThrows.values()) {
-			saveJSON.put(st.shortName, st.bonuses);
-		}
-		sheet.put("savingThrows", saveJSON);
-
-		JSONObject skillJSON = new JSONObject();
-		for (Skill s : this.skills.values()) {
-			skillJSON.put(s.name, s.bonuses);
-		}
-		sheet.put("skills", skillJSON);
-
-		sheet.put("feats", this.feats.keySet());
-		sheet.put("items", this.inventory);
-		sheet.put("equipped", this.equipped);
-		sheet.put("maxHP", this.maxHP);
-		sheet.put("currentHP", this.currentHP);
-		sheet.put("tempHP", this.tempHP);
-		sheet.put("AC", this.AC);
-		sheet.put("grapple", this.grapple);
-		System.out.println(sheet.toJSONString());
-		return sheet;
-	}
-
-	/*
 	 * Convenience functions for retrieving values from containers
 	 */
 
@@ -481,7 +275,6 @@ public class CharacterSheet {
 		System.out.println("Fort: "+c.savingThrows.get(SavingThrowID.FORT).totalValue);
 		System.out.println("Ref: " + c.savingThrows.get(SavingThrowID.REF).totalValue);
 		System.out.println("Will: " + c.savingThrows.get(SavingThrowID.WILL).totalValue);
-		c.toJSON();
     }
 }
 
