@@ -33,6 +33,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-test:1.2.7.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-tomcat:1.2.7.RELEASE")
     compile("org.apache.tomcat.embed:tomcat-embed-jasper:8.0.27")
+    compile("org.codehaus.jackson:jackson-mapper-asl:1.9.13")
     compile("javax.servlet:jstl:1.2")
     compile("com.metaparadigm:json-rpc:1.0")
     compile("org.jsoup:jsoup:1.8.3")

@@ -8,21 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.service.account.Login;
 import project.service.account.User;
+import project.service.character.CharacterBean;
 import project.service.character.CharacterSheet;
-import project.service.character.sheetBean;
 import project.service.globals.AbilityID;
 import project.service.globals.SavingThrowID;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static project.service.globals.AbilityID.STR;
 
 
 /**
@@ -71,10 +63,18 @@ public class MainController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException{
         model.addAttribute("user", user);
-        System.out.println("Making sure userInfo is working"+user.getUserID());
+        System.out.println("Making sure userInfo is working" + user.getUserID());
         Login login = new Login();
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
+            try {
+                System.out.println("login successful, getting character");
+                CharacterBean cb = login.getCharacter();
+                System.out.println(cb.getName());
+            } catch(Exception e) {
+              System.out.println("Something went wrong");
+                e.printStackTrace();
+            }
             return "index";
         } else {
             return "loginFail";

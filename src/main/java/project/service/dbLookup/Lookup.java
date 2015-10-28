@@ -140,18 +140,21 @@ public class Lookup {
 
     // General update function
     public int updateRaw(String query){
+        int res = 0;
         try{
             Statement stmt = c.createStatement();
-            return stmt.executeUpdate(query);
+            res = stmt.executeUpdate(query);
+            stmt.close();
+            c.commit();
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
         }
-        return 0;
+        return res;
     }
 
     public int updateCharacterJSON(String userID, String charName, String json) {
-        return updateRaw("UPDATE Character SET \"characterJSON\" = "+json+" WHERE characterName="+charName+"\" AND UserID = \""+userID+"\";");
+        return updateRaw("UPDATE Characters SET characterJSON = '"+json+"' WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";");
 
     }
 

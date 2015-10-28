@@ -1,10 +1,11 @@
 package project.service.account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import project.service.character.CharacterBean;
 import project.service.dbLookup.Lookup;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 /**
  * Created by andrea on 28.10.2015.
@@ -12,8 +13,10 @@ import java.util.Scanner;
 public class Login {
 
     private Lookup find;
+    private ObjectMapper mapper;
 
     public Login() {
+        this.mapper = new ObjectMapper();
         this.find = new Lookup("data/userAccounts.sqlite");
     }
 
@@ -28,7 +31,16 @@ public class Login {
             System.out.println("Wrong password");
             return false;
         }
+
+
         System.out.println("Everything seems fine");
         return true;
+    }
+
+    public CharacterBean getCharacter() throws Exception{
+        String jsonCharacter = find.searchCharacter("Nyx", "andrea");
+        CharacterBean cb = mapper.readValue(jsonCharacter, CharacterBean.class);
+
+        return cb;
     }
 }

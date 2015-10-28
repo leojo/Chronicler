@@ -1,5 +1,9 @@
 package project.service.character;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import project.service.dbLookup.AccountStorage;
+import project.service.dbLookup.Lookup;
+
 import java.sql.ResultSet;
 
 /**
@@ -18,7 +22,7 @@ public class CharacterBean {
     // fluff vars
     private String name, className, level, race, alignment, deity, size, age, gender, height, weight, eyes, hair, skin;
     // spells
-    private ResultSet[] spells;
+    private String[] spells;
     // special Abilities
     private String specialAbs, languages;
     // skills
@@ -331,11 +335,11 @@ public class CharacterBean {
         this.skin = skin;
     }
 
-    public ResultSet[] getSpells() {
+    public String[] getSpells() {
         return spells;
     }
 
-    public void setSpells(ResultSet[] spells) {
+    public void setSpells(String[] spells) {
         this.spells = spells;
     }
 
@@ -379,4 +383,73 @@ public class CharacterBean {
         this.items = items;
     }
     */
+    public static void main(String[] args) {
+        CharacterBean cb = new CharacterBean();
+        // fluff
+        cb.setAge("23");
+        cb.setAlignment("neutral");
+        cb.setName("Amanda");
+        cb.setRace("Human");
+        cb.setDeity("God");
+        cb.setEyes("Blue");
+        cb.setGender("Female");
+        cb.setHair("Blonde");
+        cb.setHeight("1.70m");
+        cb.setWeight("Too heavy");
+        cb.setClassName("Rogue");
+        cb.setSize("Big");
+        cb.setSkin("Fair");
+
+        // other
+        cb.setSpells(new String[]{"Abra", "Kadabra", "Alakazam"});
+        cb.setLanguages("English");
+        cb.setSpecialAbs("6-pack");
+
+        // ac
+        cb.setAc(10);
+        cb.setFlatAc(14);
+        cb.setTouchAc(13);
+
+        // saves
+        cb.setFort(23);
+        cb.setWill(22);
+        cb.setReflex(21);
+        cb.setSpellRes(0);
+
+
+        // money
+        cb.setGp(400);
+        cb.setSp(32);
+        cb.setCp(9);
+        cb.setPp(5);
+
+        // main
+        cb.setLevel("7");
+        cb.setMaxHp(32);
+        cb.setCurrHp(17);
+        cb.setInitative(5);
+        cb.setSpeed(30);
+        cb.setGrapple(5);
+        cb.setArcSpellFail(1);
+
+        // stats
+        cb.setCon(16);
+        cb.setCha(14);
+        cb.setDex(15);
+        cb.setStr(17);
+        cb.setIntel(18);
+        cb.setWis(22);
+
+        ObjectMapper mapper = new ObjectMapper();
+        AccountStorage db = new AccountStorage("data/userAccounts.sqlite");
+        try{
+            String charAsJSON = mapper.writeValueAsString(cb);
+            System.out.println("Did it work!?");
+            System.out.println(db.updateCharacterJSON("andrea", "Nyx", charAsJSON));
+            System.out.println(mapper.writeValueAsString(cb));
+        } catch(Exception e) {
+            System.out.println("Man something went wrong :(");
+        }
+    }
+
 }
