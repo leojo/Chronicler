@@ -151,11 +151,14 @@ public class CharacterSheet {
 			int BaseSave = 0;
 			for (int c : character.classID.keySet()) {
 				// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
-				AdvancementTable advancement = character.find.advTableByClassID(c);
+				ResultSet advancement = character.find.advTableByClassID(c,character.classID.get(c));
 
-				Integer ClassSave = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
-					              .getJSONObject(String.valueOf(character.classID.get(c)))   // Get the JSON for this level only
-					              .getString(this.shortName));                                          // Get the BAB for this level
+				Integer ClassSave = 0;
+				try {
+					ClassSave = Integer.valueOf(advancement.getString(this.shortName.toLowerCase()+"_save")); // Get the Save for this level
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 
 				BaseSave += ClassSave;
 			}
@@ -209,7 +212,7 @@ public class CharacterSheet {
 	public String appearance;
 
     public CharacterSheet() {
-	    this.find = new Lookup("data/dnd.sqlite");
+	    this.find = new Lookup();
 
 	    this.resetAbilities();
 	    try {
@@ -264,12 +267,14 @@ public class CharacterSheet {
 		this.BAB = 0;
 
 		for (int i : this.classID.keySet()) {
-			AdvancementTable advancement = this.find.advTableByClassID(i);
+			ResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
 
-			Integer ClassBAB = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
-					              .getJSONObject(String.valueOf(this.classID.get(i)))   // Get the JSON for this level only
-					              .getString("BAB")                                     // Get the BAB for this level
-					              .split("/")[0]);                                      // Get the first number
+			Integer ClassBAB = 0; // Get the first number
+			try {
+				ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 			this.BAB += ClassBAB;
 		}
@@ -365,8 +370,8 @@ public class CharacterSheet {
 		this.inventory.add(item);
 	}
 
-	public void pickupItem(String itemName) {
-		ResultSet rs = this.find.item(itemName+"/exact");
+	public void pickupMundaneItem(String itemName) {
+		ResultSet rs = this.find.mundaneItem(itemName + "/exact");
 		this.pickupItem(rs);
 	}
 
