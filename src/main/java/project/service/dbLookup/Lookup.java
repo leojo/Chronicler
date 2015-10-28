@@ -101,6 +101,18 @@ public class Lookup {
         return rs;
     }
 
+    public ResultSet searchUser(String userID) {
+        ResultSet rs = null;
+        String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
+        return searchRaw(query);
+    }
+
+    public ResultSet searchCharacter(String charName, String userID) {
+        ResultSet rs = null;
+        String query = "SELECT * FROM Characters WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";";
+        return searchRaw(query);
+    }
+
     // General search function, that query's the database with any select statement and gives back the resultset
     public ResultSet searchRaw(String query){
         try{

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+    <head>
+        <meta charset="UTF-8"></meta>
+        <meta name="description" content="Interactive character sheet"></meta>
+        <title>Chronicler</title>
+    </head>
+    <body>
+        <h1>Login failed. Man that's depressing.</h1>
+
+        <p th:text="' Here is the username: '+${user.userID} "></p>
+        <p th:text="' Here is the password: '+${user.password}"></p>
+    </body>
+</html>

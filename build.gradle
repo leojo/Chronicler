@@ -29,14 +29,17 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-test:1.2.7.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-tomcat:1.2.7.RELEASE")
+    compile("org.apache.tomcat.embed:tomcat-embed-jasper:8.0.27")
+    compile("javax.servlet:jstl:1.2")
     compile("com.metaparadigm:json-rpc:1.0")
     compile("org.jsoup:jsoup:1.8.3")
     compile("org.xerial:sqlite-jdbc:3.8.11.2")
-    compile("org.apache.tomcat.embed:tomcat-embed-jasper:8.0.27")
-    compile("javax.servlet:jstl:1.2")
     compile("com.googlecode.json-simple:json-simple:1.1.1")
     testCompile("junit:junit")
+
 }
 
 task wrapper(type: Wrapper) {

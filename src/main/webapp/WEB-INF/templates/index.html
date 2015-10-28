@@ -1,19 +1,18 @@
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="description" content="Interactive character sheet">
-        <meta name="keywords" content="DnD, D&D, Character Sheet">
+        <meta charset="UTF-8"/>
+        <meta name="description" content="Interactive character sheet"/>
         <title>Chronicler</title>
 
-        <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
-        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-        <script src="<c:url value="/resources/js/jquery-1.11.3.min.js" />"></script>
-        <script src="<c:url value="/resources/js/tabSwitcher.js" />"></script>
-        <script src="<c:url value="/resources/js/dashboard.js" />"></script>
+        <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+        <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+        <script th:src="@{/resources/js/tabSwitcher.js}" />
+        <script th:src="@{/resources/js/dashboard.js}" />
     </head>
 
     <header>
@@ -49,12 +48,12 @@
 
             <div class="sheetContent">
                 <!-- this is where we put includes and hide/show depending on tab -->
-                <div id="combatTab"><jsp:include page="cs_combat.jsp" /></div>
-                <div id="spellTab"><jsp:include page="cs_spells.jsp"/></div>
-                <div id="featTab"><jsp:include page="cs_feats.jsp"/></div>
-                <div id="skillTab"><jsp:include page="cs_skills.jsp"/></div>
-                <div id="inventoryTab"><jsp:include page="cs_inventory.jsp"/></div>
-                <div id="aboutTab"><jsp:include page="cs_about.jsp"/></div>
+                <div id="combatTab" th:include="cs_combat :: combatFrag"></div>
+                <div id="spellTab"><th:include page="cs_spells.html"/></div>
+                <div id="featTab"><th:include page="cs_feats.html"/></div>
+                <div id="skillTab"><th:include page="cs_skills.html"/></div>
+                <div id="inventoryTab"><th:include page="cs_inventory.html"/></div>
+                <div id="aboutTab"><th:include page="cs_about.html"/></div>
             </div>
         </div>
     </body>

@@ -2,13 +2,25 @@ package project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import project.service.account.Login;
+import project.service.account.User;
 import project.service.character.CharacterSheet;
+import project.service.character.sheetBean;
 import project.service.globals.AbilityID;
 import project.service.globals.SavingThrowID;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static project.service.globals.AbilityID.STR;
 
@@ -25,7 +37,12 @@ public class MainController {
 
 
     @RequestMapping(value = "/dummySheet", method = RequestMethod.GET)
-    public String characterSheet(Model sheetModel) {
+    public String characterSheet(HttpSession session, Model sheetModel) {
+        session.setAttribute("message", "Managed to get session access!");
+
+
+
+
         CharacterSheet c = new CharacterSheet();
         c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
         c.classID.put(9, 10);
@@ -44,6 +61,26 @@ public class MainController {
 
         return "index";
     }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String loginGet(Model model) {
+        model.addAttribute("user", new User());
+        return "login";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException{
+        model.addAttribute("user", user);
+        System.out.println("Making sure userInfo is working"+user.getUserID());
+        Login login = new Login();
+        if(login.evalLogin(user)) {
+            session.setAttribute("userId", user);
+            return "index";
+        } else {
+            return "loginFail";
+        }
+    }
+
 }
 
 
