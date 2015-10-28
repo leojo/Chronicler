@@ -107,10 +107,19 @@ public class Lookup {
         return searchRaw(query);
     }
 
-    public ResultSet searchCharacter(String charName, String userID) {
+    public String searchCharacter(String charName, String userID) {
         ResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";";
-        return searchRaw(query);
+        try {
+            rs = searchRaw(query);
+            if(rs != null) {
+                return rs.getString("characterJSON");
+            } {
+                return "{empty}";
+            }
+        } catch (SQLException e) {
+            return "Something went wrong with our sql request.";
+        }
     }
 
     // General search function, that query's the database with any select statement and gives back the resultset
@@ -129,6 +138,22 @@ public class Lookup {
         return null;
     }
 
+    // General update function
+    public int updateRaw(String query){
+        try{
+            Statement stmt = c.createStatement();
+            return stmt.executeUpdate(query);
+        } catch (Exception e) {
+            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int updateCharacterJSON(String userID, String charName, String json) {
+        return updateRaw("UPDATE Character SET \"characterJSON\" = "+json+" WHERE characterName="+charName+"\" AND UserID = \""+userID+"\";");
+
+    }
 
     // Takes a resultset from a sqlite query and converts it into a human readable abbreviated string.
     // Intended for development purposes ONLY!
@@ -182,10 +207,14 @@ public class Lookup {
 //        }
 //    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         Lookup find = new Lookup("data/dnd.sqlite");
         Scanner scan = new Scanner(System.in);
-        Boolean b = true;
+        Boolean b = false;
+        Lookup find2 = new Lookup("data/userAccounts.sqlite");
+        System.out.println(find2.searchCharacter("Nyx", "andrea"));
+        System.out.println(find2.searchCharacter("Nylon", "bjorn"));
+        System.out.println(find2.searchCharacter("Nyk", "bjorn"));
         while(b){
             System.out.println("\n\nSearch for class: ");
             String searchString = scan.nextLine();

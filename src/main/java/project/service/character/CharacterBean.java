@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 /**
  * Created by andrea on 27.10.2015.
  */
-public class sheetBean {
+public class CharacterBean {
 
     // combat vars
     private int maxHp, currHp, ac, touchAc, flatAc, initative, speed, grapple, spellRes, arcSpellFail;
@@ -29,7 +29,7 @@ public class sheetBean {
     //private Item[] items;
 
 
-    public sheetBean() { // This function should eventually take in some session ID
+    public CharacterBean() { // This function should eventually take in some session ID
 
 
     }
