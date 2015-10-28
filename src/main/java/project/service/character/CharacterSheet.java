@@ -17,167 +17,6 @@ import java.util.Vector;
  */
 public class CharacterSheet {
 
-	public class AbilityScore {
-		String name;
-		String shortName;
-
-		int baseValue;
-		public Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		int totalValue;
-		int modifier;
-
-		public AbilityScore(AbilityID id) {
-			switch (id) {
-				case STR:
-					this.name = "Strength";
-					this.shortName = "STR";
-					break;
-				case DEX:
-					this.name = "Dexterity";
-					this.shortName = "DEX";
-					break;
-				case CON:
-					this.name = "Constitution";
-					this.shortName = "CON";
-					break;
-				case INT:
-					this.name = "Intelligence";
-					this.shortName = "INT";
-					break;
-				case WIS:
-					this.name = "Wisdom";
-					this.shortName = "WIS";
-					break;
-				case CHA:
-					this.name = "Charisma";
-					this.shortName = "CHA";
-					break;
-			}
-			this.totalValue = 0;
-			this.modifier = 0;
-			this.bonuses = new HashMap<>();
-			this.bonuses.put("Base Score", 10);
-		}
-
-		public void update(CharacterSheet character) {
-			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
-
-			this.modifier = (this.totalValue / 2) - 5;
-		}
-
-		@Override
-		public String toString() {
-			return "AbilityScore{" +
-					       "shortName='" + shortName + '\'' +
-					       ", totalValue=" + totalValue +
-					       ", bonuses=" + bonuses +
-					       '}';
-		}
-	}
-
-	class Skill {
-		String name;
-		AbilityScore baseSkill;
-		int id;
-		boolean trainedOnly;
-		boolean armorPenalty;
-		int ranks;
-
-		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		int totalValue;
-
-		public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
-			this.id = skillInfo.getInt("id");
-			this.name = skillInfo.getString("name");
-			this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillInfo.getString("base_skill")));
-			this.trainedOnly = skillInfo.getBoolean("trained_only");
-			this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
-
-			this.ranks = 0;
-			this.totalValue = 0;
-			this.bonuses = new HashMap<>();
-			this.update(character);
-		}
-
-		public void update(CharacterSheet character) {
-			this.bonuses.put("Ranks", this.ranks);
-			if (this.baseSkill != null) this.bonuses.put("Ability Modifier", this.baseSkill.totalValue);
-
-			this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
-		}
-
-		@Override
-		public String toString() {
-			return "Skill{" +
-					       "totalValue=" + totalValue +
-					       ", name='" + name + '\'' +
-					       ", baseSkill=" + baseSkill +
-					       '}';
-		}
-	}
-
-	public class SavingThrow {
-		String name;
-		String shortName;
-		AbilityScore baseSkill;
-		Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
-		public int totalValue;
-
-		public SavingThrow(CharacterSheet character, SavingThrowID id) {
-			// id is the enum value
-			switch (id) {
-				case FORT:
-					this.name = "Fortitude";
-					this.shortName = "Fort";
-					this.baseSkill = character.abilityScores.get(AbilityID.CON);
-					break;
-				case REF:
-					this.name = "Reflex";
-					this.shortName = "Ref";
-					this.baseSkill = character.abilityScores.get(AbilityID.DEX);
-					break;
-				case WILL:
-					this.name = "Will";
-					this.shortName = "Will";
-					this.baseSkill = character.abilityScores.get(AbilityID.WIS);
-					break;
-			}
-
-			this.bonuses = new HashMap<>();
-			this.update(character);
-		}
-
-		public void update(CharacterSheet character) {
-			int BaseSave = 0;
-			for (int c : character.classID.keySet()) {
-				// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
-				AdvancementTable advancement = character.find.advTableByClassID(c);
-
-				Integer ClassSave = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
-					              .getJSONObject(String.valueOf(character.classID.get(c)))   // Get the JSON for this level only
-					              .getString(this.shortName));                                          // Get the BAB for this level
-
-				BaseSave += ClassSave;
-			}
-			this.bonuses.put("Base Save", BaseSave);
-			this.bonuses.put("Ability Modifier", this.baseSkill.modifier);
-
-			this.totalValue = 0;
-			for (int v : this.bonuses.values()) {
-				this.totalValue += v;
-			}
-		}
-
-		@Override
-		public String toString() {
-			return "SavingThrow{" +
-					       "totalValue=" + totalValue +
-					       ", name='" + name + '\'' +
-					       ", bonuses=" + bonuses +
-					       '}';
-		}
-	}
-
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
 	public Map<AbilityID, AbilityScore> abilityScores;
@@ -209,7 +48,7 @@ public class CharacterSheet {
 	public String appearance;
 
     public CharacterSheet() {
-	    this.find = new Lookup("data/dnd.sqlite");
+	    this.find = new Lookup();
 
 	    this.resetAbilities();
 	    try {
@@ -264,12 +103,14 @@ public class CharacterSheet {
 		this.BAB = 0;
 
 		for (int i : this.classID.keySet()) {
-			AdvancementTable advancement = this.find.advTableByClassID(i);
+			ResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
 
-			Integer ClassBAB = Integer.valueOf(advancement.getJSON()                    // Retrieve the JSON
-					              .getJSONObject(String.valueOf(this.classID.get(i)))   // Get the JSON for this level only
-					              .getString("BAB")                                     // Get the BAB for this level
-					              .split("/")[0]);                                      // Get the first number
+			Integer ClassBAB = 0; // Get the first number
+			try {
+				ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 			this.BAB += ClassBAB;
 		}
@@ -365,8 +206,8 @@ public class CharacterSheet {
 		this.inventory.add(item);
 	}
 
-	public void pickupItem(String itemName) {
-		ResultSet rs = this.find.item(itemName+"/exact");
+	public void pickupMundaneItem(String itemName) {
+		ResultSet rs = this.find.mundaneItem(itemName + "/exact");
 		this.pickupItem(rs);
 	}
 
