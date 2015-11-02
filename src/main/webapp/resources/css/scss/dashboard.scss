@@ -1,3 +1,5 @@
+@import '_variables';
+
 .dashboard {
     position: absolute;
     top: 0;
@@ -9,8 +11,16 @@
     border-right: 1px solid $light;
     box-shadow: 0px 0px 5px $dark;
 
+    #menuButton {
+        display: block;
+        float: left;
+        width: 30px;
+        height: 30px;
+        background:url('../images/burger.png');
+    }
 
     nav {
+        margin-top: 30px;
         ul {
             margin-top: 0.2em;
             margin-left: 0.1em;
@@ -28,4 +38,12 @@
     nav {
         visibility: hidden;
     }
+
+    #menuButton {
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
 }

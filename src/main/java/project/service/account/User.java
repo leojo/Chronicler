@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class User {
     private String userID, password; //remember to encrypt and stuff later on
 
-
     public String getUserID() {
         return userID;
     }

@@ -122,31 +122,8 @@ body .container {
     top: 150px;
     bottom: 0;
     background: #f6f1ed; }
-  body .container #loginForm, body .container #registerForm {
-    padding: 70px; }
-  body .container .box {
-    display: block;
-    width: 270px;
-    height: 200px;
-    margin: 50px;
-    background: #000;
-    text-align: center; }
-    body .container .box a {
-      display: inline-block;
-      padding: 60px;
-      padding-top: 80px;
-      padding-bottom: 80px;
-      text-decoration: none;
-      color: #f6f1ed; }
-  body .container .box:hover {
-    background: #333; }
 body .container.open {
   left: 15%;
   width: 85%; }
-body .flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: row wrap; }
 
-/*# sourceMappingURL=main.css.map */
+/*# sourceMappingURL=characterSheet.css.map */

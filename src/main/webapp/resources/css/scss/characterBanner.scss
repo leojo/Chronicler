@@ -1,0 +1,18 @@
+@import '_variables';
+
+.characterBanner {
+    height: $bannerHeight;
+    width: 100%;
+    background: $headerBackground;
+    color: $accentColor;
+    font-family: $font;
+
+    h1, h3{
+        margin-left: 16px;
+    }
+}
+
+.characterBanner.open {
+    left: $openDshbrdWidth;
+    width: 100% - $openDshbrdWidth;
+}

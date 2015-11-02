@@ -23,8 +23,47 @@ import java.sql.SQLException;
 @Controller
 public class MainController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String homePage() {
+    public String homePage(Model model) {
+        model.addAttribute("user", new User());
         return "index";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public String loginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException{
+        model.addAttribute("user", user);
+        Login login = new Login();
+        if(login.evalLogin(user)) {
+            session.setAttribute("userId", user);
+            try {
+                System.out.println("login successful, getting character");
+                CharacterBean cb = login.getCharacter();
+                model.addAttribute("character", cb);
+                System.out.println(cb.getName());
+            } catch(Exception e) {
+                System.out.println("Something went wrong");
+                e.printStackTrace();
+            }
+            return "index";
+        } else {
+            return "loginFail";
+        }
+    }
+
+    @RequestMapping(value = "/myCharacters", method = RequestMethod.GET)
+    public String myCharacters(Model model) {
+        return "characters";
+    }
+    @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
+    public String newCharacter(Model model) {
+        return "newcharacter";
+    }
+    @RequestMapping(value = "/myCampaigns", method = RequestMethod.GET)
+    public String myCampaigns(Model model) {
+        return "campaigns";
+    }
+    @RequestMapping(value = "/newCampaign", method = RequestMethod.GET)
+    public String newCampaign(Model model) {
+        return "newcampaign";
     }
 
 
@@ -53,34 +92,6 @@ public class MainController {
 
         return "index";
     }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginGet(Model model) {
-        model.addAttribute("user", new User());
-        return "login";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException{
-        model.addAttribute("user", user);
-        Login login = new Login();
-        if(login.evalLogin(user)) {
-            session.setAttribute("userId", user);
-            try {
-                System.out.println("login successful, getting character");
-                CharacterBean cb = login.getCharacter();
-                model.addAttribute("character", cb);
-                System.out.println(cb.getName());
-            } catch(Exception e) {
-              System.out.println("Something went wrong");
-                e.printStackTrace();
-            }
-            return "index";
-        } else {
-            return "loginFail";
-        }
-    }
-
 }
 
 

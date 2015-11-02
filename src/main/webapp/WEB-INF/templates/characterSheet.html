@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
+
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="description" content="Interactive character sheet"/>
+        <title>Chronicler</title>
+
+        <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+        <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+        <script th:src="@{/resources/js/tabSwitcher.js}" />
+        <script th:src="@{/resources/js/dashboard.js}" />
+    </head>
+
+    <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
+    <body>
+        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+        <div class="container">
+            <div class="characterBanner">
+                <h1>TROKTOR</h1>
+                <h3>Level 1</h3>
+                <h3>Gnome Barbarian</h3>
+            </div>
+
+            <ul class="tabs">
+                <li class="tab selected"><a href='#combatTab'>Combat</a></li>
+                <li class="tab" ><a href='#spellTab'>Spells</a></li>
+                <li class="tab" ><a href='#featTab'>Feats</a></li>
+                <li class="tab"><a href='#skillTab'>Skills</a></li>
+                <li class="tab"><a href='#inventoryTab'>Inventory</a></li>
+                <li class="tab"><a href='#aboutTab'>About character</a></li>
+            </ul>
+
+            <div class="sheetContent">
+                <!-- this is where we put includes and hide/show depending on tab -->
+                <div id="combatTab" th:include="fragments/cs_combat :: combatFrag"></div>
+                <div id="spellTab" th:include="fragments/cs_spells :: spellFrag"></div>
+                <div id="featTab" th:include="fragments/cs_feats :: featFrag"></div>
+                <div id="skillTab" th:include="fragments/cs_skills :: skillFrag"></div>
+                <div id="inventoryTab" th:include="fragments/cs_inventory :: inventoryFrag"></div>
+                <div id="aboutTab" th:include="fragments/cs_about :: aboutFrag"></div>
+            </div>
+        </div>
+
+    </body>
+
+    <footer>
+    </footer>
+
+</html>

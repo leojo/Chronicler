@@ -4,7 +4,7 @@ $(function() {
         $dashboard = $('.dashboard'),
         $content = $('.dashboardContent');
 
-    $('#menuButton').on('click', 'h2', function(){
+    $('#menuButton').on('click', function(){
         console.log("Clicking burger!");
 
 

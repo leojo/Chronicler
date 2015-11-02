@@ -1,0 +1,15 @@
+/* THESE BE THEME COLORS */
+.menubar {
+  position: absolute;
+  top: 0;
+  left: 4%;
+  width: 96%;
+  height: 20px;
+  background: #000;
+  font-family: "Montserrat", sans-serif;
+  color: #f6f1ed; }
+
+.menubar p {
+  float: right; }
+
+/*# sourceMappingURL=menubar.css.map */

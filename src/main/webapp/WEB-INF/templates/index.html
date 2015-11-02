@@ -14,48 +14,16 @@
         <script th:src="@{/resources/js/tabSwitcher.js}" />
         <script th:src="@{/resources/js/dashboard.js}" />
     </head>
-
-    <header>
-        <h1>TROKTOR</h1>
-        <h3>Level 1</h3>
-        <h3>Gnome Barbarian</h3>
-    </header>
-
+    <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
     <body>
-
-        <div class="dashboard closed">
-            <span id="menuButton"><h2>|||</h2></span>
-            <nav class="dashboardContent">
-                <ul>
-                    <li><a>My Campaigns</a></li>
-                    <li><a>My Character</a></li>
-                    <li><a>My account</a></li>
-                    <li><a>About this page</a></li>
-                </ul>
-            </nav>
-        </div>
-
-
-        <div class="container">
-            <ul class="tabs">
-                <li class="tab selected"><a href='#combatTab'>Combat</a></li>
-                <li class="tab" ><a href='#spellTab'>Spells</a></li>
-                <li class="tab" ><a href='#featTab'>Feats</a></li>
-                <li class="tab"><a href='#skillTab'>Skills</a></li>
-                <li class="tab"><a href='#inventoryTab'>Inventory</a></li>
-                <li class="tab"><a href='#aboutTab'>About character</a></li>
-            </ul>
-
-            <div class="sheetContent">
-                <!-- this is where we put includes and hide/show depending on tab -->
-                <div id="combatTab" th:include="cs_combat :: combatFrag"></div>
-                <div id="spellTab"><th:include page="cs_spells.html"/></div>
-                <div id="featTab"><th:include page="cs_feats.html"/></div>
-                <div id="skillTab"><th:include page="cs_skills.html"/></div>
-                <div id="inventoryTab"><th:include page="cs_inventory.html"/></div>
-                <div id="aboutTab" th:include="cs_about :: aboutFrag"/></div>
+        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+        <div th:switch="${user.userID}" class="container flex">
+            <div th:case="null" class="flex">
+                <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
+                <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
             </div>
-
+            <div th:case="*" class="flex"  th:include="fragments/startingOptions :: optionsFrag"></div>
+        </div>
     </body>
 
     <footer>

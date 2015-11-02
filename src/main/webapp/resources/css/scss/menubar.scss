@@ -1,0 +1,16 @@
+@import '_variables';
+
+.menubar {
+    position: absolute;
+    top: 0;
+    left: $closedDshbrdWidth;
+    width: 100% - $closedDshbrdWidth;
+    height: $headerHeight;
+    background: #000;
+    font-family: $font;
+    color: $accentColor;
+}
+
+.menubar p{
+    float: right;
+}

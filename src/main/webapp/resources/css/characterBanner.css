@@ -1,0 +1,15 @@
+/* THESE BE THEME COLORS */
+.characterBanner {
+  height: 150px;
+  width: 100%;
+  background: #37371F;
+  color: #f6f1ed;
+  font-family: "Montserrat", sans-serif; }
+  .characterBanner h1, .characterBanner h3 {
+    margin-left: 16px; }
+
+.characterBanner.open {
+  left: 15%;
+  width: 85%; }
+
+/*# sourceMappingURL=characterBanner.css.map */
