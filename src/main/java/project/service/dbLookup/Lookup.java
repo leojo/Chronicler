@@ -8,7 +8,6 @@ public class Lookup {
     private Connection c;
 
     public Lookup() {this.c = connect("data/dnd_srd.db");}
-    public Lookup(String dbUrl) { this.c = connect(dbUrl); }
 
     private Connection connect(String dbUrl){
         Connection c = null;
@@ -87,10 +86,17 @@ public class Lookup {
         return searchByTemplate(query_template, field, searchTerm);
     }
 
+    public ResultSet race(String searchTerm){
+        // This is the order in which we want to search through the fields of the items
+        String[] field = {"name","full_text","family","category","cost"};
+        String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
+        return searchByTemplate(query_template, field, searchTerm);
+    }
+
     // Search the database using s query template where %2$s will be replaced with the field and %1$s will
     // be replaced with the search term
     // if the search term ends with a recognized /[command] it will be implemented, otherwize discarded.
-    public ResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
+    private ResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
         ResultSet rs = null;
         String term = "";
         if(searchTerm.toLowerCase().endsWith("/exact")) term = searchTerm.replace('*','%').substring(0,searchTerm.lastIndexOf("/"));
@@ -104,29 +110,8 @@ public class Lookup {
         return rs;
     }
 
-    public ResultSet searchUser(String userID) {
-        ResultSet rs = null;
-        String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
-        return searchRaw(query);
-    }
-
-    public String searchCharacter(String charName, String userID) {
-        ResultSet rs = null;
-        String query = "SELECT * FROM Characters WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";";
-        try {
-            rs = searchRaw(query);
-            if(rs != null) {
-                return rs.getString("characterJSON");
-            } {
-                return "{empty}";
-            }
-        } catch (SQLException e) {
-            return "Something went wrong with our sql request.";
-        }
-    }
-
     // General search function, that query's the database with any select statement and gives back the resultset
-    public ResultSet searchRaw(String query){
+    private ResultSet searchRaw(String query){
         try{
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -139,26 +124,6 @@ public class Lookup {
             e.printStackTrace();
         }
         return null;
-    }
-
-    // General update function
-    public int updateRaw(String query){
-        int res = 0;
-        try{
-            Statement stmt = c.createStatement();
-            res = stmt.executeUpdate(query);
-            stmt.close();
-            c.commit();
-        } catch (Exception e) {
-            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public int updateCharacterJSON(String userID, String charName, String json) {
-        return updateRaw("UPDATE Characters SET characterJSON = '"+json+"' WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";");
-
     }
 
     // Takes a resultset from a sqlite query and converts it into a human readable abbreviated string.
@@ -188,56 +153,8 @@ public class Lookup {
         return retString;
     }
 
-//Working on creating our own "result-set" type object
-// 
-//    public class SearchResult{
-//        private final Object[] items;
-//
-//        public SearchResult(){
-//            items = null;
-//        }
-//
-//        public class Skill{
-//            public final int ID;
-//            public final String name;
-//        }
-//
-//        public class Spell{
-//            public final int ID;
-//            public final String name;
-//        }
-//
-//        public class Class{
-//            public final int ID;
-//            public final String name;
-//        }
-//    }
     public static void main(String[] args){
         Lookup find = new Lookup();
         Scanner scan = new Scanner(System.in);
-        Boolean b = false;
-        Lookup find2 = new Lookup("data/userAccounts.sqlite");
-        System.out.println(find2.searchCharacter("Nyx", "andrea"));
-        System.out.println(find2.searchCharacter("Nylon", "bjorn"));
-        System.out.println(find2.searchCharacter("Nyk", "bjorn"));
-        while(b){
-            System.out.println("\n\nSearch for class: ");
-            String searchString = scan.nextLine();
-            if(searchString.equalsIgnoreCase("exit")) b = false;
-            else {
-                ResultSet rs = find.playerClass(searchString);
-                if(rs==null) System.out.println("the result is null :S");
-                else {
-                    try {
-                        System.out.println("\nTop hit: ");
-                        if (!rs.next()) System.exit(0);
-                        int id = Integer.parseInt(rs.getString("id"));
-                        System.out.println(rs.getString("name") + " (id: " + id + ")");
-                    } catch (Exception e) {
-                        //do nothing
-                    }
-                }
-            }
-        }
     }
 }

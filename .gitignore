@@ -9,7 +9,3 @@ gradle/
 ######################
 .idea/
 *.iml
-
-# Databases #
-#############
-data/
