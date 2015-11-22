@@ -2,6 +2,7 @@ package project.service.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.character.CharacterBean;
+import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
 
 import java.sql.ResultSet;
@@ -12,12 +13,12 @@ import java.sql.SQLException;
  */
 public class Login {
 
-    private Lookup find;
+    private AccountStorage find;
     private ObjectMapper mapper;
 
     public Login() {
         this.mapper = new ObjectMapper();
-        this.find = new Lookup("data/userAccounts.sqlite");
+        this.find = new AccountStorage("data/userAccounts.sqlite");
     }
 
     public boolean evalLogin(User userInfo) throws SQLException {

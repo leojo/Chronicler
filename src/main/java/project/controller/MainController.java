@@ -15,6 +15,7 @@ import project.service.globals.SavingThrowID;
 
 import javax.servlet.http.*;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 
 /**
@@ -54,8 +55,14 @@ public class MainController {
         return "characters";
     }
     @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
-    public String newCharacter(Model model) {
-        return "newcharacter";
+    public String newCharacter(Model model, HttpSession session) {
+        System.out.println("Prentaðu eitthvað annað svon þú sjjáir ég er að fara að prenta þetta");
+        System.out.println(Arrays.toString(session.getAttributeNames().toArray()));
+        User user = (User)session.getAttribute("userId");
+        if(user.getUserID().equals("andrea"))
+            return "newcharacter";
+        else
+            return "loginFail";
     }
     @RequestMapping(value = "/myCampaigns", method = RequestMethod.GET)
     public String myCampaigns(Model model) {

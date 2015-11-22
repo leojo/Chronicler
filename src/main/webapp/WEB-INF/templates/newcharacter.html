@@ -1,1 +1,51 @@
-<p>This is the CREATE NEW CHARACTERS page</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Interactive character sheet"/>
+    <title>Chronicler</title>
+
+    <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+    <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+    <script th:src="@{/resources/js/tabSwitcher.js}" />
+    <script th:src="@{/resources/js/dashboard.js}" />
+</head>
+<header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
+<body>
+<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+<div th:switch="${user.userID}" class="container flex">
+    <div th:case="null" class="flex">
+        <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
+        <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
+    </div>
+    <div th:case="*">
+        <p>This is the CREATE NEW CHARACTERS page</p>
+
+
+        <select id="classSelect">
+            <option value="Cleric">Cleric</option>
+            <option value="Wizard">Wizard</option>
+            <option value="Sorcerer">Sorcerer</option>
+            <option value="Barbarian">Barbarian</option>
+        </select>
+
+
+        <select id="raceSelect">
+            <option value="Elf">Elf</option>
+            <option value="Halfling">Halfling</option>
+            <option value="Human">Human</option>
+            <option value="Drow">Drow</option>
+        </select>
+
+    </div>
+</div>
+</body>
+
+<footer>
+</footer>
+
+</html>
