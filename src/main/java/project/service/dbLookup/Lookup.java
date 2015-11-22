@@ -24,6 +24,32 @@ public class Lookup {
     }
 
     // TODO: These are not final!
+    public String[] listClasses(){
+        String query = "select name from \"class\"";
+        ResultSet rs = searchRaw(query);
+        return returnNames(rs);
+    }
+
+    public String[] listRaces(){
+        String query = "select name from \"race\"";
+        ResultSet rs = searchRaw(query);
+        return returnNames(rs);
+    }
+
+    private String[] returnNames(ResultSet rs){
+        String results = "";
+        try {
+            while(rs.next()){
+                String name = rs.getString(1);
+                results += ";"+name;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return results.split(";");
+    }
+
     public ResultSet playerClass(String searchTerm){
         String[] field = {"id","name","full_text"}; // Priority order of search fields
         String query_template = "SELECT * FROM class WHERE \"%2$s\" LIKE '%1$s';";
@@ -155,6 +181,16 @@ public class Lookup {
 
     public static void main(String[] args){
         Lookup find = new Lookup();
-        Scanner scan = new Scanner(System.in);
+        String[] classes = find.listClasses();
+        System.out.println("Available classes:");
+        for(String s : classes){
+            System.out.println(s);
+        }
+
+        String[] races = find.listRaces();
+        System.out.println("\n-----------------\n\nAvailable races:");
+        for(String s : races){
+            System.out.println(s);
+        }
     }
 }
