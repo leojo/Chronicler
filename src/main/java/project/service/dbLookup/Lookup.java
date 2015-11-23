@@ -24,9 +24,20 @@ public class Lookup {
         return c;
     }
 
-    // TODO: These are not final!
     public ArrayList<String> listClasses(){
-        String query = "select name from \"class\"";
+        String query = "SELECT \"name\" FROM \"class\" WHERE \"type\" NOT LIKE \"%prestige%\" AND \"type\" NOT LIKE \"%npc%\";";
+        OfflineResultSet rs = searchRaw(query);
+        return returnNames(rs);
+    }
+
+    public ArrayList<String> listPrestigeClasses(){
+        String query = "SELECT \"name\" FROM \"class\" WHERE \"type\" LIKE \"%prestige%\" AND \"type\" NOT LIKE \"%npc%\" AND \"type\" NOT LIKE \"%epic%\";";
+        OfflineResultSet rs = searchRaw(query);
+        return returnNames(rs);
+    }
+
+    public ArrayList<String> listEpicClasses(){
+        String query = "SELECT \"name\" FROM \"class\" WHERE \"type\" LIKE \"%epic%\";";
         OfflineResultSet rs = searchRaw(query);
         return returnNames(rs);
     }
