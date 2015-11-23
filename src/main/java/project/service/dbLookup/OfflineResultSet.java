@@ -21,7 +21,7 @@ public class OfflineResultSet {
         this.lastIndex = 0;
         this.colNum = getColumnNumbers(rs);
         this.resultSet = resultSetToArrayList(rs);
-        this.currentIndex = 0;
+        this.currentIndex = -1;
     }
 
     private HashMap<Integer,String> getColumnNumbers (ResultSet rs){
