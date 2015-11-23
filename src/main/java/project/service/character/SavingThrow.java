@@ -1,10 +1,10 @@
 package project.service.character;
 
+import project.service.dbLookup.OfflineResultSet;
 import project.service.globals.AbilityID;
 import project.service.globals.AdvancementTable;
 import project.service.globals.SavingThrowID;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,14 +49,9 @@ public class SavingThrow {
 		int BaseSave = 0;
 		for (int c : character.classID.keySet()) {
 			// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
-			ResultSet advancement = character.find.advTableByClassID(c,character.classID.get(c));
+			OfflineResultSet advancement = character.find.advTableByClassID(c,character.classID.get(c));
 
-			Integer ClassSave = 0;
-			try {
-				ClassSave = Integer.valueOf(advancement.getString(this.shortName.toLowerCase()+"_save")); // Get the Save for this level
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			Integer ClassSave = Integer.valueOf(advancement.getString(this.shortName.toLowerCase() + "_save")); // Get the Save for this level
 
 			BaseSave += ClassSave;
 		}

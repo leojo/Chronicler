@@ -1,8 +1,8 @@
 package project.service.character;
 
+import project.service.dbLookup.OfflineResultSet;
 import project.service.globals.AbilityID;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ class Skill {
 	Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 	int totalValue;
 
-	public Skill(CharacterSheet character, ResultSet skillInfo) throws SQLException {
+	public Skill(CharacterSheet character, OfflineResultSet skillInfo) throws SQLException {
 		this.id = skillInfo.getInt("id");
 		this.name = skillInfo.getString("name");
 		this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillInfo.getString("base_skill")));
