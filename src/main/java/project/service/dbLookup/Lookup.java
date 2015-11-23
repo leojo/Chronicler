@@ -1,6 +1,7 @@
 package project.service.dbLookup;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Lookup {
@@ -24,95 +25,84 @@ public class Lookup {
     }
 
     // TODO: These are not final!
-    public String[] listClasses(){
+    public ArrayList<String> listClasses(){
         String query = "select name from \"class\"";
-        ResultSet rs = searchRaw(query);
+        OfflineResultSet rs = searchRaw(query);
         return returnNames(rs);
     }
 
-    public String[] listRaces(){
+    public ArrayList<String> listRaces(){
         String query = "select name from \"race\"";
-        ResultSet rs = searchRaw(query);
+        OfflineResultSet rs = searchRaw(query);
         return returnNames(rs);
     }
 
-    private String[] returnNames(ResultSet rs){
-        String results = "";
-        try {
-            while(rs.next()){
-                String name = rs.getString(1);
-                results += ";"+name;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+    private ArrayList<String> returnNames(OfflineResultSet rs){
+        ArrayList<String> names = new ArrayList<String>();
+        while(rs.next()){
+            names.add(rs.getString("name"));
         }
-        return results.split(";");
+        return names;
     }
 
-    public ResultSet playerClass(String searchTerm){
+    public OfflineResultSet playerClass(String searchTerm){
         String[] field = {"id","name","full_text"}; // Priority order of search fields
         String query_template = "SELECT * FROM class WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet advTableByClassID(int classID, int level){
+    public OfflineResultSet advTableByClassID(int classID, int level){
         String className = null;
-        try {
-            className = playerClass(classID+"").getString("name");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        className = playerClass(classID+"").getString("name");
         return advTable(className,level);
     }
 
-    public ResultSet advTable(String className, int level){
+    public OfflineResultSet advTable(String className, int level){
         String query= "select * from \"class_table\" WHERE name LIKE \""+className+"\" AND \"level\" = "+level+";";
         return searchRaw(query);
     }
 
-    public ResultSet skill(String searchTerm){
+    public OfflineResultSet skill(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
         String[] field = {"name","full_text","skill_check","action","special","synergy","untrained"};
         String query_template = "SELECT * FROM skill WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet spell(String searchTerm){
+    public OfflineResultSet spell(String searchTerm){
         // This is the order in which we want to search through the fields of the spells
         String[] field = {"name","full_text","school","subschool","descriptor","effect"};
         String query_template = "SELECT * FROM spell WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet spellList(String castingName, int spellLevel){
+    public OfflineResultSet spellList(String castingName, int spellLevel){
         String query= "SELECT * FROM spell WHERE \"level\" LIKE \"%"+castingName+"%"+spellLevel+"%\";";
         return searchRaw(query);
     }
 
-    public ResultSet feat(String searchTerm){
+    public OfflineResultSet feat(String searchTerm){
         // This is the order in which we want to search through the fields of the feats
         String[] field = {"name","benefit","full_text","normal","special"};
         String query_template = "SELECT * FROM feat WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet specialItem(String searchTerm){
+    public OfflineResultSet specialItem(String searchTerm){
         // This is the order in which we want to search through the fields of the items
         String[] field = {"name","full_text","category"};
         String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet mundaneItem(String searchTerm){
+    public OfflineResultSet mundaneItem(String searchTerm){
         // This is the order in which we want to search through the fields of the items
         String[] field = {"name","full_text","family","category","cost"};
         String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public ResultSet race(String searchTerm){
+    public OfflineResultSet race(String searchTerm){
         // This is the order in which we want to search through the fields of the items
         String[] field = {"name","full_text","family","category","cost"};
         String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
@@ -122,8 +112,8 @@ public class Lookup {
     // Search the database using s query template where %2$s will be replaced with the field and %1$s will
     // be replaced with the search term
     // if the search term ends with a recognized /[command] it will be implemented, otherwize discarded.
-    private ResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
-        ResultSet rs = null;
+    private OfflineResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
+        OfflineResultSet rs = null;
         String term = "";
         if(searchTerm.toLowerCase().endsWith("/exact")) term = searchTerm.replace('*','%').substring(0,searchTerm.lastIndexOf("/"));
         else term = "%"+searchTerm.replace('*','%')+"%"; // % is the SQL wildcard
@@ -137,14 +127,14 @@ public class Lookup {
     }
 
     // General search function, that query's the database with any select statement and gives back the resultset
-    private ResultSet searchRaw(String query){
+    private OfflineResultSet searchRaw(String query){
         try{
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.next()) return null; // This advances the cursor forward
             // So we must redo the query in order not to miss the first line
             // (There is a function that should do this, but it's not supported for sqlite :[ )
-            return stmt.executeQuery(query);
+            return new OfflineResultSet(stmt.executeQuery(query));
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
@@ -152,42 +142,15 @@ public class Lookup {
         return null;
     }
 
-    // Takes a resultset from a sqlite query and converts it into a human readable abbreviated string.
-    // Intended for development purposes ONLY!
-    private String rs2string(ResultSet rs){
-        String retString = "";
-        try {
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();
-            while (rs.next()) {
-                System.out.println("while loop iteration");
-                for (int i = 1; i <= columnsNumber; i++) {
-                    String columnValue = rs.getString(i);
-                    if(columnValue == null) columnValue = "          ";
-                    if(columnValue.length() > 10) columnValue = columnValue.substring(0,7)+"...";
-                    else{
-                        while(columnValue.length() < 10) columnValue+=" ";
-                    }
-                    if (i > 1) columnValue = ",  "+columnValue;
-                    retString+=columnValue;
-                }
-                retString+="\n<br>===============================================================<br>\n";
-            }
-        } catch (Exception e) {
-            System.err.println("Error in printResultSet: "+e.getClass().getName() + ": " + e.getMessage());
-        }
-        return retString;
-    }
-
     public static void main(String[] args){
         Lookup find = new Lookup();
-        String[] classes = find.listClasses();
+        ArrayList<String> classes = find.listClasses();
         System.out.println("Available classes:");
         for(String s : classes){
             System.out.println(s);
         }
 
-        String[] races = find.listRaces();
+        ArrayList<String> races = find.listRaces();
         System.out.println("\n-----------------\n\nAvailable races:");
         for(String s : races){
             System.out.println(s);

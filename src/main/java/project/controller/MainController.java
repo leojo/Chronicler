@@ -53,7 +53,6 @@ public class MainController {
         }
     }
 
-
     @RequestMapping(value = "/dummySheet", method = RequestMethod.GET)
     public String characterSheet(HttpSession session, Model sheetModel) {
         session.setAttribute("message", "Managed to get session access!");

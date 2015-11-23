@@ -2,11 +2,11 @@ package project.service.character;
 
 import org.json.simple.JSONObject;
 import project.service.dbLookup.Lookup;
+import project.service.dbLookup.OfflineResultSet;
 import project.service.globals.AbilityID;
 import project.service.globals.AdvancementTable;
 import project.service.globals.SavingThrowID;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +21,11 @@ public class CharacterSheet {
 	public Integer raceID;
 	public Map<AbilityID, AbilityScore> abilityScores;
 	public Map<Integer, Skill> skills;
-	public Map<Integer, ResultSet> feats; // TODO: Refactor to map for consistency
+	public Map<Integer, OfflineResultSet> feats; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 
-	public Vector<ResultSet> inventory; // TODO: Change this to use an Item class
-	public Vector<ResultSet> equipped;
+	public Vector<OfflineResultSet> inventory; // TODO: Change this to use an Item class
+	public Vector<OfflineResultSet> equipped;
 
 	public Lookup find;
 
@@ -103,14 +103,10 @@ public class CharacterSheet {
 		this.BAB = 0;
 
 		for (int i : this.classID.keySet()) {
-			ResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
+			OfflineResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
 
 			Integer ClassBAB = 0; // Get the first number
-			try {
-				ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
 
 			this.BAB += ClassBAB;
 		}
@@ -175,13 +171,9 @@ public class CharacterSheet {
 	 * Feats
 	 */
 
-	public void acquireFeat(ResultSet feat) {
+	public void acquireFeat(OfflineResultSet feat) {
 		// TODO: check for prerequisites
-		try {
-			this.feats.put(feat.getInt("id"), feat);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.feats.put(feat.getInt("id"), feat);
 	}
 
 	/*
@@ -190,7 +182,7 @@ public class CharacterSheet {
 
 	public void resetSkills() throws SQLException {
 		this.skills = new HashMap<>();
-		ResultSet rs = this.find.skill("*");
+		OfflineResultSet rs = this.find.skill("*");
 
 		while (rs.next()) {
 			int skillID = rs.getInt("id");
@@ -202,49 +194,37 @@ public class CharacterSheet {
 	 * Inventory
 	 */
 
-	public void pickupItem(ResultSet item) {
+	public void pickupItem(OfflineResultSet item) {
 		this.inventory.add(item);
 	}
 
 	public void pickupMundaneItem(String itemName) {
-		ResultSet rs = this.find.mundaneItem(itemName + "/exact");
+		OfflineResultSet rs = this.find.mundaneItem(itemName + "/exact");
 		this.pickupItem(rs);
 	}
 
 	public void dropItem(String itemName) {
-		for (ResultSet item : inventory) {
-			try {
-				if (item.getString("name") == itemName) {
-					this.inventory.remove(item);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		for (OfflineResultSet item : inventory) {
+			if (item.getString("name") == itemName) {
+                this.inventory.remove(item);
+            }
 
 		}
 	}
 
 	public void equipItem(String itemName) {
-		for (ResultSet item : inventory) {
-			try {
-				if (item.getString("name") == itemName) {
-					this.equipped.add(item);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		for (OfflineResultSet item : inventory) {
+			if (item.getString("name") == itemName) {
+                this.equipped.add(item);
+            }
 		}
 	}
 
 	public void unequipItem(String itemName) {
-		for (ResultSet item : inventory) {
-			try {
-				if (item.getString("name") == itemName) {
-					this.equipped.remove(item);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		for (OfflineResultSet item : inventory) {
+			if (item.getString("name") == itemName) {
+                this.equipped.remove(item);
+            }
 		}
 	}
 
@@ -311,7 +291,7 @@ public class CharacterSheet {
 		c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
 		System.out.println(c.abilityScores.get(AbilityID.STR));
 		System.out.println(c.savingThrows.get(SavingThrowID.FORT));
-		ResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
+		OfflineResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
 		c.acquireFeat(ImprovedInitiative);
 		System.out.println(c.feats.keySet());
 		c.classID.put(9, 10);

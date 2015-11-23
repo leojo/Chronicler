@@ -9,3 +9,7 @@ gradle/
 ######################
 .idea/
 *.iml
+
+# sass stuff #
+##############
+**/.sass-cache/*
