@@ -10,12 +10,14 @@ import project.service.account.Login;
 import project.service.account.User;
 import project.service.character.CharacterBean;
 import project.service.character.CharacterSheet;
+import project.service.dbLookup.Lookup;
 import project.service.globals.AbilityID;
 import project.service.globals.SavingThrowID;
 
 import javax.servlet.http.*;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 
 /**
@@ -23,6 +25,7 @@ import java.util.Arrays;
  */
 @Controller
 public class MainController {
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String homePage(Model model) {
         model.addAttribute("user", new User());
@@ -48,29 +51,6 @@ public class MainController {
         } else {
             return "loginFail";
         }
-    }
-
-    @RequestMapping(value = "/myCharacters", method = RequestMethod.GET)
-    public String myCharacters(Model model) {
-        return "characters";
-    }
-    @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
-    public String newCharacter(Model model, HttpSession session) {
-        System.out.println("Prentaðu eitthvað annað svon þú sjjáir ég er að fara að prenta þetta");
-        System.out.println(Arrays.toString(session.getAttributeNames().toArray()));
-        User user = (User)session.getAttribute("userId");
-        if(user.getUserID().equals("andrea"))
-            return "newcharacter";
-        else
-            return "loginFail";
-    }
-    @RequestMapping(value = "/myCampaigns", method = RequestMethod.GET)
-    public String myCampaigns(Model model) {
-        return "campaigns";
-    }
-    @RequestMapping(value = "/newCampaign", method = RequestMethod.GET)
-    public String newCampaign(Model model) {
-        return "newcampaign";
     }
 
 
