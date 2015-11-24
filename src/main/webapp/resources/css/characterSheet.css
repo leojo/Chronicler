@@ -121,7 +121,9 @@ body .container {
     width: 100%;
     top: 150px;
     bottom: 0;
-    background: #f6f1ed; }
+    background: #f6f1ed;
+    display: block;
+    overflow: auto; }
     body .container .sheetContent .editFieldBig {
       display: block;
       width: 100px;

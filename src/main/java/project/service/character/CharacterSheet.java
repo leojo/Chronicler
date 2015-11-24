@@ -55,21 +55,25 @@ public class CharacterSheet {
     public CharacterSheet(CharacterBean bean, boolean fresh) {
 		this.find = new Lookup();
 
+		this.resetAbilities();
+
+		/*try {
+			this.resetSkills();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}*/
+
+		this.resetSavingThrows();
+
+		this.classID = new HashMap<>();
+
 		if(fresh) this.bean = initializeBean(bean);
 		else {
 
 			this.bean = bean;
 
-			this.resetAbilities();
-			try {
-				this.resetSkills();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
 			this.resetSavingThrows();
 
-			this.classID = new HashMap<>();
 			this.feats = new HashMap<>();
 
 			this.raceID = null;
@@ -94,8 +98,9 @@ public class CharacterSheet {
 		Integer classID = ors.getInt("id");
 		String race = bean.getRace();
 		this.setRacialMods(race);
-		this.levelUp(classID);
 
+		this.classID = new HashMap<>();
+		this.levelUp(classID);
 
 		// might even be unneccessary? It seems that the bean sets these as 0 and "" by default
 		/*bean.setName("");
