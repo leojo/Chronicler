@@ -1,0 +1,196 @@
+package project.service.globals;
+
+import project.service.dbLookup.Lookup;
+import project.service.dbLookup.OfflineResultSet;
+
+/**
+ * Created by leo on 24.11.2015.
+ */
+public class Spell {
+    private final String name;
+    private final String shortDescription;
+    private final String fullText;
+    private final String description;
+    private final String school;
+    private final String specialVerbal;
+    private final String druidFocus;
+    private final String clericFocus;
+    private final String bardFocus;
+    private final String sorcererFocus;
+    private final String wizardFocus;
+    private final String arcaneFocus;
+    private final String xpCost;
+    private final String focus;
+    private final String arcaneMat;
+    private final String material;
+    private final String developCost;
+    private final String SR;
+    private final String save;
+    private final String duration;
+    private final String effect;
+    private final String area;
+    private final String target;
+    private final String range;
+    private final String castingTime;
+    private final String components;
+    private final String level;
+    private final String spellcraftDC;
+    private final String subSchool;
+    private final String descriptor;
+
+    public Spell(int id){
+        Lookup find = new Lookup();
+        OfflineResultSet spell = find.spell(id+"/exact");
+        spell.first();
+        this.name = spell.getString("name");
+        this.shortDescription = spell.getString("short_description");
+        this.description = spell.getString("description");
+        this.fullText = spell.getString("full_text");
+        this.school = spell.getString("school");
+        this.subSchool = spell.getString("subschool");
+        this.descriptor = spell.getString("descriptor");
+        this.spellcraftDC = spell.getString("spellcraft_dc");
+        this.level = spell.getString("level");
+        this.components = spell.getString("components");
+        this.castingTime = spell.getString("casting_time");
+        this.range = spell.getString("range");
+        this.target = spell.getString("target");
+        this.area = spell.getString("area");
+        this.effect = spell.getString("effect");
+        this.duration = spell.getString("duration");
+        this.save = spell.getString("saving_throw");
+        this.SR = spell.getString("spell_resistance");
+        this.developCost = spell.getString("to_develop");
+        this.material = spell.getString("material_components");
+        this.arcaneMat = spell.getString("arcane_material_components");
+        this.focus = spell.getString("focus");
+        this.xpCost = spell.getString("xp_cost");
+        this.arcaneFocus = spell.getString("arcane_focus");
+        this.wizardFocus = spell.getString("wizard_focus");
+        this.sorcererFocus = spell.getString("sorcerer_focus");
+        this.bardFocus = spell.getString("bard_focus");
+        this.clericFocus = spell.getString("cleric_focus");
+        this.druidFocus = spell.getString("druid_focus");
+        this.specialVerbal = spell.getString("verbal_components");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public String getFullText() {
+        return fullText;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public String getSpecialVerbal() {
+        return specialVerbal;
+    }
+
+    public String getDruidFocus() {
+        return druidFocus;
+    }
+
+    public String getClericFocus() {
+        return clericFocus;
+    }
+
+    public String getBardFocus() {
+        return bardFocus;
+    }
+
+    public String getSorcererFocus() {
+        return sorcererFocus;
+    }
+
+    public String getWizardFocus() {
+        return wizardFocus;
+    }
+
+    public String getArcaneFocus() {
+        return arcaneFocus;
+    }
+
+    public String getXpCost() {
+        return xpCost;
+    }
+
+    public String getFocus() {
+        return focus;
+    }
+
+    public String getArcaneMat() {
+        return arcaneMat;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public String getDevelopCost() {
+        return developCost;
+    }
+
+    public String getSR() {
+        return SR;
+    }
+
+    public String getSave() {
+        return save;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public String getRange() {
+        return range;
+    }
+
+    public String getCastingTime() {
+        return castingTime;
+    }
+
+    public String getComponents() {
+        return components;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public String getSpellcraftDC() {
+        return spellcraftDC;
+    }
+
+    public String getSubSchool() {
+        return subSchool;
+    }
+
+    public String getDescriptor() {
+        return descriptor;
+    }
+}

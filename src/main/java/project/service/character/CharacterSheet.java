@@ -216,7 +216,6 @@ public class CharacterSheet {
 
 	private void resetAC(){
 		this.AC = new HashMap<String,Integer>();
-		this.AC.put("Base",10);
 	}
 
 	public void updateTotalLevel(){
