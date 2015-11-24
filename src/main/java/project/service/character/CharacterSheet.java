@@ -17,71 +17,112 @@ import java.util.Vector;
  */
 public class CharacterSheet {
 
+	// Added this and removed a lot of global variables instead because
+	// since we need to use the bean anyway for html display reason, we
+	// shouldn't have a bunch of global variables that are basically just
+	// the variables of the bean anyway.
+	public CharacterBean bean;
+
+	// Lookup object for database stuff:
+	public Lookup find;
+
+	// VARIABLES THAT ARE NOT COMMON WITH BEAN AND THEREFORE NEED TO BE UPDATED
+	// Note: These need special edit function in the system if they are to be edited.
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
 	public Map<AbilityID, AbilityScore> abilityScores;
-	public Map<Integer, Skill> skills;
-	public Map<Integer, OfflineResultSet> feats; // TODO: Refactor to map for consistency
 	public Map<SavingThrowID, SavingThrow> savingThrows;
-
+	// Combat stats
+	public Map<Integer, Integer> hitDice;
+	public Map<String, Integer> AC;
+	public Map<String, Integer> grapple;
 	public Vector<OfflineResultSet> inventory; // TODO: Change this to use an Item class
 	public Vector<OfflineResultSet> equipped;
 
-	public Lookup find;
 
-	// Combat stats
-	public Map<Integer, Integer> hitDice;
-	public int maxHP;
-	public int currentHP;
-	public int tempHP;
+	// TODO: Make compatible with bean
+	public Map<Integer, Skill> skills;
+	public Map<Integer, OfflineResultSet> feats; // TODO: Refactor to map for consistency
+	// items
 
-	public int BAB;
-	public Map<String, Integer> AC;
-	public Map<String, Integer> grapple;
+	// bio, appearance??? Do something with this?
 
-	// Fluff stuff
-	public String name;
-	public String gender;
-	public Integer age; // Should we incorporate aging rules?
-	public String height; // Maybe do something more with this?
-	public String bio;
-	public String appearance;
 
-    public CharacterSheet() {
-	    this.find = new Lookup();
+    public CharacterSheet(CharacterBean bean, boolean fresh) {
+		this.find = new Lookup();
 
-	    this.resetAbilities();
-	    try {
-		    this.resetSkills();
-	    } catch (SQLException e) {
-		    e.printStackTrace();
-	    }
-	    this.classID = new HashMap<>();
-	    this.feats = new HashMap<>();
-	    this.resetSavingThrows();
-	    this.raceID = null;
+		if(fresh) this.bean = initializeBean(bean);
+		else {
 
-	    this.inventory = new Vector<>();
+			this.bean = bean;
 
-	    this.hitDice = new HashMap<>();
-	    this.maxHP = 0;
-	    this.currentHP = 0;
-	    this.tempHP = 0;
+			this.resetAbilities();
+			try {
+				this.resetSkills();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
-	    this.AC = new HashMap<>();
-	    this.grapple = new HashMap<>();
+			this.resetSavingThrows();
 
-	    this.name = "";
-	    this.gender = "";
-	    this.age = null;
-	    this.height = "";
-	    this.bio = "";
-	    this.appearance = "";
+			this.classID = new HashMap<>();
+			this.feats = new HashMap<>();
 
-	    this.update();
+			this.raceID = null;
+
+			this.inventory = new Vector<>();
+
+			this.hitDice = new HashMap<>();
+
+			this.AC = new HashMap<>();
+			this.grapple = new HashMap<>();
+			/*
+			this.bio = "";
+			this.appearance = "";
+			*/
+			this.update();
+		}
     }
 
-	// TODO: Construct sheet from JSON
+	private CharacterBean initializeBean(CharacterBean bean) {
+		String classname  = bean.getClassName();
+		String race = bean.getRace();
+		find.advTable(classname, 1);
+
+		// might even be unneccessary? It seems that the bean sets these as 0 and "" by default
+		/*bean.setName("");
+		bean.setGender("");
+		bean.setAge("");
+		bean.setHeight("");
+		bean.setMaxHp(0);
+		bean.setCurrHp(0);
+		bean.setTempHP(0);*/
+
+		return bean;
+	}
+
+	private void updateBean() {
+		this.bean.setSTR(this.abilityScores.get(AbilityID.STR).totalValue);
+		this.bean.setDEX(this.abilityScores.get(AbilityID.DEX).totalValue);
+		this.bean.setCON(this.abilityScores.get(AbilityID.CON).totalValue);
+		this.bean.setINT(this.abilityScores.get(AbilityID.INT).totalValue);
+		this.bean.setWIS(this.abilityScores.get(AbilityID.WIS).totalValue);
+		this.bean.setCHA(this.abilityScores.get(AbilityID.CHA).totalValue);
+
+		this.bean.setFort(this.savingThrows.get(SavingThrowID.FORT).totalValue);
+		this.bean.setWill(this.savingThrows.get(SavingThrowID.WILL).totalValue);
+		this.bean.setReflex(this.savingThrows.get(SavingThrowID.REF).totalValue);
+
+		this.bean.setAc(this.getAC());
+		this.bean.setFlatAc(this.getFlatFootedAC());
+		this.bean.setTouchAc(this.getTouchAC());
+		this.bean.setGrapple(this.getGrappleModifier());
+	}
+
+	public CharacterBean getBean() {
+		updateBean();
+		return this.bean;
+	}
 
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
@@ -100,7 +141,7 @@ public class CharacterSheet {
 	}
 
 	public Integer updateBAB() {
-		this.BAB = 0;
+		int BAB = 0;
 
 		for (int i : this.classID.keySet()) {
 			OfflineResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
@@ -108,15 +149,16 @@ public class CharacterSheet {
 			Integer ClassBAB = 0; // Get the first number
 			ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
 
-			this.BAB += ClassBAB;
+			BAB += ClassBAB;
 		}
 
-		return this.BAB;
+		this.bean.setBab(BAB);
+		return BAB;
 	}
 
 	public Vector<Integer> getBAB() {
 		Vector<Integer> BAB = new Vector<>();
-		int currentBAB = this.BAB;
+		int currentBAB = this.bean.getBab();
 
 		while (currentBAB > 0) {
 			BAB.add(currentBAB);
@@ -228,49 +270,7 @@ public class CharacterSheet {
 		}
 	}
 
-	/*
-	 * JSON dumper
-	 */
-	public JSONObject toJSON() {
-		JSONObject sheet = new JSONObject();
-		sheet.put("name", this.name);
-		sheet.put("gender", this.gender);
-		sheet.put("age", this.age);
-		sheet.put("height", this.height);
-		sheet.put("bio", this.bio);
-		sheet.put("appearance", this.appearance);
-		sheet.put("classes", this.classID);
-		sheet.put("race", this.raceID);
 
-		JSONObject abilityJSON = new JSONObject();
-		for (AbilityScore ab : this.abilityScores.values()) {
-			abilityJSON.put(ab.shortName, ab.bonuses);
-		}
-		sheet.put("abilityScores", abilityJSON);
-
-		JSONObject saveJSON = new JSONObject();
-		for (SavingThrow st : this.savingThrows.values()) {
-			saveJSON.put(st.shortName, st.bonuses);
-		}
-		sheet.put("savingThrows", saveJSON);
-
-		JSONObject skillJSON = new JSONObject();
-		for (Skill s : this.skills.values()) {
-			skillJSON.put(s.name, s.bonuses);
-		}
-		sheet.put("skills", skillJSON);
-
-		sheet.put("feats", this.feats.keySet());
-		sheet.put("items", this.inventory);
-		sheet.put("equipped", this.equipped);
-		sheet.put("maxHP", this.maxHP);
-		sheet.put("currentHP", this.currentHP);
-		sheet.put("tempHP", this.tempHP);
-		sheet.put("AC", this.AC);
-		sheet.put("grapple", this.grapple);
-		System.out.println(sheet.toJSONString());
-		return sheet;
-	}
 
 	/*
 	 * Convenience functions for retrieving values from containers
@@ -287,22 +287,7 @@ public class CharacterSheet {
 
 
 	public static void main(String[] args) {
-		CharacterSheet c = new CharacterSheet();
-		c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
-		System.out.println(c.abilityScores.get(AbilityID.STR));
-		System.out.println(c.savingThrows.get(SavingThrowID.FORT));
-		OfflineResultSet ImprovedInitiative = c.find.feat("Improved Initiative");
-		c.acquireFeat(ImprovedInitiative);
-		System.out.println(c.feats.keySet());
-		c.classID.put(9, 10);
-		c.classID.put(8, 1);
-		c.update();
-		//c.skills.forEach((k, v) -> System.out.println(v));
-		System.out.println(c.getBAB());
-		System.out.println("Fort: "+c.savingThrows.get(SavingThrowID.FORT).totalValue);
-		System.out.println("Ref: " + c.savingThrows.get(SavingThrowID.REF).totalValue);
-		System.out.println("Will: " + c.savingThrows.get(SavingThrowID.WILL).totalValue);
-		c.toJSON();
+
     }
 }
 

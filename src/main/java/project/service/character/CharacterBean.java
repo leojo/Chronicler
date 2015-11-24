@@ -2,9 +2,6 @@ package project.service.character;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.dbLookup.AccountStorage;
-import project.service.dbLookup.Lookup;
-
-import java.sql.ResultSet;
 
 /**
  * Created by andrea on 27.10.2015.
@@ -12,13 +9,13 @@ import java.sql.ResultSet;
 public class CharacterBean {
 
     // combat vars
-    private int maxHp, currHp, ac, touchAc, flatAc, initiative, speed, grapple, spellRes, arcSpellFail, bab;
+    private int maxHp, currHp, tempHP, ac, touchAc, flatAc, initiative, speed, grapple, spellRes, arcSpellFail, bab;
     // currency vars
     private int gp, sp, cp, pp; //gold, silver, copper, platinum
     // save vars
     private int fort, reflex, will;
     // stat vars
-    private int str, dex, con, intel, wis, cha;
+    private int STR, DEX, CON, INT, WIS, CHA;
     // fluff vars
 
 
@@ -178,52 +175,52 @@ public class CharacterBean {
         this.will = will;
     }
 
-    public int getStr() {
-        return str;
+    public int getSTR() {
+        return STR;
     }
 
-    public void setStr(int str) {
-        this.str = str;
+    public void setSTR(int STR) {
+        this.STR = STR;
     }
 
-    public int getDex() {
-        return dex;
+    public int getDEX() {
+        return DEX;
     }
 
-    public void setDex(int dex) {
-        this.dex = dex;
+    public void setDEX(int DEX) {
+        this.DEX = DEX;
     }
 
-    public int getCon() {
-        return con;
+    public int getCON() {
+        return CON;
     }
 
-    public void setCon(int con) {
-        this.con = con;
+    public void setCON(int CON) {
+        this.CON = CON;
     }
 
-    public int getIntel() {
-        return intel;
+    public int getINT() {
+        return INT;
     }
 
-    public void setIntel(int intel) {
-        this.intel = intel;
+    public void setINT(int INT) {
+        this.INT = INT;
     }
 
-    public int getWis() {
-        return wis;
+    public int getWIS() {
+        return WIS;
     }
 
-    public void setWis(int wis) {
-        this.wis = wis;
+    public void setWIS(int WIS) {
+        this.WIS = WIS;
     }
 
-    public int getCha() {
-        return cha;
+    public int getCHA() {
+        return CHA;
     }
 
-    public void setCha(int cha) {
-        this.cha = cha;
+    public void setCHA(int CHA) {
+        this.CHA = CHA;
     }
 
     public String getName() {
@@ -446,12 +443,12 @@ public class CharacterBean {
         cb.setBab(6);
 
         // stats
-        cb.setCon(16);
-        cb.setCha(14);
-        cb.setDex(15);
-        cb.setStr(17);
-        cb.setIntel(18);
-        cb.setWis(22);
+        cb.setCON(16);
+        cb.setCHA(14);
+        cb.setDEX(15);
+        cb.setSTR(17);
+        cb.setINT(18);
+        cb.setWIS(22);
 
         ObjectMapper mapper = new ObjectMapper();
         AccountStorage db = new AccountStorage("data/userAccounts.sqlite");
@@ -465,4 +462,11 @@ public class CharacterBean {
         }
     }
 
+    public int getTempHP() {
+        return tempHP;
+    }
+
+    public void setTempHP(int tempHP) {
+        this.tempHP = tempHP;
+    }
 }

@@ -53,31 +53,6 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/dummySheet", method = RequestMethod.GET)
-    public String characterSheet(HttpSession session, Model sheetModel) {
-        session.setAttribute("message", "Managed to get session access!");
-
-
-
-
-        CharacterSheet c = new CharacterSheet();
-        c.abilityScores.get(AbilityID.WIS).bonuses.put("Base Score", 14);
-        c.classID.put(9, 10);
-        c.classID.put(8, 1);
-        c.update();
-
-
-        sheetModel.addAttribute("classID", c.classID);
-        sheetModel.addAttribute("raceID", c.raceID);
-        sheetModel.addAttribute("hitPoints", c.currentHP);
-        sheetModel.addAttribute("BAB", c.getBAB());
-        sheetModel.addAttribute("saveFort", c.savingThrows.get(SavingThrowID.FORT).totalValue);
-        sheetModel.addAttribute("saveWill", c.savingThrows.get(SavingThrowID.WILL).totalValue);
-        sheetModel.addAttribute("saveReflex", c.savingThrows.get(SavingThrowID.REF).totalValue);
-        sheetModel.addAttribute("name", c.name);
-
-        return "index";
-    }
 }
 
 
