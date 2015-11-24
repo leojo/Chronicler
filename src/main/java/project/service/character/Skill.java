@@ -22,12 +22,15 @@ class Skill {
 	Map<String, Integer> bonuses; // Map<source, value> of bonuses to this skill
 	int totalValue;
 
-	public Skill(CharacterSheet character, OfflineResultSet skillInfo) throws SQLException {
+	public Skill(CharacterSheet character, OfflineResultSet skillInfo){
 		this.id = skillInfo.getInt("id");
 		this.name = skillInfo.getString("name");
-		this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillInfo.getString("base_skill")));
-		this.trainedOnly = skillInfo.getBoolean("trained_only");
-		this.armorPenalty = skillInfo.getBoolean("armor_check_penalty");
+		if(character.abilityScores == null) character.resetAbilities();
+		String skillName = skillInfo.getString("key_ability");
+		System.out.println("THE SKILL NAME!!!! ----> "+skillName);
+		this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillName));
+		this.trainedOnly = skillInfo.getBoolean("trained");
+		this.armorPenalty = skillInfo.getBoolean("armor_check");
 
 		this.ranks = 0;
 		this.totalValue = 0;

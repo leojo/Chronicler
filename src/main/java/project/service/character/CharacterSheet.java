@@ -37,8 +37,9 @@ public class CharacterSheet {
 	public Map<AbilityID, AbilityScore> abilityScores;
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 	// Combat stats
-	public Map<Integer, Integer> hitDice;
+	public Map<Integer, Integer> hitDice; // < 3 , 6 > = "6d3"
 	public Map<String, Integer> AC;
+	public Map<String, Integer> initiative;
 	public Map<String, Integer> grapple;
 	public Vector<OfflineResultSet> inventory; // TODO: Change this to use an Item class
 	public Vector<OfflineResultSet> equipped;
@@ -88,7 +89,6 @@ public class CharacterSheet {
 		Integer classID = ors.getInt("id");
 		String race = bean.getRace();
 		this.setRacialMods(race);
-
 		this.classID = new HashMap<>();
 		this.levelUp(classID);
 
@@ -103,46 +103,14 @@ public class CharacterSheet {
 	}
 
 	private void setRacialMods(String race) {
-		if(true)return;
 		// TODO: This is broken - low-ish priority
 		OfflineResultSet raceData = find.race(race);
 		raceData.first();
-		ObjectMapper jsonParser = new ObjectMapper();
-		HashMap<String,String> abilityBonus = null;
-		Collection<String> autoLanguages = null;
-		Collection<String> bonusLanguages = null;
-		HashMap<String,String> condSkillBonus = null;
-		HashMap<String,String> condSaveBonus = null;
-		HashMap<String,String> condACBonus = null;
-		try {
-			abilityBonus = jsonParser.readValue(raceData.getString("abilit_bonus"), HashMap.class);
-			HashMap<String,String> languages = jsonParser.readValue(raceData.getString("languages"), HashMap.class);
-			autoLanguages = jsonParser.readValue(languages.get("Automatic Languages"), HashMap.class).values();
-			bonusLanguages = jsonParser.readValue(languages.get("Bonus Languages"), HashMap.class).values();
-			HashMap<String,String> special = jsonParser.readValue(raceData.getString("special"), HashMap.class);
-		} catch (JsonMappingException e) {
-			System.err.println("Error mapping race info");
-			e.printStackTrace(System.err);
-			return;
-		} catch (JsonParseException e) {
-			System.err.println("Error parsing race info");
-			e.printStackTrace(System.err);
-			return;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		this.bean.setSpeed(getSpeed(raceData));
+	}
 
-		// Iterate through abilityBonuses
-		for(String key : abilityBonus.keySet()){
-			AbilityID abilityID = AbilityID.fromString(key);
-			Integer bonus = Integer.parseInt(abilityBonus.get(key));
-			this.abilityScores.get(abilityID).setBonus("racial",bonus);
-			this.abilityScores.get(abilityID).update();
-		}
-
-		// Iterate through abilityBonuses
-
+	private Integer getSpeed(OfflineResultSet raceData){
+		return 30;
 	}
 
 	private void updateBean() {
@@ -161,6 +129,7 @@ public class CharacterSheet {
 		this.bean.setFlatAc(this.getFlatFootedAC());
 		this.bean.setTouchAc(this.getTouchAC());
 		this.bean.setGrapple(this.getGrappleModifier());
+		this.bean.setInitiative(this.getInitiative());
 	}
 
 	public CharacterBean getBean() {
@@ -187,6 +156,18 @@ public class CharacterSheet {
 		if(this.totalClassLevel%3 == 0 && this.totalClassLevel>0){
 			this.bean.setAvailableFeats(this.bean.getAvailableFeats() + 1);
 		}
+		if(this.hitDice == null) this.hitDice = new HashMap<Integer, Integer>();
+		Integer hdType = Integer.parseInt(currentClass.getString("hit_die").substring(1));
+		Integer hdNum = 1;
+		if(this.hitDice.containsKey(hdType)) hdNum+=this.hitDice.get(hdType);
+		this.hitDice.put(hdType,hdNum);
+		Integer conMod = this.abilityScores.get(AbilityID.CON).modifier;
+		if(this.bean.getMaxHp()==0){
+			this.bean.setMaxHp(conMod+hdType);
+		}else{
+			this.bean.setMaxHp(this.bean.getMaxHp()+conMod+hdType/2+1);
+		}
+		updateBean();
 	}
 
 	/*
@@ -194,11 +175,48 @@ public class CharacterSheet {
 	 */
 
 	public void update() {
-		this.abilityScores.values().stream().forEach(v -> v.update());
-		//this.savingThrows.values().stream().forEach(v -> v.update(this));
-		//this.skills.values().stream().forEach(v -> v.update());
+		this.updateAbilityScores();
+		this.updateSavingThrows();
+		this.updateSkills();
 		this.updateBAB();
+		this.updateAC();
+		this.updateInitiative();
 		this.updateTotalLevel();
+	}
+
+	private Integer getInitiative(){
+		this.updateInitiative();
+		return this.initiative.values().stream().reduce(0, (a, b) -> a + b);
+	}
+	private void updateInitiative() {
+		if(this.initiative == null) this.initiative = new HashMap<String, Integer>();
+	}
+
+	private void updateAbilityScores() {
+		if(this.abilityScores==null) this.resetAbilities();
+		this.abilityScores.values().stream().forEach(v -> v.update());
+	}
+
+	private void updateSavingThrows() {
+		if(this.savingThrows == null) this.resetSavingThrows();
+		this.savingThrows.values().stream().forEach(v -> v.update(this));
+	}
+
+	private void updateSkills() {
+		if(this.skills==null) this.resetSkills();
+		this.skills.values().stream().forEach(v -> v.update());
+	}
+
+
+	private void updateAC() {
+		if(this.AC == null) this.resetAC();
+		Integer dex = this.abilityScores.get(AbilityID.DEX).totalValue;
+		if(dex != null)this.AC.put("DEX",dex);
+	}
+
+	private void resetAC(){
+		this.AC = new HashMap<String,Integer>();
+		this.AC.put("Base",10);
 	}
 
 	public void updateTotalLevel(){
@@ -250,9 +268,13 @@ public class CharacterSheet {
 	}
 
 	public int getGrappleModifier() {
-		return this.grapple.values()
-				       .stream()
-				       .reduce(0, (a, b) -> a + b);
+		if(this.grapple == null) this.resetGrapple();
+		return this.grapple.values().stream().reduce(0, (a, b) -> a + b);
+	}
+
+	private void resetGrapple() {
+		this.grapple = new HashMap<String, Integer>();
+		this.grapple.put("TESTING",7);
 	}
 
 	/*
@@ -290,10 +312,10 @@ public class CharacterSheet {
 	 * Skills
 	 */
 
-	public void resetSkills() throws SQLException {
+	public void resetSkills(){
 		this.skills = new HashMap<>();
 		OfflineResultSet rs = this.find.skill("*");
-
+		System.out.println("Number of skills found: "+rs.size());
 		while (rs.next()) {
 			int skillID = rs.getInt("id");
 			this.skills.put(skillID, new Skill(this, rs));

@@ -3,10 +3,7 @@ package project.service.dbLookup;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by leo on 23.11.2015.
@@ -56,6 +53,21 @@ public class OfflineResultSet {
             e.printStackTrace(System.err);
             return null;
         }
+    }
+
+    // for debugging
+    public void printCurrentRowKeys(){
+        HashMap<String,Object> row = resultSet.get(currentIndex);
+        Object[] keys = row.keySet().toArray();
+        for(int i=0; i<keys.length; i++){
+            System.out.print(keys[i].toString() + ", ");
+        }
+        System.out.println();
+
+    }
+
+    public int size(){
+        return this.resultSet.size();
     }
 
     //Cursor movements
@@ -131,7 +143,8 @@ public class OfflineResultSet {
     }
 
     public String getString(String key){
-        return getObject(key).toString();
+        Object o = getObject(key);
+        return(o==null?null:o.toString());
     }
 
     public Object getObject(int index){
@@ -142,6 +155,6 @@ public class OfflineResultSet {
     public Object getObject(String key){
         HashMap<String,Object> row = resultSet.get(currentIndex);
         Object cell = row.get(key);
-        return cell.toString();
+        return cell;
     }
 }
