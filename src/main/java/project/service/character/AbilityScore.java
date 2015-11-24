@@ -44,16 +44,50 @@ public class AbilityScore {
 				this.shortName = "CHA";
 				break;
 		}
-		this.totalValue = 0;
+		this.totalValue = 10;
 		this.modifier = 0;
 		this.bonuses = new HashMap<>();
 		this.bonuses.put("Base Score", 10);
 	}
 
-	public void update(CharacterSheet character) {
+	public void update() {
 		this.totalValue = this.bonuses.values().stream().reduce(0, (a, b) -> a + b);
-
 		this.modifier = (this.totalValue / 2) - 5;
+	}
+
+	public boolean setBonus(String key, int value){
+		boolean existingBonus = this.bonuses.containsKey(key);
+		this.bonuses.put(key,value);
+		this.update();
+		return existingBonus;
+	}
+
+	public boolean incrementBonus(String key){
+		boolean existingBonus = this.bonuses.containsKey(key);
+		int value = 1;
+		if(existingBonus) value = this.bonuses.get(key)+1;
+		this.bonuses.put(key,value);
+		this.update();
+		return existingBonus;
+	}
+
+	public boolean decrementBonus(String key){
+		boolean validBonus = this.bonuses.containsKey(key);
+		if(validBonus) {
+			int value = this.bonuses.get(key)-1;
+			this.bonuses.put(key, value);
+			this.update();
+		}
+		return validBonus;
+	}
+
+	public boolean removeBonus(String key){
+		if(this.bonuses.containsKey(key)){
+			this.bonuses.remove(key);
+			this.update();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
