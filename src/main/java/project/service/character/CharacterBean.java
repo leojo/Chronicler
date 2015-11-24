@@ -16,6 +16,7 @@ public class CharacterBean {
     private int fort, reflex, will;
     // stat vars
     private int STR, DEX, CON, INT, WIS, CHA;
+    private int availableAbilityPoints;
     // fluff vars
 
 
@@ -26,8 +27,10 @@ public class CharacterBean {
     // special Abilities
     private String specialAbs, languages;
     // skills
+    private int availableSkillPoints;
     //private Skill[] skills;
     // feats
+    private int availableFeats;
     //private Feat[] feats;
     // items/inventory
     //private Item[] items;
@@ -468,5 +471,29 @@ public class CharacterBean {
 
     public void setTempHP(int tempHP) {
         this.tempHP = tempHP;
+    }
+
+    public int getAvailableAbilityPoints() {
+        return availableAbilityPoints;
+    }
+
+    public void setAvailableAbilityPoints(int availableAbilityPoints) {
+        this.availableAbilityPoints = availableAbilityPoints;
+    }
+
+    public int getAvailableSkillPoints() {
+        return availableSkillPoints;
+    }
+
+    public void setAvailableSkillPoints(int availableSkillPoints) {
+        this.availableSkillPoints = availableSkillPoints;
+    }
+
+    public int getAvailableFeats() {
+        return availableFeats;
+    }
+
+    public void setAvailableFeats(int availableFeats) {
+        this.availableFeats = availableFeats;
     }
 }

@@ -43,13 +43,13 @@ public class OfflineResultSet {
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
-            while (rs.next()) {
+            do {
                 HashMap<String,Object> row = new HashMap<String,Object>();
                 for (int i = 1; i <= columns; ++i) {
                     row.put(md.getColumnName(i), rs.getObject(i));
                 }
                 list.add(row);
-            }
+            } while (rs.next());
             rs.close();
             return list;
         }catch (SQLException e){

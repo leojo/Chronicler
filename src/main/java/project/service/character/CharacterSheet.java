@@ -1,16 +1,19 @@
 package project.service.character;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 import project.service.globals.AbilityID;
-import project.service.globals.AdvancementTable;
 import project.service.globals.SavingThrowID;
 
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
@@ -30,6 +33,7 @@ public class CharacterSheet {
 	// Note: These need special edit function in the system if they are to be edited.
 	public Map<Integer, Integer> classID; //Placeholders
 	public Integer raceID;
+	public Integer totalClassLevel;
 	public Map<AbilityID, AbilityScore> abilityScores;
 	public Map<SavingThrowID, SavingThrow> savingThrows;
 	// Combat stats
@@ -85,9 +89,13 @@ public class CharacterSheet {
     }
 
 	private CharacterBean initializeBean(CharacterBean bean) {
-		String classname  = bean.getClassName();
+		OfflineResultSet ors = find.playerClass(bean.getClassName());
+		ors.first();
+		Integer classID = ors.getInt("id");
 		String race = bean.getRace();
-		find.advTable(classname, 1);
+		this.setRacialMods(race);
+		this.levelUp(classID);
+
 
 		// might even be unneccessary? It seems that the bean sets these as 0 and "" by default
 		/*bean.setName("");
@@ -99,6 +107,49 @@ public class CharacterSheet {
 		bean.setTempHP(0);*/
 
 		return bean;
+	}
+
+	private void setRacialMods(String race) {
+		if(true)return;
+		// TODO: This is broken - low-ish priority
+		OfflineResultSet raceData = find.race(race);
+		raceData.first();
+		ObjectMapper jsonParser = new ObjectMapper();
+		HashMap<String,String> abilityBonus = null;
+		Collection<String> autoLanguages = null;
+		Collection<String> bonusLanguages = null;
+		HashMap<String,String> condSkillBonus = null;
+		HashMap<String,String> condSaveBonus = null;
+		HashMap<String,String> condACBonus = null;
+		try {
+			abilityBonus = jsonParser.readValue(raceData.getString("abilit_bonus"), HashMap.class);
+			HashMap<String,String> languages = jsonParser.readValue(raceData.getString("languages"), HashMap.class);
+			autoLanguages = jsonParser.readValue(languages.get("Automatic Languages"), HashMap.class).values();
+			bonusLanguages = jsonParser.readValue(languages.get("Bonus Languages"), HashMap.class).values();
+			HashMap<String,String> special = jsonParser.readValue(raceData.getString("special"), HashMap.class);
+		} catch (JsonMappingException e) {
+			System.err.println("Error mapping race info");
+			e.printStackTrace(System.err);
+			return;
+		} catch (JsonParseException e) {
+			System.err.println("Error parsing race info");
+			e.printStackTrace(System.err);
+			return;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		// Iterate through abilityBonuses
+		for(String key : abilityBonus.keySet()){
+			AbilityID abilityID = AbilityID.fromString(key);
+			Integer bonus = Integer.parseInt(abilityBonus.get(key));
+			this.abilityScores.get(abilityID).setBonus("racial",bonus);
+			this.abilityScores.get(abilityID).update();
+		}
+
+		// Iterate through abilityBonuses
+
 	}
 
 	private void updateBean() {
@@ -124,9 +175,22 @@ public class CharacterSheet {
 		return this.bean;
 	}
 
+	// Levels the character up in the given class (given by class ID)
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
-		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); //Increment level counter
+		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1);
+		OfflineResultSet currentClass = find.playerClass(classID+"/exact");
+		int baseSkillPoints = currentClass.getInt("skill_points");
+		AbilityID skillAbilityID = AbilityID.fromString(currentClass.getString("skill_points_ability"));
+		int bonusSkillPoints = this.abilityScores.get(skillAbilityID).totalValue;
+		this.bean.setAvailableSkillPoints(baseSkillPoints + bonusSkillPoints);
+		this.update();
+		if(this.totalClassLevel%4 == 0 && this.totalClassLevel>0){
+			this.bean.setAvailableAbilityPoints(this.bean.getAvailableSkillPoints()+1);
+		}
+		if(this.totalClassLevel%3 == 0 && this.totalClassLevel>0){
+			this.bean.setAvailableFeats(this.bean.getAvailableFeats() + 1);
+		}
 	}
 
 	/*
@@ -134,10 +198,18 @@ public class CharacterSheet {
 	 */
 
 	public void update() {
-		this.abilityScores.values().stream().forEach(v -> v.update(this));
+		this.abilityScores.values().stream().forEach(v -> v.update());
 		this.savingThrows.values().stream().forEach(v -> v.update(this));
-		this.skills.values().stream().forEach(v -> v.update(this));
+		this.skills.values().stream().forEach(v -> v.update());
 		this.updateBAB();
+		this.updateTotalLevel();
+	}
+
+	public void updateTotalLevel(){
+		this.totalClassLevel = 0;
+		for(Integer level : classID.values()){
+			totalClassLevel += level;
+		}
 	}
 
 	public Integer updateBAB() {
@@ -271,11 +343,9 @@ public class CharacterSheet {
 	}
 
 
-
 	/*
 	 * Convenience functions for retrieving values from containers
 	 */
-
 	public AbilityScore get(AbilityID id) {
 		return this.abilityScores.get(id);
 	}

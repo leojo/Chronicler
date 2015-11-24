@@ -122,6 +122,26 @@ body .container {
     top: 150px;
     bottom: 0;
     background: #f6f1ed; }
+    body .container .sheetContent .editFieldBig {
+      display: block;
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+      text-align: center;
+      line-height: 100px;
+      font-size: 1.5em;
+      font-weight: 600;
+      background: white; }
+    body .container .sheetContent .editField {
+      display: block;
+      width: 100px;
+      height: 30px;
+      border: 1px solid black;
+      text-align: center;
+      line-height: 30px;
+      font-size: 0.7em;
+      font-weight: 600;
+      background: white; }
 body .container.open {
   left: 15%;
   width: 85%; }
