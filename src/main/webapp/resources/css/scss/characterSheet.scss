@@ -29,6 +29,8 @@ body {
             top: $bannerHeight;
             bottom: 0;
             background: $light;
+            display: block;
+            overflow: auto;
 
             .editFieldBig {
                 display: block;

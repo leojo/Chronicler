@@ -21,9 +21,9 @@
         <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
         <div class="container">
             <div class="characterBanner">
-                <h1>TROKTOR</h1>
-                <h3>Level 1</h3>
-                <h3>Gnome Barbarian</h3>
+                <h1 th:text="${character.name}"></h1>
+                <h3 th:text="${character.level}"></h3>
+                <h3 th:text="${character.className} +' '+${character.race}"></h3>
             </div>
 
             <ul class="tabs">
