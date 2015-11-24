@@ -55,7 +55,7 @@ public class CharacterSheet {
     public CharacterSheet(CharacterBean bean, boolean fresh) {
 		this.find = new Lookup();
 
-		if(fresh) this.bean = initializeBean(bean);
+		if(fresh) initializeBean(bean);
 		else {
 
 			this.bean = bean;
@@ -88,7 +88,9 @@ public class CharacterSheet {
 		}
     }
 
-	private CharacterBean initializeBean(CharacterBean bean) {
+	private void initializeBean(CharacterBean bean) {
+		this.bean = bean;
+		this.totalClassLevel = 1;
 		OfflineResultSet ors = find.playerClass(bean.getClassName());
 		ors.first();
 		Integer classID = ors.getInt("id");
@@ -105,8 +107,6 @@ public class CharacterSheet {
 		bean.setMaxHp(0);
 		bean.setCurrHp(0);
 		bean.setTempHP(0);*/
-
-		return bean;
 	}
 
 	private void setRacialMods(String race) {
@@ -178,11 +178,14 @@ public class CharacterSheet {
 	// Levels the character up in the given class (given by class ID)
 	public void levelUp(int classID) {
 		// TODO: Check prerequisites if multiclassing
+		if(this.classID == null) this.classID = new HashMap<Integer,Integer>();
 		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1);
 		OfflineResultSet currentClass = find.playerClass(classID+"/exact");
-		int baseSkillPoints = currentClass.getInt("skill_points");
+		currentClass.first();
+		int baseSkillPoints = currentClass.getInt("skill_points")*(this.totalClassLevel==1?4:1);
+		if(this.abilityScores == null) this.resetAbilities();
 		AbilityID skillAbilityID = AbilityID.fromString(currentClass.getString("skill_points_ability"));
-		int bonusSkillPoints = this.abilityScores.get(skillAbilityID).totalValue;
+		int bonusSkillPoints = this.abilityScores.get(skillAbilityID).totalValue*(this.totalClassLevel==1?4:1);
 		this.bean.setAvailableSkillPoints(baseSkillPoints + bonusSkillPoints);
 		this.update();
 		if(this.totalClassLevel%4 == 0 && this.totalClassLevel>0){
@@ -199,8 +202,8 @@ public class CharacterSheet {
 
 	public void update() {
 		this.abilityScores.values().stream().forEach(v -> v.update());
-		this.savingThrows.values().stream().forEach(v -> v.update(this));
-		this.skills.values().stream().forEach(v -> v.update());
+		//this.savingThrows.values().stream().forEach(v -> v.update(this));
+		//this.skills.values().stream().forEach(v -> v.update());
 		this.updateBAB();
 		this.updateTotalLevel();
 	}
@@ -217,7 +220,7 @@ public class CharacterSheet {
 
 		for (int i : this.classID.keySet()) {
 			OfflineResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
-
+			advancement.first();
 			Integer ClassBAB = 0; // Get the first number
 			ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);
 

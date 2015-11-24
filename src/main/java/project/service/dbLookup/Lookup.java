@@ -64,7 +64,9 @@ public class Lookup {
 
     public OfflineResultSet advTableByClassID(int classID, int level){
         String className = null;
-        className = playerClass(classID+"/exact").getString("name");
+        OfflineResultSet theclass = playerClass(classID+"/exact");
+        theclass.first();
+        className = theclass.getString("name");
         return advTable(className,level);
     }
 
