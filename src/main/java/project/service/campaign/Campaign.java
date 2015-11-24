@@ -14,14 +14,14 @@ public class Campaign {
 	public Vector<User> players;
 	public Vector<User> DMs;
 	public Map<String, String> imagePaths; // Map<[Image title], [Image path]>
-	public Vector<String> notes;
+	public String notes;
 
 	public Campaign(String name) {
 		this.name = name;
 		this.players = new Vector<>();
 		this.DMs = new Vector<>();
 		this.imagePaths = new HashMap<>();
-		this.notes = new Vector<>();
+		this.notes = "";
 	}
 
 	public Campaign() {
