@@ -6,9 +6,9 @@ import java.util.Scanner;
 
 public class Lookup {
 
-    private Connection c;
+    private String URL;
 
-    public Lookup() {this.c = connect("data/dnd_srd.db");}
+    public Lookup() {this.URL = "data/dnd_srd.db";}
 
     private Connection connect(String dbUrl){
         Connection c = null;
@@ -140,12 +140,16 @@ public class Lookup {
     // General search function, that query's the database with any select statement and gives back the resultset
     private OfflineResultSet searchRaw(String query){
         try{
+            Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.next()) return null; // This advances the cursor forward
             // So we must redo the query in order not to miss the first line
             // (There is a function that should do this, but it's not supported for sqlite :[ )
-            return new OfflineResultSet(stmt.executeQuery(query));
+            OfflineResultSet ors = new OfflineResultSet(stmt.executeQuery(query));
+            rs.close();
+            c.close();
+            return ors;
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();

@@ -15,10 +15,8 @@ public class OfflineResultSet {
     private final List<HashMap<String,Object>> resultSet;
     private final HashMap<Integer,String> colNum;
     private int currentIndex;
-    private int lastIndex;
 
     public OfflineResultSet(ResultSet rs){
-        this.lastIndex = 0;
         this.colNum = getColumnNumbers(rs);
         this.resultSet = resultSetToArrayList(rs);
         this.currentIndex = -1;
@@ -41,13 +39,11 @@ public class OfflineResultSet {
 
     // Convert a resultset into an arraylist of hashmaps
     private ArrayList<HashMap<String,Object>> resultSetToArrayList(ResultSet rs){
-        this.lastIndex = 0;
         try {
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             ArrayList<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
             while (rs.next()) {
-                this.lastIndex++;
                 HashMap<String,Object> row = new HashMap<String,Object>();
                 for (int i = 1; i <= columns; ++i) {
                     row.put(md.getColumnName(i), rs.getObject(i));
@@ -66,7 +62,7 @@ public class OfflineResultSet {
 
     public boolean next(){
         this.currentIndex++;
-        if(this.currentIndex >= this.lastIndex){
+        if(this.currentIndex >= this.resultSet.size()){
             return false;
         }
         return true;
@@ -100,6 +96,20 @@ public class OfflineResultSet {
     public Integer getInt(String key){
         try {
             return Integer.parseInt(getObject(key).toString());
+        } catch (NumberFormatException e){
+            e.printStackTrace(System.err);
+            return null;
+        }
+    }
+
+    public Double getDouble(int index){
+        String key = colNum.get(index);
+        return getDouble(key);
+    }
+
+    public Double getDouble(String key){
+        try {
+            return Double.parseDouble(getObject(key).toString());
         } catch (NumberFormatException e){
             e.printStackTrace(System.err);
             return null;
