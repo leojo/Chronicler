@@ -89,6 +89,7 @@ public class CharacterSheet {
 		String race = bean.getRace();
 		find.advTable(classname, 1);
 
+
 		// might even be unneccessary? It seems that the bean sets these as 0 and "" by default
 		/*bean.setName("");
 		bean.setGender("");
@@ -271,11 +272,9 @@ public class CharacterSheet {
 	}
 
 
-
 	/*
 	 * Convenience functions for retrieving values from containers
 	 */
-
 	public AbilityScore get(AbilityID id) {
 		return this.abilityScores.get(id);
 	}

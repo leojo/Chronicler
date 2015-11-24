@@ -1,18 +1,18 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-about" th:fragment="aboutFrag">
 <p> This is the about page</p>
     <div class="about-main">
-        <div class="mainInfo" id="name">Name: <span th:text="${character.name}">Error loading</span></div>
+        <div class="mainInfo" id="name">Name: <span class="editable-span editFieldBig" th:text="${character.name}">Error loading</span></div>
         <div class="mainInfo" id="race">Race: <span th:text="${character.race}"></span></div>
         <div class="mainInfo" id="className">Class: <span th:text="${character.className}"></span></div>
-        <div class="mainInfo" id="alignment">Alignment: <span th:text="${character.alignment}"></span></div>
-        <div class="mainInfo" id="deity">Deity: <span th:text="${character.deity}"></span></div>
-        <div class="mainInfo" id="gender">Gender: <span th:text="${character.gender}"></span></div>
-        <div class="mainInfo" id="eyes">Eyes: <span th:text="${character.eyes}"></span></div>
-        <div class="mainInfo" id="hair">Hair: <span th:text="${character.hair}"></span></div>
-        <div class="mainInfo" id="height">Height: <span th:text="${character.height}"></span></div>
-        <div class="mainInfo" id="weight">Weight: <span th:text="${character.weight}"></span></div>
-        <div class="mainInfo" id="size">Size: <span th:text="${character.size}"></span></div>
-        <div class="mainInfo" id="skin">Skin: <span th:text="${character.skin}"></span></div>
+        <div class="mainInfo" id="alignment">Alignment: <span class="editable-span editFieldBig" th:text="${character.alignment}"></span></div>
+        <div class="mainInfo" id="deity">Deity: <span class="editable-span editFieldBig" th:text="${character.deity}"></span></div>
+        <div class="mainInfo" id="gender">Gender: <span class="editable-span editField" th:text="${character.gender}"></span></div>
+        <div class="mainInfo" id="eyes">Eyes: <span class="editable-span editField" th:text="${character.eyes}"></span></div>
+        <div class="mainInfo" id="hair">Hair: <span class="editable-span editField" th:text="${character.hair}"></span></div>
+        <div class="mainInfo" id="height">Height: <span class="editable-span editField" th:text="${character.height}"></span></div>
+        <div class="mainInfo" id="weight">Weight: <span class="editable-span editField" th:text="${character.weight}"></span></div>
+        <div class="mainInfo" id="size">Size: <span class="editable-span editField" th:text="${character.size}"></span></div>
+        <div class="mainInfo" id="skin">Skin: <span class="editable-span editField" th:text="${character.skin}"></span></div>
 
     </div>
     <div class="about-story">
