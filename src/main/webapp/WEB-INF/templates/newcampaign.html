@@ -1,1 +1,46 @@
-<p>This is the CREATE NEW CAMPAIGN page</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Interactive character sheet"/>
+    <title>Chronicler</title>
+
+    <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+    <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+    <script th:src="@{/resources/js/tabSwitcher.js}" />
+    <script th:src="@{/resources/js/dashboard.js}" />
+</head>
+<header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
+<body>
+<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+<div th:switch="${user.userID}" class="container flex">
+    <div th:case="null" class="flex">
+        <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
+        <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
+    </div>
+    <div th:case="*">
+        <p>This is the NEW CAMPAIGN page</p>
+        <form action="#" th:action="@{/newCampaign}" th:object="${campaign}" method="post">
+            <select id="classSelect" th:field="*{className}">
+                <option th:each="classname : ${classes}"
+                        th:value="${classname}" th:text="${classname}"></option>
+            </select>
+            <select id="raceSelect" th:field="*{race}">
+                <option th:each="race:${races}"
+                        th:value="${race}" th:text="${race}">Japan</option>
+
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+</div>
+</body>
+
+<footer>
+</footer>
+
+</html>
