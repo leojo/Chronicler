@@ -11,6 +11,7 @@
     <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
     <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+    <script th:src="@{/resources/js/editableFields.js}" />
     <script th:src="@{/resources/js/tabSwitcher.js}" />
     <script th:src="@{/resources/js/dashboard.js}" />
 </head>
@@ -23,17 +24,9 @@
         <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
     </div>
     <div th:case="*">
-        <p>This is the NEW CAMPAIGN page</p>
+        <p>Select a name for your campaign</p>
         <form action="#" th:action="@{/newCampaign}" th:object="${campaign}" method="post">
-            <select id="classSelect" th:field="*{className}">
-                <option th:each="classname : ${classes}"
-                        th:value="${classname}" th:text="${classname}"></option>
-            </select>
-            <select id="raceSelect" th:field="*{race}">
-                <option th:each="race:${races}"
-                        th:value="${race}" th:text="${race}">Japan</option>
-
-            </select>
+            <div id="campName">Name: <span class="editable-span" th:field="*{name}">Campaign name</span></div>
             <input type="submit" value="Submit" />
         </form>
     </div>
