@@ -13,10 +13,10 @@ public class Lookup {
     private Connection connect(String dbUrl){
         Connection c = null;
         try {
-            System.out.println("Establishing connection to "+dbUrl+"...");
+            System.err.println("Establishing connection to "+dbUrl+"...");
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:"+dbUrl);
-            System.out.println("Connection established!");
+            System.err.println("Connection established");
             c.setAutoCommit(false);
         } catch ( Exception e ) {
             System.err.println("Error in connect: "+e.getClass().getName() + ": " + e.getMessage() );
@@ -64,7 +64,7 @@ public class Lookup {
 
     public OfflineResultSet advTableByClassID(int classID, int level){
         String className = null;
-        className = playerClass(classID+"").getString("name");
+        className = playerClass(classID+"/exact").getString("name");
         return advTable(className,level);
     }
 
@@ -143,12 +143,11 @@ public class Lookup {
             Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(!rs.next()) return null; // This advances the cursor forward
-            // So we must redo the query in order not to miss the first line
-            // (There is a function that should do this, but it's not supported for sqlite :[ )
-            OfflineResultSet ors = new OfflineResultSet(stmt.executeQuery(query));
+            if(!rs.next()) return null; // return null if the ResultSet is empty
+            OfflineResultSet ors = new OfflineResultSet(rs);
             rs.close();
             c.close();
+            System.err.println("Connection closed");
             return ors;
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
@@ -169,6 +168,13 @@ public class Lookup {
         System.out.println("\n-----------------\n\nAvailable races:");
         for(String s : races){
             System.out.println(s);
+        }
+
+
+        System.out.println("\n-----------------\n\nClasses found with id '1':");
+        OfflineResultSet ors = find.playerClass("1/exact");
+        while(ors.next()){
+            System.out.println(ors.getString("name"));
         }
     }
 }
