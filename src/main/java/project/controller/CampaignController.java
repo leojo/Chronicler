@@ -21,14 +21,25 @@ public class CampaignController {
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
 
-	    Campaign c = new Campaign();
         return "campaigns";
     }
     @RequestMapping(value = "/newCampaign", method = RequestMethod.GET)
     public String newCampaign(Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
+
+	    Campaign campaign = new Campaign();
+	    model.addAttribute("campaign", campaign);
+
         return "newcampaign";
     }
+	@RequestMapping(value = "/newCampaign", method = RequestMethod.POST)
+    public String newCampaignPost(Model model, HttpSession session) {
+		User user = (User)session.getAttribute("userId");
+		model.addAttribute("user", user);
+
+        return "campaigns";
+    }
+
 
 }
