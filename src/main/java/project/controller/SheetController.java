@@ -59,7 +59,13 @@ public class SheetController {
                 session.setAttribute("charbean", charbean);
                 //session.setAttribute("characterSheet", cs);
                 //cs = session.getAttribute("characterSheet");
-                return "characterSheet";
+                try {
+                    charbean.saveAsJson(user.getUserID(), true);
+                }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                    System.out.println("Sadly we couldn't save your character, this is disastrous.");
+                }
+
+                    return "characterSheet";
             } else return "loginFail";
         }
 
@@ -75,12 +81,13 @@ public class SheetController {
             User user = (User)session.getAttribute("userId");
             model.addAttribute("user", user);
             model.addAttribute("character", charbean);
-            System.out.println("Alrighty then, here is our name");
+            System.out.println("Our bean has this as character name");
             System.out.println(charbean.getName());
-            System.out.println("And our class");
-            System.out.println(charbean.getClassName());
-
-
+            try {
+                charbean.saveAsJson(user.getUserID(), false);
+            } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                System.out.println("Sadly we couldn't save your character, this is disastrous.");
+            }
             return "characterSheet";
         }
 }

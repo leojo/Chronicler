@@ -59,10 +59,21 @@ public class OfflineResultSet {
     public void printCurrentRowKeys(){
         HashMap<String,Object> row = resultSet.get(currentIndex);
         Object[] keys = row.keySet().toArray();
+        System.err.print("Keys: ");
         for(int i=0; i<keys.length; i++){
-            System.out.print(keys[i].toString() + ", ");
+            System.err.print(keys[i].toString() + ", ");
         }
-        System.out.println();
+        System.err.println();
+
+    }
+    public void printCurrentRowValues(){
+        HashMap<String,Object> row = resultSet.get(currentIndex);
+        Object[] keys = row.keySet().toArray();
+        System.err.print("Values: ");
+        for(int i=0; i<keys.length; i++){
+            System.err.print((row.get(keys[i])==null?"NULL":row.get(keys[i])).toString() + ", ");
+        }
+        System.err.println();
 
     }
 

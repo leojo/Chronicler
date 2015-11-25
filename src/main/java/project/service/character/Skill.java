@@ -27,7 +27,6 @@ class Skill {
 		this.name = skillInfo.getString("name");
 		if(character.abilityScores == null) character.resetAbilities();
 		String skillName = skillInfo.getString("key_ability");
-		System.out.println("THE SKILL NAME!!!! ----> "+skillName);
 		this.baseSkill = character.abilityScores.get(AbilityID.fromString(skillName));
 		this.trainedOnly = skillInfo.getBoolean("trained");
 		this.armorPenalty = skillInfo.getBoolean("armor_check");
