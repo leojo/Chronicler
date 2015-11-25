@@ -121,7 +121,11 @@ public class AccountStorage {
             Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(!rs.next()) return null; // return null if the ResultSet is empty
+            if(!rs.next()){
+                rs.close();
+                c.close();
+                return null; // return null if the ResultSet is empty
+            }
             OfflineResultSet ors = new OfflineResultSet(rs);
             rs.close();
             c.close();
@@ -144,6 +148,7 @@ public class AccountStorage {
             stmt.close();
             c.commit();
             c.close();
+            System.err.println("Connection closed");
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();

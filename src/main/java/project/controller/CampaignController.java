@@ -26,8 +26,10 @@ public class CampaignController {
 	    storage = new AccountStorage("data/userAccounts.sqlite");
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
-	    OfflineResultSet campaigns = storage.getCampaigns(user.getUserID());
-	    if (campaigns == null) {
+		System.err.println("Getting campaigns...");
+		OfflineResultSet campaigns = storage.getCampaigns(user.getUserID());
+		System.err.println("done!");
+		if (campaigns == null) {
 		    return "campaigns";
 	    }
 	    Vector<String> campaignNames = new Vector<>();

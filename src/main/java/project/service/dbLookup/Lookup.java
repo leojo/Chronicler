@@ -145,7 +145,12 @@ public class Lookup {
             Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(!rs.next()) return null; // return null if the ResultSet is empty
+            if(!rs.next()){
+                rs.close();
+                c.close();
+                System.err.println("Connection closed");
+                return null; // return null if the ResultSet is empty
+            }
             OfflineResultSet ors = new OfflineResultSet(rs);
             rs.close();
             c.close();

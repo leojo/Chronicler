@@ -74,6 +74,10 @@ public class Spell {
         this.specialVerbal = spell.getString("verbal_components");
     }
 
+    public boolean getLevelFor(){
+        return false;
+    }
+
     public String getName() {
         return name;
     }
