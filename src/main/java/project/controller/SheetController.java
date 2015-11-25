@@ -89,4 +89,22 @@ public class SheetController {
             }
             return "characterSheet";
         }
+
+        @RequestMapping(value = "/character", method = RequestMethod.GET)
+        public String getCharacter(@ModelAttribute Model model, HttpSession session) {
+            find = new Lookup();
+            model.addAttribute("races", find.listRaces());
+            model.addAttribute("classes", find.listClasses());
+
+            model.addAttribute("charbean", new CharacterBean());
+
+            User user = (User)session.getAttribute("userId");
+            model.addAttribute("user", user);
+            if(user.getUserID() != null)
+                return "newcharacter";
+            else
+                return "loginFail";
+        }
+
+
 }
