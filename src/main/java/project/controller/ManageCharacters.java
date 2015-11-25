@@ -53,6 +53,8 @@ public class ManageCharacters {
             charbean.setDatabaseID(charID);
             charbean = loadBeanFromJson(charbean, user.getUserID());
             model.addAttribute("character", charbean);
+            session.setAttribute("currentCharID", charID);
+            System.out.println("LOADED CHARACTER NUMBER "+charID+" and set his session attr as "+session.getAttribute("currentCharID"));
             return "characterSheet";
         } else
             return "loginFail";

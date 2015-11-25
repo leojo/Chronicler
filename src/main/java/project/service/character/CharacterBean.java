@@ -51,10 +51,13 @@ public class CharacterBean {
     }
 
     public void saveAsJson(String user) throws com.fasterxml.jackson.core.JsonProcessingException {
+
+        this.databaseID = db.getNextID();
         String charAsJSON = mapper.writeValueAsString(this);
+
         System.out.println(charAsJSON);
         System.out.println(user);
-        this.databaseID = db.getNextID();
+        System.out.println("INSIDE BEAN "+this.databaseID);
         System.out.println(db.addCharacterJSON(user, charAsJSON));
     }
 

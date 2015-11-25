@@ -89,7 +89,4 @@ public class SheetController {
             }
             return "characterSheet";
         }
-
-
-
 }
