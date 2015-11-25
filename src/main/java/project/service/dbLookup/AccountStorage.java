@@ -50,27 +50,23 @@ public class AccountStorage {
         }
     }
 
-    public String getCampaignPlayers(String campaignID) {
-        ResultSet rs = null;
+    public OfflineResultSet getCampaignPlayers(String campaignID) {
+        OfflineResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE campaignID=\""+campaignID+"\"";
-        try {
-            rs = searchRaw(query);
-            if(rs != null) {
-                return rs.getString("characterName");
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
+        rs = searchRaw(query);
+        if(rs != null) {
+            return rs;
+        } else {
             return null;
         }
     }
 
     public OfflineResultSet getCampaigns(String user) {
-        ResultSet rs = null;
+        OfflineResultSet rs = null;
         String query = "SELECT * FROM Campaigns WHERE Owner=\""+user+"\"";
         rs = searchRaw(query);
         if(rs != null) {
-            return new OfflineResultSet(rs);
+            return rs;
         } else {
             return null;
         }
