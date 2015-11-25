@@ -144,6 +144,8 @@ body .container {
       font-size: 0.7em;
       font-weight: 600;
       background: white; }
+    body .container .sheetContent .spanInput {
+      display: none; }
 body .container.open {
   left: 15%;
   width: 85%; }
