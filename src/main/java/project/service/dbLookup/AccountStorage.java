@@ -40,8 +40,11 @@ public class AccountStorage {
 
     public int getNextID() {
         OfflineResultSet ors = searchRaw("SELECT max(CharacterID) FROM Characters;");
+        if(ors == null) return 1;
         ors.first();
-        return ors.getInt(1)+1;
+        Integer currentID = ors.getInt(1);
+        if (currentID == null) currentID = 0;
+        return currentID+1;
     }
 
     public HashMap<Integer, String> listCharacters(String user){
