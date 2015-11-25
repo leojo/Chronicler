@@ -60,7 +60,9 @@ public class SheetController {
                 //session.setAttribute("characterSheet", cs);
                 //cs = session.getAttribute("characterSheet");
                 try {
-                    charbean.saveAsJson(user.getUserID(), true);
+                    charbean.saveAsJson(user.getUserID());
+                    session.setAttribute("currentCharID", charbean.getDatabaseID());
+
                 }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                     System.out.println("Sadly we couldn't save your character, this is disastrous.");
                 }
@@ -69,12 +71,6 @@ public class SheetController {
             } else return "loginFail";
         }
 
-        @RequestMapping(value = "/character", method = RequestMethod.GET)
-        public String myCharacterGet(Model model) {
-            //model.addAttribute()
-
-            return "characterSheet";
-        }
 
         @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
         public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
@@ -84,7 +80,10 @@ public class SheetController {
             System.out.println("Our bean has this as character name");
             System.out.println(charbean.getName());
             try {
-                charbean.saveAsJson(user.getUserID(), false);
+                charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+                System.out.println("ABOUT TO SAVE TO CHARACTER WITH THIS ID:");
+                System.out.println(charbean.getDatabaseID());
+                charbean.updateJson(user.getUserID());
             } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
