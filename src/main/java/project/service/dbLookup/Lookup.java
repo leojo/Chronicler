@@ -94,7 +94,7 @@ public class Lookup {
     public SpellList spellList(String castingName){
         String query= "SELECT * FROM spell WHERE \"level\" LIKE \"%"+castingName+"%\";";
         OfflineResultSet spells = searchRaw(query);
-        return new SpellList(spells,castingName);
+        return new SpellList(spells);
     }
 
     public OfflineResultSet feat(String searchTerm){
