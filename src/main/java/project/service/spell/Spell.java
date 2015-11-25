@@ -73,6 +73,7 @@ public class Spell {
     }
 
     public int getLevelFor(String className){
+        // Is git listening here?
         if(!this.level.contains(className)) return -1;
         int start = this.level.indexOf(className);
         int stop = this.level.indexOf(",",start);
