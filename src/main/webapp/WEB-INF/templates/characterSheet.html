@@ -37,13 +37,15 @@
             </ul>
 
             <div class="sheetContent">
+                <form id="sheetForm" th:object="${character}">
                 <!-- this is where we put includes and hide/show depending on tab -->
-                <div id="combatTab" th:include="fragments/cs_combat :: combatFrag"></div>
-                <div id="spellTab" th:include="fragments/cs_spells :: spellFrag"></div>
-                <div id="featTab" th:include="fragments/cs_feats :: featFrag"></div>
-                <div id="skillTab" th:include="fragments/cs_skills :: skillFrag"></div>
-                <div id="inventoryTab" th:include="fragments/cs_inventory :: inventoryFrag"></div>
-                <div id="aboutTab" th:include="fragments/cs_about :: aboutFrag"></div>
+                    <div id="combatTab" th:include="fragments/cs_combat :: combatFrag"></div>
+                    <div id="spellTab" th:include="fragments/cs_spells :: spellFrag"></div>
+                    <div id="featTab" th:include="fragments/cs_feats :: featFrag"></div>
+                    <div id="skillTab" th:include="fragments/cs_skills :: skillFrag"></div>
+                    <div id="inventoryTab" th:include="fragments/cs_inventory :: inventoryFrag"></div>
+                    <div id="aboutTab" th:include="fragments/cs_about :: aboutFrag"></div>
+                </form>
             </div>
         </div>
 

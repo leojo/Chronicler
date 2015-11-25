@@ -51,6 +51,11 @@ public class AccountStorage {
 
     }
 
+    public int addCharacterJSON(String userID, String charName, String json) {
+        return updateRaw("INSERT INTO Characters(UserID, characterName, characterJSON) VALUES('"+userID+"', '"+charName+"', '"+json+"')");
+
+    }
+
     // General search function, that query's the database with any select statement and gives back the resultset
     public OfflineResultSet searchRaw(String query){
         try{

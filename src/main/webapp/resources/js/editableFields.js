@@ -28,7 +28,7 @@ $.fn.extend({
 			// Submit the edited values for the spans:
 			submitChanges = function () {
 				if ($editField.val() !== '') {
-					$('#testForm').ajaxSubmit({url: 'updateCharacter', type: 'post'});
+					$('#sheetForm').ajaxSubmit({url: 'updateCharacter', type: 'post'});
 					$spans.html($editField.val());
 					$spans.show();
 					$spans.trigger('editsubmit', [$spans.html()]);
@@ -36,7 +36,7 @@ $.fn.extend({
 					$editField.hide();
 					console.log("DO WE HAVE A NAME");
 					console.log($spans.html());
-					$("#theForm").ajaxSubmit({url: 'character', type: 'post'})
+
 				}
 			},
 			tempVal;
