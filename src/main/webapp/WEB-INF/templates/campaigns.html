@@ -13,6 +13,7 @@
     <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
     <script th:src="@{/resources/js/tabSwitcher.js}" />
     <script th:src="@{/resources/js/dashboard.js}" />
+    <script th:src="@{/resources/js/deleteFunctions.js}" />
 </head>
 <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
 <body>
@@ -22,12 +23,17 @@
         <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
         <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
     </div>
-    <div th:case="*">
+    <div th:case="*" class="listContainer">
         <p>This is the MANAGE CAMPAIGNS page</p>
 
-        <ul>
-            <li th:each="c : ${campaignList}" th:text="${c}"></li>
+        <ul class="fancyList">
+            <li th:each="c : ${campaignList}" class="listItem">
+                <a class="content" th:text="${c.value}" th:href="${'/campaign'+c.key}"></a>
+
+                <input class="itemBtn remove" type="button" text="DEL" th:onclick="${'deleteCampaign('+c.key+')'}"></input>
+            </li>
         </ul>
+
     </div>
 </div>
 </body>

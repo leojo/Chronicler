@@ -38,8 +38,8 @@ public class AccountStorage {
         return c;
     }
 
-    public int getNextID() {
-        OfflineResultSet ors = searchRaw("SELECT max(CharacterID) FROM Characters;");
+    public int getNextID(String tableName) {
+        OfflineResultSet ors = searchRaw("SELECT max(characterID) FROM "+tableName+";");
         if(ors == null) return 1;
         ors.first();
         Integer currentID = ors.getInt(1);
@@ -50,18 +50,41 @@ public class AccountStorage {
     public HashMap<Integer, String> listCharacters(String user){
         String query = "SELECT characterID, characterName FROM \"Characters\" WHERE userID=\""+user+"\";";
         OfflineResultSet rs = searchRaw(query);
-        return returnIntegerNames(rs);
+        return returnIntegerNames(rs, "characterID", "characterName");
     }
 
-    private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs){
+    private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs, String intName, String stringName){
         HashMap<Integer, String> pairs = new HashMap<Integer, String>();
         while(rs.next()){
-            String name = rs.getString("characterName");
-            Integer id = rs.getInt("characterID");
+            String name = rs.getString(stringName);
+            Integer id = rs.getInt(intName);
             pairs.put(id,name);
         }
         return pairs;
     }
+
+    public HashMap<Integer, String> getCampaigns(String user) {
+        OfflineResultSet rs = null;
+        String query = "SELECT campaignID, campaignName FROM Campaigns WHERE ownerID=\""+user+"\"";
+        rs = searchRaw(query);
+        return returnIntegerNames(rs, "campaignID", "campaignName");
+/*
+        if(rs != null) {
+            return rs;
+        } else {
+            return null;
+        }*/
+    }
+
+    public int deleteCampaign(int ID) {
+        return updateRaw("DELETE FROM Campaigns WHERE campaignID="+ID+";");
+    }
+
+
+    public int deleteCharacter(int ID) {
+        return updateRaw("DELETE FROM Characters WHERE characterID="+ID+";");
+    }
+
 
     public OfflineResultSet searchUser(String userID) {
         String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
@@ -95,19 +118,10 @@ public class AccountStorage {
         }
     }
 
-    public OfflineResultSet getCampaigns(String user) {
-        OfflineResultSet rs = null;
-        String query = "SELECT * FROM Campaigns WHERE Owner=\""+user+"\"";
-        rs = searchRaw(query);
-        if(rs != null) {
-            return rs;
-        } else {
-            return null;
-        }
-    }
+
 
     public int insertCampaign(String user, String campaignName) {
-        return updateRaw("INSERT INTO Campaigns (CampaignID,Owner) VALUES ('"+campaignName+"','"+user+"');");
+        return updateRaw("INSERT INTO Campaigns (campaignName,ownerID) VALUES ('"+campaignName+"','"+user+"');");
     }
 
     public int addCharacterJSON(String userID, String json) {
