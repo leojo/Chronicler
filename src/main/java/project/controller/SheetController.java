@@ -20,9 +20,10 @@ import java.util.Enumeration;
 public class SheetController {
 
         Lookup find;
-// --------------
-// NEW CHAR STUFF
-// --------------
+
+        // -----------------------------------------------
+        // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
+        // -----------------------------------------------
         @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
         public String newCharacter(Model model, HttpSession session) {
             find = new Lookup();
@@ -55,18 +56,31 @@ public class SheetController {
                 CharacterSheet cs = new CharacterSheet(charbean, true);
                 //charbean = cs.getBean();
                 model.addAttribute("character", charbean);
+                session.setAttribute("charbean", charbean);
                 //session.setAttribute("characterSheet", cs);
                 //cs = session.getAttribute("characterSheet");
                 return "characterSheet";
-            } else
-                return "loginFail";
+            } else return "loginFail";
         }
 
-        @RequestMapping(value = "/myCharacters", method = RequestMethod.GET)
-        public String myCharacters(Model model) {
-            return "characters";
+        @RequestMapping(value = "/character", method = RequestMethod.GET)
+        public String myCharacterGet(Model model) {
+            //model.addAttribute()
+
+            return "characterSheet";
         }
 
+        @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
+        public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+            User user = (User)session.getAttribute("userId");
+            model.addAttribute("user", user);
+            model.addAttribute("character", charbean);
+            System.out.println("Alrighty then, here is our name");
+            System.out.println(charbean.getName());
+            System.out.println("And our class");
+            System.out.println(charbean.getClassName());
 
 
+            return "characterSheet";
+        }
 }

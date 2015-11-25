@@ -27,8 +27,11 @@ import java.util.Enumeration;
 public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String homePage(Model model) {
-        model.addAttribute("user", new User());
+    public String homePage(Model model, HttpSession session) {
+        // Make sure user is who we think they are, and put character bean in our model.
+        User user = (User)session.getAttribute("userId");
+        if(user == null) model.addAttribute("user", new User());
+        else model.addAttribute("user", user);
         return "index";
     }
 
