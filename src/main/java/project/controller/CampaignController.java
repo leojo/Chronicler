@@ -12,6 +12,7 @@ import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.OfflineResultSet;
 
 import javax.servlet.http.HttpSession;
+import java.util.Vector;
 
 /**
  * Created by andrea on 23.11.2015.
@@ -22,8 +23,16 @@ public class CampaignController {
 
     @RequestMapping(value = "/myCampaigns", method = RequestMethod.GET)
     public String myCampaigns(Model model, HttpSession session) {
+	    storage = new AccountStorage("data/userAccounts.sqlite");
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
+	    OfflineResultSet campaigns = storage.getCampaigns(user.getUserID());
+	    Vector<String> campaignNames = new Vector<>();
+	    while (campaigns.next()) {
+		    campaignNames.add(campaigns.getString("CampaignID"));
+	    }
+
+	    model.addAttribute("campaignList", campaignNames.toArray());
 
         return "campaigns";
     }
