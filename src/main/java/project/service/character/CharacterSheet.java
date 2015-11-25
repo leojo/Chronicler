@@ -99,8 +99,9 @@ public class CharacterSheet {
 		// TODO: This is broken - low-ish priority
 		OfflineResultSet raceData = find.race(race+"/exact");
 		raceData.first();
-		raceData.printCurrentRowKeys();
-		this.bean.setSpeed(raceData.getInt("speed"));
+		Integer speed = raceData.getInt("speed");
+		if(speed == null) speed = 30; //TODO: FIX THIS BUG PROPERLY!!!
+		this.bean.setSpeed(speed);
 		this.applyRacialAbilityBonuses(raceData);
 	}
 
@@ -216,8 +217,9 @@ public class CharacterSheet {
 
 	private void updateAC() {
 		if(this.AC == null) this.resetAC();
-		Integer dex = this.abilityScores.get(AbilityID.DEX).totalValue;
+		Integer dex = this.abilityScores.get(AbilityID.DEX).modifier;
 		if(dex != null)this.AC.put("DEX",dex);
+		this.AC.put("Base",10);
 	}
 
 	private void resetAC(){
@@ -324,7 +326,6 @@ public class CharacterSheet {
 	public void resetSkills(){
 		this.skills = new HashMap<>();
 		OfflineResultSet rs = this.find.skill("*");
-		System.out.println("Number of skills found: "+rs.size());
 		while (rs.next()) {
 			int skillID = rs.getInt("id");
 			this.skills.put(skillID, new Skill(this, rs));
