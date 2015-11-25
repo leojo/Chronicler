@@ -16,7 +16,7 @@
     </head>
     <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
     <body>
-        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+
         <div th:switch="${user.userID}" class="container flex">
             <div th:case="null" class="flex">
                 <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
@@ -24,6 +24,7 @@
             </div>
             <div th:case="*" class="flex"  th:include="fragments/startingOptions :: optionsFrag"></div>
         </div>
+        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
     </body>
 
     <footer>

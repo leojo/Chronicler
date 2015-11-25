@@ -21,9 +21,11 @@
         display: block;
         width: 90%;
         min-width: 310px;
-        margin: 10px 40px 10px 10px;
+        padding: 10px 40px 10px 10px;
         display: flex;
-        flex-flow: row wrap; }
+        flex-flow: row wrap;
+        text-decoration: none;
+        color: black; }
       .listContainer .fancyList .listItem .itemBtn {
         display: block;
         position: relative;

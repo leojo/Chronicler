@@ -9,8 +9,19 @@
     background: #000;
     font-family: $font;
     color: $accentColor;
-}
 
-.menubar p{
-    float: right;
+    div {
+        float: right;
+        padding-left: 5px;
+    }
+    p{
+        float: right;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 }

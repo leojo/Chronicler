@@ -27,7 +27,7 @@
         <ul class="fancyList">
             <li th:each="char : ${myChars}" class="listItem">
                 <a class="content" th:text="${char.value}" th:href="${'/character'+char.key}"></a>
-                <input class="itemBtn remove" type="button">DELETE</input>
+                <input class="itemBtn remove" type="button" text="DEL"></input>
             </li>
         </ul>
 
