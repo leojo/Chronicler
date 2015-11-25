@@ -46,7 +46,7 @@ public class AbilityScore {
 		}
 		this.totalValue = 10;
 		this.modifier = 0;
-		this.bonuses = new HashMap<>();
+		this.bonuses = new HashMap<String, Integer>();
 		this.bonuses.put("Base Score", 10);
 	}
 
@@ -92,10 +92,8 @@ public class AbilityScore {
 
 	@Override
 	public String toString() {
-		return "AbilityScore{" +
-				       "shortName='" + shortName + '\'' +
-				       ", totalValue=" + totalValue +
-				       ", bonuses=" + bonuses +
-				       '}';
+		final String[] details = {""};
+		this.bonuses.forEach((k, v) -> details[0] += k + ":" + v + ",");
+		return details[0];
 	}
 }

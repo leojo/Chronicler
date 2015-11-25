@@ -57,28 +57,93 @@ public class CharacterSheet {
     public CharacterSheet(CharacterBean bean, boolean fresh) {
 		this.find = new Lookup();
 		if(fresh) initializeBean(bean);
-		else {
-			this.bean = bean;
-
-			this.resetSavingThrows();
-
-			this.feats = new HashMap<>();
-
-			this.raceID = null;
-
-			this.inventory = new Vector<>();
-
-			this.hitDice = new HashMap<>();
-
-			this.AC = new HashMap<>();
-			this.grapple = new HashMap<>();
-			/*
-			this.bio = "";
-			this.appearance = "";
-			*/
-			this.update();
-		}
+		else this.loadFromBean(bean);
     }
+
+	private void loadFromBean(CharacterBean bean){
+		this.bean = bean;
+		this.loadClassIDs();
+		this.loadAbilityScores();
+		this.loadSavingThrows();
+		this.update();
+	}
+
+	private void loadClassIDs() {
+		this.resetClassIDs();
+		String level_details = this.bean.getLevel_details();
+		if(level_details == null || level_details.equals("")) return;
+		String[] classID_level = level_details.split(";");
+		// The string should be on the form: "1:3;4:2..." and should be read as
+		// the character having 3 levels in class with id 1, 2 levels in class with id 4 etc.
+		for(String pair : classID_level){
+			if(pair.length()==0) continue; //This should only skip the last line (in the case the string ends with a ;)
+			String[] details = pair.split(":");
+			Integer id = Integer.parseInt(details[0]);
+			Integer level = Integer.parseInt(details[1]);
+			this.classID.put(id,level);
+		}
+	}
+	private void storeClassIDs(){
+		final String[] level_details = {""};
+		this.classID.forEach((k, v) -> level_details[0] += k + ":" + v + ";");
+		this.bean.setLevel_details(level_details[0]);
+	}
+
+	private void loadAbilityScores() {
+		this.resetAbilities();
+		String ability_details = this.bean.getAbility_details();
+		if(ability_details == null || ability_details.equals("")) return;
+		String[] ability_info = ability_details.split(";");
+		// The string should be on the form: "XXXkey1:value1,key2:value2,;YYYkey3:value3,;" and should be read as
+		// The ability XXX has bonuses key1 and key2 with values value1 and value2 respectively. The ability YYY has bonus key3 with value value3.
+		for(String info : ability_info){
+			if(info.length()==0)continue;
+			AbilityID id = AbilityID.fromString(info.substring(0, 3));
+			String[] bonuses = info.substring(3).split(",");
+			AbilityScore score = new AbilityScore(id);
+			for(String bonus : bonuses){
+				if(bonus.length()==0)continue;
+				String key = bonus.split(":")[0];
+				Integer value = Integer.parseInt(bonus.split(":")[1]);
+				score.setBonus(key,value);
+			}
+			this.abilityScores.put(id,score);
+		}
+	}
+
+	private void storeAbilityScores(){
+		final String[] details = {""};
+		this.abilityScores.forEach((k, v) -> details[0] += k.toString() + v.toString() + ";");
+		this.bean.setAbility_details(details[0]);
+	}
+
+	private void loadSavingThrows() {
+		this.resetAbilities();
+		String save_details = this.bean.getSave_details();
+		if(save_details == null || save_details.equals("")) return;
+		String[] save_info = save_details.split(";");
+		// The string should be on the form: "XXX)key1:value1,key2:value2,;YYY)key3:value3,;" and should be read as
+		// The Save XXX has bonuses key1 and key2 with values value1 and value2 respectively. The save YYY has bonus key3 with value value3.
+		for(String info : save_info){
+			if(info.length()==0)continue;
+			SavingThrowID id = SavingThrowID.valueOf(info.split("[)]")[0]);
+			String[] bonuses = info.split("[)]")[1].split(",");
+			SavingThrow save = new SavingThrow(this,id);
+			for(String bonus : bonuses){
+				if(bonus.length()==0)continue;
+				String key = bonus.split(":")[0];
+				Integer value = Integer.parseInt(bonus.split(":")[1]);
+				save.setBonus(key,value);
+			}
+			this.savingThrows.put(id,save);
+		}
+	}
+
+	private void storeSavingThrows(){
+		final String[] details = {""};
+		this.abilityScores.forEach((k, v) -> details[0] += k.toString() + ")" + v.toString() + ";");
+		this.bean.setAbility_details(details[0]);
+	}
 
 	private void initializeBean(CharacterBean bean) {
 		this.bean = bean;
@@ -222,6 +287,10 @@ public class CharacterSheet {
 
 	private void resetAC(){
 		this.AC = new HashMap<String,Integer>();
+	}
+
+	private void resetClassIDs(){
+		this.classID = new HashMap<Integer,Integer>();
 	}
 
 	public void updateTotalLevel(){

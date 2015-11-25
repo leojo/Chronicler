@@ -31,9 +31,6 @@ public class CharacterBean {
     //private Skill[] skills;
     // feats
     private int availableFeats;
-    //private Feat[] feats;
-    // items/inventory
-    //private Item[] items;
 
 
     ObjectMapper mapper;
@@ -526,4 +523,70 @@ public class CharacterBean {
     public void setAvailableFeats(int availableFeats) {
         this.availableFeats = availableFeats;
     }
+
+
+
+
+
+
+    // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
+    //------------------------------------------------------------------
+    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details;
+
+    public String getLevel_details() {
+        return level_details;
+    }
+
+    public void setLevel_details(String level_details) {
+        this.level_details = level_details;
+    }
+
+    public String getAbility_details() {
+        return ability_details;
+    }
+
+    public void setAbility_details(String ability_details) {
+        this.ability_details = ability_details;
+    }
+
+    public String getSave_details() {
+        return save_details;
+    }
+
+    public void setSave_details(String save_details) {
+        this.save_details = save_details;
+    }
+
+    public String getHD_details() {
+        return HD_details;
+    }
+
+    public void setHD_details(String HD_details) {
+        this.HD_details = HD_details;
+    }
+
+    public String getAC_details() {
+        return AC_details;
+    }
+
+    public void setAC_details(String AC_details) {
+        this.AC_details = AC_details;
+    }
+
+    public String getInitiative_details() {
+        return initiative_details;
+    }
+
+    public void setInitiative_details(String initiative_details) {
+        this.initiative_details = initiative_details;
+    }
+
+    public String getGrapple_details() {
+        return grapple_details;
+    }
+
+    public void setGrapple_details(String grapple_details) {
+        this.grapple_details = grapple_details;
+    }
+    //------------------------------------------------------------------
 }

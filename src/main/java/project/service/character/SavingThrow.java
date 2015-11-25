@@ -2,10 +2,8 @@ package project.service.character;
 
 import project.service.dbLookup.OfflineResultSet;
 import project.service.globals.AbilityID;
-import project.service.globals.AdvancementTable;
 import project.service.globals.SavingThrowID;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,13 +62,53 @@ public class SavingThrow {
 		}
 	}
 
+	public void recalculate(){
+		this.totalValue = 0;
+		for (int v : this.bonuses.values()) {
+			this.totalValue += v;
+		}
+	}
+
+	public boolean setBonus(String key, int value){
+		boolean existingBonus = this.bonuses.containsKey(key);
+		this.bonuses.put(key,value);
+		this.recalculate();
+		return existingBonus;
+	}
+
+	public boolean incrementBonus(String key){
+		boolean existingBonus = this.bonuses.containsKey(key);
+		int value = 1;
+		if(existingBonus) value = this.bonuses.get(key)+1;
+		this.bonuses.put(key,value);
+		this.recalculate();
+		return existingBonus;
+	}
+
+	public boolean decrementBonus(String key){
+		boolean validBonus = this.bonuses.containsKey(key);
+		if(validBonus) {
+			int value = this.bonuses.get(key)-1;
+			this.bonuses.put(key, value);
+			this.recalculate();
+		}
+		return validBonus;
+	}
+
+	public boolean removeBonus(String key){
+		if(this.bonuses.containsKey(key)){
+			this.bonuses.remove(key);
+			this.recalculate();
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
-		return "SavingThrow{" +
-				       "totalValue=" + totalValue +
-				       ", name='" + name + '\'' +
-				       ", bonuses=" + bonuses +
-				       '}';
+		final String[] details = {""};
+		this.bonuses.forEach((k, v) -> details[0] += k + ":" + v + ",");
+		return details[0];
 	}
 }
 
