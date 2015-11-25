@@ -60,6 +60,19 @@ public class ManageCharacters {
             return "loginFail";
     }
 
+    @RequestMapping(value = "deleteCharacter{charID}", method = RequestMethod.GET)
+    public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+
+        System.out.println("WE PRESSED THAT BUTTON BOOM");
+        System.out.println("WERE DELETING CHARACTER WITH ID "+charID);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        storage.deleteCharacter(charID);
+
+        return "myCharacters";
+    }
+
     public CharacterBean loadBeanFromJson(CharacterBean bean, String user) {
         ObjectMapper mapper = new ObjectMapper();
         AccountStorage db = new AccountStorage("data/userAccounts.sqlite");

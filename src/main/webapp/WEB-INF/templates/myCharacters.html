@@ -13,6 +13,7 @@
     <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
     <script th:src="@{/resources/js/tabSwitcher.js}" />
     <script th:src="@{/resources/js/dashboard.js}" />
+    <script th:src="@{/resources/js/deleteFunctions.js}" />
 </head>
 <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
 <body>
@@ -27,7 +28,8 @@
         <ul class="fancyList">
             <li th:each="char : ${myChars}" class="listItem">
                 <a class="content" th:text="${char.value}" th:href="${'/character'+char.key}"></a>
-                <input class="itemBtn remove" type="button" text="DEL"></input>
+
+                <input class="itemBtn remove" type="button" text="DEL" th:onclick="${'deleteCharacter('+char.key+')'}"></input>
             </li>
         </ul>
 
