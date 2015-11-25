@@ -61,6 +61,11 @@ public class CharacterBean {
         System.out.println(db.addCharacterJSON(user, charAsJSON));
     }
 
+    public void putInCampaign(int campID) {
+        db.putInCampaign(this.databaseID, campID);
+
+    }
+
     public void updateJson(String user) throws com.fasterxml.jackson.core.JsonProcessingException {
         String charAsJSON = mapper.writeValueAsString(this);
         System.out.println(charAsJSON);

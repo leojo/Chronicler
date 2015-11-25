@@ -24,19 +24,36 @@
     </div>
     <div th:case="*">
         <p>This is the CREATE NEW CHARACTERS page</p>
+        <div th:switch="${campaignID}">
+            <div th:case="null">
+                <form action="#" th:action="@{/newCharacter}" th:object="${charbean}" method="post">
+                    <select class="classSelect" th:field="*{className}">
+                        <option th:each="classname : ${classes}"
+                                th:value="${classname}" th:text="${classname}"></option>
+                    </select>
+                    <select class="raceSelect" th:field="*{race}">
+                        <option th:each="race:${races}"
+                                th:value="${race}" th:text="${race}">Japan</option>
 
-        <form action="#" th:action="@{/newCharacter}" th:object="${charbean}" method="post">
-            <select id="classSelect" th:field="*{className}">
-                <option th:each="classname : ${classes}"
-                        th:value="${classname}" th:text="${classname}"></option>
-            </select>
-            <select id="raceSelect" th:field="*{race}">
-                <option th:each="race:${races}"
-                        th:value="${race}" th:text="${race}">Japan</option>
+                    </select>
+                    <input type="submit" value="Submit" />
+                </form>
+            </div>
+            <div th:case="*">
+                <form action="#" th:action="${'/newCharacter'+campaignID}" th:object="${charbean}" method="post">
+                    <select class="classSelect" th:field="*{className}">
+                        <option th:each="classname : ${classes}"
+                                th:value="${classname}" th:text="${classname}"></option>
+                    </select>
+                    <select class="raceSelect" th:field="*{race}">
+                        <option th:each="race:${races}"
+                                th:value="${race}" th:text="${race}">Japan</option>
 
-            </select>
-            <input type="submit" value="Submit" />
-        </form>
+                    </select>
+                    <input type="submit" value="Submit" />
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>

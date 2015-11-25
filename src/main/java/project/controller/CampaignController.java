@@ -70,6 +70,20 @@ public class CampaignController {
         return "redirect:myCampaigns";
     }
 
+	@RequestMapping(value = "/campaign{campID}", method = RequestMethod.GET)
+	public String openCharacter(@PathVariable int campID, Model model, HttpSession session) {
+		User user = (User)session.getAttribute("userId");
+		model.addAttribute("user", user);
+		System.out.println("URL PARAMETER "+campID);
+		storage = new AccountStorage("data/userAccounts.sqlite");
+		model.addAttribute("myChars", storage.listCharactersCampaign(campID));
+		model.addAttribute("character", new CharacterBean());
+		if(user.getUserID() != null) {
+			return "campaignInfo";
+		} else
+			return "loginFail";
+	}
+
 	@RequestMapping(value = "deleteCampaign{charID}", method = RequestMethod.GET)
 	public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
 		User user = (User)session.getAttribute("userId");
