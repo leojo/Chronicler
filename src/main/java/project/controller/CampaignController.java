@@ -27,6 +27,9 @@ public class CampaignController {
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
 	    OfflineResultSet campaigns = storage.getCampaigns(user.getUserID());
+	    if (campaigns == null) {
+		    return "campaigns";
+	    }
 	    Vector<String> campaignNames = new Vector<>();
 	    while (campaigns.next()) {
 		    campaignNames.add(campaigns.getString("CampaignID"));
@@ -59,7 +62,7 @@ public class CampaignController {
 		System.out.println("Campaign name: " + campaign.getName());
 		storage.insertCampaign(user.getUserID(), campaign.getName());
 
-        return "campaigns";
+        return "redirect:myCampaigns";
     }
 
 
