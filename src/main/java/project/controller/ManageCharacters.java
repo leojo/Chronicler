@@ -32,7 +32,7 @@ public class ManageCharacters {
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
         model.addAttribute("charbean", new CharacterBean());
         if(user.getUserID() != null)
-            return "newcharacter";
+            return "myCharacters";
         else
             return "loginFail";
     }

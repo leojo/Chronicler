@@ -34,7 +34,7 @@ public class SheetController {
 
             User user = (User)session.getAttribute("userId");
             model.addAttribute("user", user);
-            if(user.getUserID().equals("andrea"))
+            if(user.getUserID() != null)
                 return "newcharacter";
             else
                 return "loginFail";
