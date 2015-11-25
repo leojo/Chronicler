@@ -70,6 +70,7 @@ public class AccountStorage {
         String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";
         rs = searchRaw(query);
         if(rs != null) {
+            rs.first();
             return rs.getString("characterJSON");
         } {
             return "{empty}";

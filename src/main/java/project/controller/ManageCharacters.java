@@ -32,7 +32,7 @@ public class ManageCharacters {
         storage = new AccountStorage("data/userAccounts.sqlite");
 
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
-        model.addAttribute("charbean", new CharacterBean());
+        model.addAttribute("character", new CharacterBean());
         if(user.getUserID() != null)
             return "myCharacters";
         else
@@ -48,22 +48,31 @@ public class ManageCharacters {
         storage = new AccountStorage("data/userAccounts.sqlite");
 
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
-        model.addAttribute("charbean", charbean);
+
         if(user.getUserID() != null) {
-            loadBeanFromJson(charbean, user.getUserID());
+            charbean = loadBeanFromJson(charbean, user.getUserID());
+            model.addAttribute("character", charbean);
             return "characterSheet";
         } else
             return "loginFail";
     }
 
-    public void loadBeanFromJson(CharacterBean bean, String user) {
+    public CharacterBean loadBeanFromJson(CharacterBean bean, String user) {
         ObjectMapper mapper = new ObjectMapper();
         AccountStorage db = new AccountStorage("data/userAccounts.sqlite");
         String charJSON = db.searchCharacter(bean.getDatabaseID(), user);
+        System.out.println("This is the json we found");
+        System.out.println(charJSON);
         try {
+            System.out.println("reading into bean...");
             bean = mapper.readValue(charJSON, CharacterBean.class);
+            System.out.println(bean.getName());
+            System.out.println(bean.getClassName());
+
         } catch(Exception e) {
             System.out.println("Something went wrong parsing your character");
         }
+
+        return bean;
     }
 }

@@ -25,7 +25,7 @@
     <div th:case="*">
         <p>This is the MANAGE MY CHARACTERS page</p>
 
-        <form action="#" th:action="@{/character}" th:object="${charbean}" method="post">
+        <form action="#" th:action="@{/character}" th:object="${character}" method="post">
             <select id="classSelect" th:field="*{databaseID}">
                 <option th:each="char : ${myChars}"
                         th:value="${char.key}" th:text="${char.value}"></option>
