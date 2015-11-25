@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.character.CharacterBean;
 import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
+import project.service.dbLookup.OfflineResultSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,14 +22,16 @@ public class Login {
         this.find = new AccountStorage("data/userAccounts.sqlite");
     }
 
-    public boolean evalLogin(User userInfo) throws SQLException {
+    public boolean evalLogin(User userInfo){
         System.out.println("about to evaluate the login!");
         System.out.println("user ID:"+userInfo.getUserID());
-        ResultSet rs = find.searchUser(userInfo.getUserID());
+        OfflineResultSet rs = find.searchUser(userInfo.getUserID());
         if(rs == null) {
             System.out.println("result set empty, no user with id "+userInfo.getUserID());
             return false;
-        } else if(!rs.getString("password").equals(userInfo.getPassword())) {
+        }
+        rs.first();
+        if(!rs.getString("Password").equals(userInfo.getPassword())) {
             System.out.println("Wrong password");
             return false;
         }

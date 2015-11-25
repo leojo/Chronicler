@@ -31,12 +31,11 @@ public class AccountStorage {
 
 
     public OfflineResultSet searchUser(String userID) {
-        ResultSet rs = null;
         String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
         return searchRaw(query);
     }
 
-    public String OfflineResultSet(String charName, String userID) {
+    public String searchCharacter(String charName, String userID) {
         OfflineResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";";
         rs = searchRaw(query);
@@ -81,7 +80,6 @@ public class AccountStorage {
             stmt.close();
             c.commit();
             c.close();
-            System.err.println("Connection closed");
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
