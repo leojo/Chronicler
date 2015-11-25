@@ -25,6 +25,9 @@
     <div th:case="*">
         <p>This is the MANAGE CAMPAIGNS page</p>
 
+        <ul>
+            <li th:each="c : ${campaignList}" th:text="${c}"></li>
+        </ul>
     </div>
 </div>
 </body>
