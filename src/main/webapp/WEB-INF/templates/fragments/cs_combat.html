@@ -1,19 +1,57 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-combat" th:fragment="combatFrag">
-    <div class="combat-main">
-        <div class="mainStat" id="HP">Hitpoints: <span class="editable-span editFieldBig numberField" th:text="${character.maxHp}"></span></div>
-        <div class="mainStat" id="AC">Armor Class: <span th:text="${character.ac}"></span></div>
-        <div class="mainStat" id="T-AC">Touch Armor Class: <span th:text="${character.touchAc}"></span></div>
-        <div class="mainStat" id="FF-AC">FF Armor Class: <span th:text="${character.flatAc}"></span></div>
-        <div class="mainStat" id="initiative">Initiative: <span th:text="${character.initiative}"></span></div>
-        <div class="mainStat" id="BAB">Base attack bonus: <span th:text="${character.bab}"></span></div>
-        <div class="mainStat" id="speed">Speed: <span class="editable-span  editFieldBig numberField" th:text="${character.speed}"></span> feet</div>
-        <div class="mainStat" id="spellRes">Spell Resistance: <span th:text="${character.spellRes}"></span></div>
-        <div class="mainStat" id="grapple">Grapple: <span th:text="${character.Grapple}"></span></div>
-    </div>
-    <div class="combat-saves">
-        <div class="saveStat" id="fort">Fortitude save: <span th:text="${character.fort}"></span></div>
-        <div class="saveStat" id="reflex">Reflex save: <span th:text="${character.reflex}"></span></div>
-        <div class="saveStat" id="will">Will save: <span th:text="${character.will}"></span></div>
-    </div>
-    <div class="combat-gear"></div>
+
+        <div class="combat-main">
+            <div class="mainStat" id="HP">Hitpoints:
+                <span class="editable-span editFieldBig numberField" th:text="${character.maxHp}"></span>
+                <input class="spanInput" th:field="*{maxHp}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="AC">Armor Class:
+                <span th:text="${character.ac}"></span>
+                <input class="spanInput" th:field="*{ac}" th:value="${character.ac}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="T-AC">Touch Armor Class:
+                <span th:text="${character.touchAc}"></span>
+                <input class="spanInput" th:field="*{touchAc}" th:value="${character.touchAc}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="FF-AC">FF Armor Class:
+                <span th:text="${character.flatAc}"></span>
+                <input class="spanInput" th:field="*{flatAc}" th:value="${character.flatAc}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="initiative">Initiative:
+                <span th:text="${character.initiative}"></span>
+                <input class="spanInput" th:field="*{initiative}" th:value="${character.initiative}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="BAB">Base attack bonus:
+                <span th:text="${character.bab}"></span>
+                <input class="spanInput" th:field="*{bab}" th:value="${character.bab}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="speed">Speed:
+                <span class="editable-span  editFieldBig numberField" th:text="${character.speed}"></span> feet
+                <input class="editFieldBig spanInput" th:field="*{speed}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="spellRes">Spell Resistance:
+                <span th:text="${character.spellRes}"></span>
+                <input class="spanInput" th:field="*{spellRes}" th:value="${character.spellRes}" type="number" autocomplete="off"/>
+            </div>
+            <div class="mainStat" id="grapple">Grapple:
+                <span th:text="${character.Grapple}"></span>
+                <input class="spanInput" th:field="*{grapple}" th:value="${character.grapple}" type="number" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="combat-saves">
+            <div class="saveStat" id="fort">Fortitude save:
+                <span th:text="${character.fort}"></span>
+                <input class="spanInput" th:field="*{fort}" th:value="${character.fort}" type="number" autocomplete="off"/>
+            </div>
+            <div class="saveStat" id="reflex">Reflex save:
+                <span th:text="${character.reflex}"></span>
+                <input class="spanInput" th:field="*{reflex}" th:value="${character.reflex}" type="number" autocomplete="off"/>
+            </div>
+            <div class="saveStat" id="will">Will save:
+                <span th:text="${character.will}"></span>
+                <input class="spanInput" th:field="*{will}" th:value="${character.will}" type="number" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="combat-gear"></div>
+
 </div>

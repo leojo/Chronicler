@@ -36,9 +36,19 @@ public class CharacterBean {
     //private Item[] items;
 
 
+    ObjectMapper mapper;
+    AccountStorage db;
     public CharacterBean() { // This function should eventually take in some session ID
+        mapper = new ObjectMapper();
+        db = new AccountStorage("data/userAccounts.sqlite");
+    }
 
-
+    public void saveAsJson(String user, boolean fresh) throws com.fasterxml.jackson.core.JsonProcessingException {
+        String charAsJSON = mapper.writeValueAsString(this);
+        System.out.println(charAsJSON);
+        System.out.println(user);
+        if(fresh) System.out.println(db.addCharacterJSON(user, this.name, charAsJSON));
+        else System.out.println(db.updateCharacterJSON(user, this.name, charAsJSON));
     }
 
     public int getMaxHp() {

@@ -1,7 +1,7 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-about" th:fragment="aboutFrag">
 <p> This is the about page</p>
-    <div class="about-main" th:object="${charbean}">
-        <form id="testForm" th:object="${character}">
+    <div class="about-main">
+
             <div class="mainInfo" id="name">Name:
                 <span class="editable-span editFieldBig" th:text="${character.name}">Error loading</span>
                 <input class="editFieldBig spanInput" th:field="*{name}" type="text" autocomplete="off"/>
@@ -50,7 +50,7 @@
                 <span class="editable-span editField" th:text="${character.skin}"></span>
                 <input class="editFieldBig spanInput" th:field="*{skin}" type="text"/>
             </div>
-        </form>
+
     </div>
     <div class="about-story">
         <div class="story" id="fluff"></div>
