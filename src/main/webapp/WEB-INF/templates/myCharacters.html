@@ -22,16 +22,23 @@
         <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
         <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
     </div>
-    <div th:case="*">
+    <div th:case="*" class="listContainer">
         <p>This is the MANAGE MY CHARACTERS page</p>
+        <ul class="fancyList">
+            <li th:each="char : ${myChars}" class="listItem">
+                <a class="content" th:text="${char.value}" th:href="${'/character'+char.key}"></a>
+                <input class="itemBtn remove" type="button">DELETE</input>
+            </li>
+        </ul>
 
-        <form action="#" th:action="@{/character}" th:object="${character}" method="post">
+
+        <!--<form action="#" th:action="@{/character}" th:object="${character}" method="post">
             <select id="classSelect" th:field="*{databaseID}">
                 <option th:each="char : ${myChars}"
                         th:value="${char.key}" th:text="${char.value}"></option>
             </select>
             <input type="submit" value="Submit" />
-        </form>
+        </form>-->
     </div>
 </div>
 </body>

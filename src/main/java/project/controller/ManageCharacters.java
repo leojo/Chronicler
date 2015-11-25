@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.service.account.User;
@@ -39,17 +40,17 @@ public class ManageCharacters {
             return "loginFail";
     }
 
-    @RequestMapping(value = "/character", method = RequestMethod.POST)
-    public String openCharacter(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
-
+    @RequestMapping(value = "/character{charID}", method = RequestMethod.GET)
+    public String openCharacter(@PathVariable int charID, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
-
+        System.out.println("URL PARAMETER "+charID);
         storage = new AccountStorage("data/userAccounts.sqlite");
-
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
-
+        CharacterBean charbean;
         if(user.getUserID() != null) {
+            charbean = new CharacterBean();
+            charbean.setDatabaseID(charID);
             charbean = loadBeanFromJson(charbean, user.getUserID());
             model.addAttribute("character", charbean);
             return "characterSheet";
