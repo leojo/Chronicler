@@ -118,7 +118,7 @@ public class Lookup {
     public OfflineResultSet race(String searchTerm){
         // This is the order in which we want to search through the fields of the items
         String[] field = {"name","full_text","family","category","cost"};
-        String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
+        String query_template = "SELECT * FROM race WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 

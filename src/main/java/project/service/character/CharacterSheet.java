@@ -1,6 +1,7 @@
 package project.service.character;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
@@ -88,29 +89,34 @@ public class CharacterSheet {
 		ors.first();
 		Integer classID = ors.getInt("id");
 		String race = bean.getRace();
+		System.err.println(race);
 		this.setRacialMods(race);
 		this.classID = new HashMap<>();
 		this.levelUp(classID);
-
-		// might even be unneccessary? It seems that the bean sets these as 0 and "" by default
-		/*bean.setName("");
-		bean.setGender("");
-		bean.setAge("");
-		bean.setHeight("");
-		bean.setMaxHp(0);
-		bean.setCurrHp(0);
-		bean.setTempHP(0);*/
 	}
 
 	private void setRacialMods(String race) {
 		// TODO: This is broken - low-ish priority
-		OfflineResultSet raceData = find.race(race);
+		OfflineResultSet raceData = find.race(race+"/exact");
 		raceData.first();
-		this.bean.setSpeed(getSpeed(raceData));
+		raceData.printCurrentRowKeys();
+		this.bean.setSpeed(raceData.getInt("speed"));
+		this.applyRacialAbilityBonuses(raceData);
 	}
 
-	private Integer getSpeed(OfflineResultSet raceData){
-		return 30;
+	private void applyRacialAbilityBonuses(OfflineResultSet raceData){
+		this.resetAbilities();
+		String raw = raceData.getString("ability_bonus");
+		if(raw==null) return;
+		String[] pairs = raw.split("\n");
+		for(String abilityBonusPair : pairs){
+			String[] info = abilityBonusPair.split(":");
+			AbilityID id = AbilityID.fromString(info[0]);
+			Integer bonus = Integer.parseInt(info[1]);
+			System.out.println("Applying bonus "+bonus+" to ability "+info[0]);
+			this.abilityScores.get(id).setBonus("Racial",bonus);
+			this.updateAbilityScores();
+		}
 	}
 
 	private void updateBean() {
@@ -292,10 +298,14 @@ public class CharacterSheet {
 	 */
 
 	public void resetSavingThrows() {
-		this.savingThrows = new HashMap<>();
+		this.initSavingThrows();
 		for (SavingThrowID id: SavingThrowID.values()) {
 			this.savingThrows.put(id, new SavingThrow(this, id));
 		}
+	}
+
+	public void initSavingThrows(){
+		this.savingThrows = new HashMap<>();
 	}
 
 	/*
