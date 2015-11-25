@@ -1,9 +1,8 @@
 package project.service.character;
 
 import project.service.dbLookup.OfflineResultSet;
-import project.service.globals.AbilityID;
+import project.service.enums.AbilityID;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 

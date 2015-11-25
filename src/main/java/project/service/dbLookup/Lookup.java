@@ -1,5 +1,7 @@
 package project.service.dbLookup;
 
+import project.service.spell.SpellList;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -89,8 +91,8 @@ public class Lookup {
         return searchByTemplate(query_template, field, searchTerm);
     }
 
-    public OfflineResultSet spellList(String castingName, int spellLevel){
-        String query= "SELECT * FROM spell WHERE \"level\" LIKE \"%"+castingName+"%"+spellLevel+"%\";";
+    public OfflineResultSet spellList(String castingName){
+        String query= "SELECT * FROM spell WHERE \"level\" LIKE \"%"+castingName+"%\";";
         return searchRaw(query);
     }
 

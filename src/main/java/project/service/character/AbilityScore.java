@@ -1,6 +1,6 @@
 package project.service.character;
 
-import project.service.globals.AbilityID;
+import project.service.enums.AbilityID;
 
 import java.util.HashMap;
 import java.util.Map;
