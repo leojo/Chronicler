@@ -36,6 +36,7 @@ public class CampaignController {
 
         return "campaigns";
     }
+
     @RequestMapping(value = "/newCampaign", method = RequestMethod.GET)
     public String newCampaign(Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
@@ -46,6 +47,7 @@ public class CampaignController {
 
         return "newcampaign";
     }
+
 	@RequestMapping(value = "/newCampaign", method = RequestMethod.POST)
     public String newCampaignPost(@ModelAttribute Campaign campaign, Model model, HttpSession session) {
 		User user = (User)session.getAttribute("userId");
