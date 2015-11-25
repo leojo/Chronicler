@@ -3,4 +3,5 @@
         <p th:case="null" th:text="NotLoggedIn"></p>
         <p th:case="*" th:text="${user.userID}"></p>
     </div>
+    <a href="/logout">Logout</a>
 </div>

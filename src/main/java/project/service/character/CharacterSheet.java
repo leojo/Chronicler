@@ -56,10 +56,8 @@ public class CharacterSheet {
 
     public CharacterSheet(CharacterBean bean, boolean fresh) {
 		this.find = new Lookup();
-
 		if(fresh) initializeBean(bean);
 		else {
-
 			this.bean = bean;
 
 			this.resetSavingThrows();

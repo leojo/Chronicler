@@ -122,6 +122,8 @@ public class OfflineResultSet {
         } catch (NumberFormatException e){
             e.printStackTrace(System.err);
             return null;
+        } catch (NullPointerException e){
+            return null;
         }
     }
 
