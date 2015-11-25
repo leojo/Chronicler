@@ -4,7 +4,11 @@ import project.service.campaign.Campaign;
 
 import java.io.IOException;
 import java.sql.*;
+
+import java.util.ArrayList;
+
 import java.util.Vector;
+
 
 /**
  * Created by andrea on 28.10.2015.
@@ -32,7 +36,27 @@ public class AccountStorage {
         return c;
     }
 
+    public int getNextID() {
+        OfflineResultSet ors = searchRaw("SELECT max(CharacterID) FROM Characters;");
+        ors.first();
+        return ors.getInt(1)+1;
+    }
 
+    public ArrayList<String> listCharacters(String user){
+        String query = "SELECT characterName FROM \"Characters\" WHERE userID=\""+user+"\";";
+        OfflineResultSet rs = searchRaw(query);
+        return returnNames(rs);
+    }
+
+    private ArrayList<String> returnNames(OfflineResultSet rs){
+        ArrayList<String> names = new ArrayList<String>();
+        while(rs.next()){
+            String name = rs.getString("characterName");
+            names.add(name);
+            System.out.println("ADDING NAME "+name);
+        }
+        return names;
+    }
 
     public OfflineResultSet searchUser(String userID) {
         String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
@@ -50,6 +74,10 @@ public class AccountStorage {
         }
     }
 
+
+    public int updateCharacterJSON(String userID, int charID, String json, String charName) {
+        return updateRaw("UPDATE Characters SET characterJSON = '" + json + "', characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";");
+    }
     public OfflineResultSet getCampaignPlayers(String campaignID) {
         OfflineResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE campaignID=\""+campaignID+"\"";
@@ -76,13 +104,8 @@ public class AccountStorage {
         return updateRaw("INSERT INTO Campaigns (CampaignID,Owner) VALUES ('"+campaignName+"','"+user+"');");
     }
 
-    public int updateCharacterJSON(String userID, String charName, String json) {
-        return updateRaw("UPDATE Characters SET characterJSON = '"+json+"' WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";");
-
-    }
-
-    public int addCharacterJSON(String userID, String charName, String json) {
-        return updateRaw("INSERT INTO Characters(UserID, characterName, characterJSON) VALUES('"+userID+"', '"+charName+"', '"+json+"')");
+    public int addCharacterJSON(String userID, String json) {
+        return updateRaw("INSERT INTO Characters(UserID, characterJSON) VALUES('"+userID+"', '"+json+"');");
 
     }
 

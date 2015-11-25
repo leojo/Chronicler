@@ -38,18 +38,38 @@ public class CharacterBean {
 
     ObjectMapper mapper;
     AccountStorage db;
+
+    public int getDatabaseID() {
+        return databaseID;
+    }
+
+    public void setDatabaseID(int databaseID) {
+        this.databaseID = databaseID;
+    }
+
+    private int databaseID;
     public CharacterBean() { // This function should eventually take in some session ID
         mapper = new ObjectMapper();
         db = new AccountStorage("data/userAccounts.sqlite");
     }
 
-    public void saveAsJson(String user, boolean fresh) throws com.fasterxml.jackson.core.JsonProcessingException {
+    public void saveAsJson(String user) throws com.fasterxml.jackson.core.JsonProcessingException {
         String charAsJSON = mapper.writeValueAsString(this);
         System.out.println(charAsJSON);
         System.out.println(user);
-        if(fresh) System.out.println(db.addCharacterJSON(user, this.name, charAsJSON));
-        else System.out.println(db.updateCharacterJSON(user, this.name, charAsJSON));
+        this.databaseID = db.getNextID();
+        System.out.println(db.addCharacterJSON(user, charAsJSON));
     }
+
+    public void updateJson(String user) throws com.fasterxml.jackson.core.JsonProcessingException {
+        String charAsJSON = mapper.writeValueAsString(this);
+        System.out.println(charAsJSON);
+        System.out.println(user);
+        System.out.println("WHat is the name we will insert???");
+        System.out.println(this.name);
+        System.out.println(db.updateCharacterJSON(user, this.databaseID, charAsJSON, this.name));
+    }
+
 
     public int getMaxHp() {
         return maxHp;
@@ -468,7 +488,7 @@ public class CharacterBean {
         try{
             String charAsJSON = mapper.writeValueAsString(cb);
             System.out.println("Did it work!?");
-            System.out.println(db.updateCharacterJSON("andrea", "Nyx", charAsJSON));
+            //System.out.println(db.updateCharacterJSON("andrea", "Nyx", charAsJSON));
             System.out.println(mapper.writeValueAsString(cb));
         } catch(Exception e) {
             System.out.println("Man something went wrong :(");
