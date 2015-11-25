@@ -130,6 +130,11 @@ public class CharacterSheet {
 		}
 	}
 
+	private void loadKnownSpells(){
+		String knownSpells = this.bean.getKnownSpells_details();
+
+	}
+
 	private void storeSavingThrows(){
 		final String[] details = {""};
 		this.abilityScores.forEach((k, v) -> details[0] += k.toString() + ")" + v.toString() + ";");

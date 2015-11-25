@@ -534,7 +534,7 @@ public class CharacterBean {
 
     // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
     //------------------------------------------------------------------
-    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details;
+    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details,knownSpells_details;
 
     public String getLevel_details() {
         return level_details;
@@ -591,5 +591,14 @@ public class CharacterBean {
     public void setGrapple_details(String grapple_details) {
         this.grapple_details = grapple_details;
     }
+
+    public String getKnownSpells_details() {
+        return knownSpells_details;
+    }
+
+    public void setKnownSpells_details(String knownSpells_details) {
+        this.knownSpells_details = knownSpells_details;
+    }
+
     //------------------------------------------------------------------
 }
