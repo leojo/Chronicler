@@ -14,6 +14,10 @@ public class SpellSlot {
         this.className = className;
     }
 
+    public SpellSlot(String className, int level){
+        this(level,className);
+    }
+
     public boolean prepare(Spell s){
         if(this.level != s.getLevelFor(this.className)) return false;
         this.spell = s;
@@ -36,5 +40,10 @@ public class SpellSlot {
 
     public int getLevel() {
         return level;
+    }
+
+    @Override
+    public String toString(){
+        return this.className+":"+this.level;
     }
 }

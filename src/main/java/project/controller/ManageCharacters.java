@@ -13,6 +13,7 @@ import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 /**
  * Created by andrea on 25.11.2015.
@@ -31,8 +32,9 @@ public class ManageCharacters {
         model.addAttribute("user", user);
 
         storage = new AccountStorage("data/userAccounts.sqlite");
-
-        model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
+        HashMap<Integer, String> characters = storage.listCharacters(user.getUserID());
+        if(characters == null) return new SheetController().newCharacter(model,session);
+        model.addAttribute("myChars", characters);
         model.addAttribute("character", new CharacterBean());
         if(user.getUserID() != null)
             return "myCharacters";

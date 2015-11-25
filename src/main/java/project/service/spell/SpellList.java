@@ -1,5 +1,6 @@
 package project.service.spell;
 
+import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 
 import java.util.ArrayList;
@@ -25,6 +26,18 @@ public class SpellList {
     public SpellList(Spell[] spells){
         this();
         for(Spell s : spells){
+            this.spells.add(s);
+        }
+    }
+
+    public SpellList(String spellList){
+        this();
+        Lookup find = new Lookup();
+        for(String spellID : spellList.split(";")){
+            if(spellID.length()==0) continue;
+            OfflineResultSet ors = find.spell(spellID+"/exact");
+            ors.first();
+            Spell s = new Spell(ors);
             this.spells.add(s);
         }
     }
@@ -56,5 +69,14 @@ public class SpellList {
             if(s.getLevelFor(className)==level) subList.add(s);
         }
         return (Spell[]) subList.toArray();
+    }
+
+    @Override
+    public String toString() {
+        String retString = "";
+        for(Spell s : this.spells){
+            retString += s.getId()+";";
+        }
+        return retString;
     }
 }

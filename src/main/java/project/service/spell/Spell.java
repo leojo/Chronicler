@@ -1,12 +1,17 @@
 package project.service.spell;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
+
+import java.io.IOException;
 
 /**
  * Created by leo on 25.11.2015.
  */
 public class Spell {
+    private final String id;
     private final String name;
     private final String shortDescription;
     private final String fullText;
@@ -40,6 +45,7 @@ public class Spell {
 
     // This constructor assumes we get a ors with the cursor on the spell itself.
     public Spell(OfflineResultSet spell) {
+        this.id = spell.getString("id");
         this.name = spell.getString("name");
         this.shortDescription = spell.getString("short_description");
         this.description = spell.getString("description");
@@ -72,6 +78,47 @@ public class Spell {
         this.specialVerbal = spell.getString("verbal_components");
     }
 
+    public Spell(String id){
+        Lookup find = new Lookup();
+        OfflineResultSet spell = find.spell(id+"/exact");
+        spell.first();
+        this.id = spell.getString("id");
+        this.name = spell.getString("name");
+        this.shortDescription = spell.getString("short_description");
+        this.description = spell.getString("description");
+        this.fullText = spell.getString("full_text");
+        this.school = spell.getString("school");
+        this.subSchool = spell.getString("subschool");
+        this.descriptor = spell.getString("descriptor");
+        this.spellcraftDC = spell.getString("spellcraft_dc");
+        this.level = spell.getString("level");
+        this.components = spell.getString("components");
+        this.castingTime = spell.getString("casting_time");
+        this.range = spell.getString("range");
+        this.target = spell.getString("target");
+        this.area = spell.getString("area");
+        this.effect = spell.getString("effect");
+        this.duration = spell.getString("duration");
+        this.save = spell.getString("saving_throw");
+        this.SR = spell.getString("spell_resistance");
+        this.developCost = spell.getString("to_develop");
+        this.material = spell.getString("material_components");
+        this.arcaneMat = spell.getString("arcane_material_components");
+        this.focus = spell.getString("focus");
+        this.xpCost = spell.getString("xp_cost");
+        this.arcaneFocus = spell.getString("arcane_focus");
+        this.wizardFocus = spell.getString("wizard_focus");
+        this.sorcererFocus = spell.getString("sorcerer_focus");
+        this.bardFocus = spell.getString("bard_focus");
+        this.clericFocus = spell.getString("cleric_focus");
+        this.druidFocus = spell.getString("druid_focus");
+        this.specialVerbal = spell.getString("verbal_components");
+    }
+
+    public Spell(int id){
+        this(id+"");
+    }
+
     public int getLevelFor(String className){
         // Is git listening here?
         if(!this.level.contains(className)) return -1;
@@ -81,6 +128,7 @@ public class Spell {
         int lvl = Integer.parseInt(this.level.substring(start,stop).replaceAll("[^0-9]", ""));
         return lvl;
     }
+    public String getId(){ return id; }
 
     public String getName() {
         return name;
@@ -200,5 +248,10 @@ public class Spell {
 
     public String getDescriptor() {
         return descriptor;
+    }
+
+    @Override
+    public String toString() {
+        return this.id;
     }
 }

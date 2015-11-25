@@ -54,6 +54,7 @@ public class AccountStorage {
     }
 
     private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs, String intName, String stringName){
+        if(rs == null) return null;
         HashMap<Integer, String> pairs = new HashMap<Integer, String>();
         while(rs.next()){
             String name = rs.getString(stringName);
@@ -68,12 +69,6 @@ public class AccountStorage {
         String query = "SELECT campaignID, campaignName FROM Campaigns WHERE ownerID=\""+user+"\"";
         rs = searchRaw(query);
         return returnIntegerNames(rs, "campaignID", "campaignName");
-/*
-        if(rs != null) {
-            return rs;
-        } else {
-            return null;
-        }*/
     }
 
     public int deleteCampaign(int ID) {

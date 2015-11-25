@@ -29,19 +29,10 @@ public class CampaignController {
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
 		System.err.println("Getting campaigns...");
-		/*
 		HashMap<Integer, String> campaigns = storage.getCampaigns(user.getUserID());
-		System.err.println("done!");
-		if (campaigns == null) {
-		    return "campaigns";
-	    }
-	    Vector<String> campaignNames = new Vector<>();
-	    while (campaigns.next()) {
-		    campaignNames.add(campaigns.getString("CampaignID"));
-	    }*/
+		if(campaigns == null) return newCampaign(model,session);
 
-	    model.addAttribute("campaignList", storage.getCampaigns(user.getUserID()));
-
+	    model.addAttribute("campaignList", campaigns);
         return "campaigns";
     }
 
