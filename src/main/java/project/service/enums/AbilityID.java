@@ -1,4 +1,4 @@
-package project.service.globals;
+package project.service.enums;
 
 /**
  * Created by whiskeyjack on 10/15/15.

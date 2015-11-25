@@ -8,16 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.service.account.Login;
 import project.service.account.User;
-import project.service.character.CharacterBean;
-import project.service.character.CharacterSheet;
-import project.service.dbLookup.Lookup;
-import project.service.globals.AbilityID;
-import project.service.globals.SavingThrowID;
 
 import javax.servlet.http.*;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Enumeration;
 
 
 /**

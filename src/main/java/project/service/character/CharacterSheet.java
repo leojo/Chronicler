@@ -1,19 +1,10 @@
 package project.service.character;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
-import project.service.globals.AbilityID;
-import project.service.globals.SavingThrowID;
+import project.service.enums.AbilityID;
+import project.service.enums.SavingThrowID;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -200,6 +191,10 @@ public class CharacterSheet {
 		this.bean.setTouchAc(this.getTouchAC());
 		this.bean.setGrapple(this.getGrappleModifier());
 		this.bean.setInitiative(this.getInitiative());
+
+		this.storeAbilityScores();
+		this.storeClassIDs();
+		this.storeSavingThrows();
 	}
 
 	public CharacterBean getBean() {
