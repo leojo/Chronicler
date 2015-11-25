@@ -1,6 +1,10 @@
 package project.service.dbLookup;
 
+import project.service.campaign.Campaign;
+
+import java.io.IOException;
 import java.sql.*;
+import java.util.Vector;
 
 /**
  * Created by andrea on 28.10.2015.
@@ -51,6 +55,36 @@ public class AccountStorage {
         }
     }
 
+    public String getCampaignPlayers(String campaignID) {
+        ResultSet rs = null;
+        String query = "SELECT * FROM Characters WHERE campaignID=\""+campaignID+"\"";
+        try {
+            rs = searchRaw(query);
+            if(rs != null) {
+                return rs.getString("characterName");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public OfflineResultSet getCampaigns(String user) {
+        ResultSet rs = null;
+        String query = "SELECT * FROM Campaigns WHERE Owner=\""+user+"\"";
+        rs = searchRaw(query);
+        if(rs != null) {
+            return new OfflineResultSet(rs);
+        } else {
+            return null;
+        }
+    }
+
+    public int insertCampaign(String user, String campaignName) {
+        return updateRaw("INSERT INTO Campaigns (CampaignID,Owner) VALUES ('"+campaignName+"','"+user+"');");
+    }
+
     public int updateCharacterJSON(String userID, String charName, String json) {
         return updateRaw("UPDATE Characters SET characterJSON = '"+json+"' WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";");
 
@@ -86,6 +120,5 @@ public class AccountStorage {
         }
         return res;
     }
-
 
 }
