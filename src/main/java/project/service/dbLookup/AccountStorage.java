@@ -7,6 +7,8 @@ import java.sql.*;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -42,20 +44,20 @@ public class AccountStorage {
         return ors.getInt(1)+1;
     }
 
-    public ArrayList<String> listCharacters(String user){
-        String query = "SELECT characterName FROM \"Characters\" WHERE userID=\""+user+"\";";
+    public HashMap<Integer, String> listCharacters(String user){
+        String query = "SELECT characterID, characterName FROM \"Characters\" WHERE userID=\""+user+"\";";
         OfflineResultSet rs = searchRaw(query);
-        return returnNames(rs);
+        return returnIntegerNames(rs);
     }
 
-    private ArrayList<String> returnNames(OfflineResultSet rs){
-        ArrayList<String> names = new ArrayList<String>();
+    private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs){
+        HashMap<Integer, String> pairs = new HashMap<Integer, String>();
         while(rs.next()){
             String name = rs.getString("characterName");
-            names.add(name);
-            System.out.println("ADDING NAME "+name);
+            Integer id = rs.getInt("characterID");
+            pairs.put(id,name);
         }
-        return names;
+        return pairs;
     }
 
     public OfflineResultSet searchUser(String userID) {
@@ -63,11 +65,12 @@ public class AccountStorage {
         return searchRaw(query);
     }
 
-    public String searchCharacter(String charName, String userID) {
+    public String searchCharacter(int charID, String userID) {
         OfflineResultSet rs = null;
-        String query = "SELECT * FROM Characters WHERE characterName=\""+charName+"\" AND UserID = \""+userID+"\";";
+        String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";
         rs = searchRaw(query);
         if(rs != null) {
+            rs.first();
             return rs.getString("characterJSON");
         } {
             return "{empty}";
