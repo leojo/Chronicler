@@ -67,7 +67,7 @@ public class CharacterSheet {
 		String knownSpellString = this.bean.getKnownSpells_details();
 		if(knownSpellString == null) knownSpellString = "168;101;294;268;176;300;380;360;694";
 		String spellSlotString = this.bean.getSpellSlots_details();
-		if(spellSlotString == null) spellSlotString = "Wizard:1;Wizard:2;Wizard:3;Wizard:4;Wizard:5;Wizard:6;Wizard:7;Wizard:8;Wizard:9;";
+		if(spellSlotString == null) spellSlotString = "Wizard:1:168;Wizard:2:101;Wizard:3:294;Wizard:4:268;Wizard:5:176;Wizard:6:300;Wizard:7:380;Wizard:8:360;Wizard:9:694;";
 
 		this.knownSpells = new SpellList(knownSpellString);
 		this.spellSlots = new SpellSlotArray(spellSlotString);
@@ -159,13 +159,6 @@ public class CharacterSheet {
 	private void initializeBean(CharacterBean bean) {
 		this.bean = bean;
 		this.totalClassLevel = 1;
-		String knownSpellString = this.bean.getKnownSpells_details();
-		if(knownSpellString == null) knownSpellString = "168;101;294;268;176;300;380;360;694";
-		String spellSlotString = this.bean.getSpellSlots_details();
-		if(spellSlotString == null) spellSlotString = "Wizard:1;Wizard:2;Wizard:3;Wizard:4;Wizard:5;Wizard:6;Wizard:7;Wizard:8;Wizard:9;";
-
-		this.knownSpells = new SpellList(knownSpellString);
-		this.spellSlots = new SpellSlotArray(spellSlotString);
 
 		OfflineResultSet ors = find.playerClass(bean.getClassName());
 		ors.first();
@@ -175,6 +168,16 @@ public class CharacterSheet {
 		this.setRacialMods(race);
 		this.classID = new HashMap<>();
 		this.levelUp(classID);
+
+		String knownSpellString = this.bean.getKnownSpells_details();
+		if(knownSpellString == null) knownSpellString = "168;101;294;268;176;300;380;360;694";
+		String spellSlotString = this.bean.getSpellSlots_details();
+		if(spellSlotString == null) spellSlotString = "Wizard:1:168;Wizard:2:101;Wizard:3:294;Wizard:4:268;Wizard:5:176;Wizard:6:300;Wizard:7:380;Wizard:8:360;Wizard:9:694;";
+
+		this.knownSpells = new SpellList(knownSpellString);
+		this.spellSlots = new SpellSlotArray(spellSlotString);
+
+		this.updateBean();
 	}
 
 	private void setRacialMods(String race) {

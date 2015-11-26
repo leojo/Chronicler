@@ -13,10 +13,18 @@ public class SpellSlot {
     public SpellSlot(int level, String className){
         this.level = level;
         this.className = className;
+        this.spell = null;
     }
 
     public SpellSlot(String className, int level){
         this(level,className);
+    }
+
+    public SpellSlot(String fromString){
+        String[] info = fromString.split(":");
+        this.className = info[0];
+        this.level = Integer.parseInt(info[1]);
+        if(info.length == 3) this.spell = new Spell(info[2]);
     }
 
     public boolean prepare(Spell s){
@@ -43,8 +51,13 @@ public class SpellSlot {
         return level;
     }
 
+    public Spell getSpell() {
+        return spell;
+    }
+
     @Override
     public String toString(){
-        return this.className+":"+this.level;
+        if(this.spell == null) return this.className+":"+this.level;
+        return this.className+":"+this.level+":"+this.spell.toString();
     }
 }
