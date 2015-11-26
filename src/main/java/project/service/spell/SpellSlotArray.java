@@ -27,7 +27,7 @@ public class SpellSlotArray {
     }
 
     public ArrayList<ArrayList<SpellSlot>> getSpellSlots() {
-
+        return null;
     }
 
     @Override
