@@ -539,7 +539,8 @@ public class CharacterBean {
 
     // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
     //------------------------------------------------------------------
-    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details,knownSpells_details;
+    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details,
+            knownSpells_details,spellSlots_details;
 
     public String getLevel_details() {
         return level_details;
@@ -605,5 +606,13 @@ public class CharacterBean {
         this.knownSpells_details = knownSpells_details;
     }
 
-    //------------------------------------------------------------------
+    public String getSpellSlots_details() {
+        return spellSlots_details;
+    }
+
+    public void setSpellSlots_details(String spellSlots_details) {
+        this.spellSlots_details = spellSlots_details;
+    }
+
+//------------------------------------------------------------------
 }

@@ -4,6 +4,8 @@ import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 import project.service.enums.AbilityID;
 import project.service.enums.SavingThrowID;
+import project.service.spell.SpellList;
+import project.service.spell.SpellSlotArray;
 
 import java.util.*;
 
@@ -36,6 +38,10 @@ public class CharacterSheet {
 	public Vector<OfflineResultSet> inventory; // TODO: Change this to use an Item class
 	public Vector<OfflineResultSet> equipped;
 
+	// Spells
+	public SpellList knownSpells;
+	public SpellSlotArray spellSlots;
+
 
 	// TODO: Make compatible with bean
 	public Map<Integer, Skill> skills;
@@ -56,6 +62,8 @@ public class CharacterSheet {
 		this.loadClassIDs();
 		this.loadAbilityScores();
 		this.loadSavingThrows();
+		this.knownSpells = new SpellList(this.bean.getKnownSpells_details());
+		this.spellSlots = new SpellSlotArray(this.bean.getSpellSlots_details());
 		this.update();
 	}
 
@@ -200,6 +208,9 @@ public class CharacterSheet {
 		this.storeAbilityScores();
 		this.storeClassIDs();
 		this.storeSavingThrows();
+
+		this.bean.setKnownSpells_details(knownSpells.toString());
+		this.bean.setSpellSlots_details(spellSlots.toString());
 	}
 
 	public CharacterBean getBean() {
