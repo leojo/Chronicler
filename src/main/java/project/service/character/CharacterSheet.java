@@ -13,6 +13,7 @@ import java.util.*;
  * Created by BjornBjarnsteins on 10/2/15.
  */
 public class CharacterSheet {
+	// Git why you no find me?
 
 	// Added this and removed a lot of global variables instead because
 	// since we need to use the bean anyway for html display reason, we
