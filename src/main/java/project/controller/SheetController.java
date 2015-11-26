@@ -139,4 +139,10 @@ public class SheetController {
             }
             return "characterSheet";
         }
+
+    @RequestMapping(value = "character{charID}#levelUp", method = RequestMethod.GET)
+    public String levelUp(@ModelAttribute CharacterBean charbean, Model model, HttpSession session, @PathVariable int charID){
+        System.out.println("Level up!!!");
+        return "characterSheet";
+    }
 }
