@@ -79,14 +79,14 @@ public class Lookup {
 
     public OfflineResultSet skill(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
-        String[] field = {"name","full_text","skill_check","action","special","synergy","untrained"};
+        String[] field = {"id","name","full_text","skill_check","action","special","synergy","untrained"};
         String query_template = "SELECT * FROM skill WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
     public OfflineResultSet spell(String searchTerm){
         // This is the order in which we want to search through the fields of the spells
-        String[] field = {"name","full_text","school","subschool","descriptor","effect"};
+        String[] field = {"id","name","full_text","school","subschool","descriptor","effect"};
         String query_template = "SELECT * FROM spell WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }

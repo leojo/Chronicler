@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Inteactive character sheet"/>
+    <title>Chronicler</title>
+
+    <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+    <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+    <script th:src="@{/resources/js/tabSwitcher.js}" />
+    <script th:src="@{/resources/js/dashboard.js}" />
+</head>
+<header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
+<body>
+
+<div th:utext="${spell.fullText}" class="container flex"></div>
+<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+</body>
+
+<footer>
+</footer>
+
+</html>

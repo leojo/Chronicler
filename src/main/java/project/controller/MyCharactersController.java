@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.service.account.User;
 import project.service.character.CharacterBean;
+import project.service.character.CharacterSheet;
 import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
+import project.service.spell.SpellList;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ import java.util.HashMap;
  * Created by andrea on 25.11.2015.
  */
 @Controller
-public class ManageCharacters {
+public class MyCharactersController {
 
     AccountStorage storage;
     // -----------------------------------------------
@@ -50,10 +52,14 @@ public class ManageCharacters {
         storage = new AccountStorage("data/userAccounts.sqlite");
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
         CharacterBean charbean;
+        CharacterSheet charSheet;
         if(user.getUserID() != null) {
             charbean = new CharacterBean();
             charbean.setDatabaseID(charID);
             charbean = loadBeanFromJson(charbean, user.getUserID());
+            charSheet = new CharacterSheet(charbean,false);
+            model.addAttribute("spellList", charSheet.knownSpells.getSpells());
+            model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
             model.addAttribute("character", charbean);
             session.setAttribute("currentCharID", charID);
             System.out.println("LOADED CHARACTER NUMBER "+charID+" and set his session attr as "+session.getAttribute("currentCharID"));

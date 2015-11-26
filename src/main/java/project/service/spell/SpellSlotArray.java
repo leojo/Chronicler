@@ -22,6 +22,14 @@ public class SpellSlotArray {
         }
     }
 
+    public void add(SpellSlot ss){
+        this.spellSlots.add(ss);
+    }
+
+    public ArrayList<ArrayList<SpellSlot>> getSpellSlots() {
+        return null;
+    }
+
     @Override
     public String toString(){
         String s = "";

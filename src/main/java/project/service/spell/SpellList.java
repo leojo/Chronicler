@@ -36,7 +36,12 @@ public class SpellList {
         for(String spellID : spellList.split(";")){
             if(spellID.length()==0) continue;
             OfflineResultSet ors = find.spell(spellID+"/exact");
+            if(ors == null){
+                System.out.println("Spell "+spellID+" wasn't found!");
+                continue;
+            }
             ors.first();
+            System.out.println("creating spell "+spellID);
             Spell s = new Spell(ors);
             this.spells.add(s);
         }
@@ -44,6 +49,10 @@ public class SpellList {
 
     public SpellList(){
         this.spells = new ArrayList<Spell>();
+    }
+
+    public ArrayList<Spell> getSpells() {
+        return spells;
     }
 
     // usability functions
