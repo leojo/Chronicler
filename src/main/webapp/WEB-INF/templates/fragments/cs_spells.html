@@ -1,5 +1,5 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-spell" th:fragment="spellFrag">
-    <div th:each="" class="listContainer">
+    <div class="listContainer">
         <ul class="fancyList">
             <li th:each="spell : ${spellList}" class="listItem">
                 <a class="content" th:href="${'/spell'+spell.id}">
@@ -10,6 +10,5 @@
                 </a>
             </li>
         </ul>
-
     </div>
 </div>
