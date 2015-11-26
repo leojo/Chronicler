@@ -7,7 +7,6 @@ import java.util.HashMap;
  * Created by leo on 25.11.2015.
  */
 public class SpellSlotArray {
-    // Git why you no find me?
     private final ArrayList<SpellSlot> spellSlots;
 
     public SpellSlotArray(){
