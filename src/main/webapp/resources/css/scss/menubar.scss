@@ -6,9 +6,10 @@
     left: $closedDshbrdWidth;
     width: 100% - $closedDshbrdWidth;
     height: $headerHeight;
-    background: #000;
+    background: #0C0C0B;
     font-family: $font;
     color: $accentColor;
+    box-shadow: 0px 0px 5px #37371F;
 
     div {
         float: right;

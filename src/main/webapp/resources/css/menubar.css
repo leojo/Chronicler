@@ -5,9 +5,10 @@
   left: 4%;
   width: 96%;
   height: 20px;
-  background: #000;
+  background: #0C0C0B;
   font-family: "Montserrat", sans-serif;
-  color: #f6f1ed; }
+  color: #f6f1ed;
+  box-shadow: 0px 0px 5px #37371F; }
   .menubar div {
     float: right;
     padding-left: 5px; }

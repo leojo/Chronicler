@@ -53,6 +53,14 @@ public class AccountStorage {
         return returnIntegerNames(rs, "characterID", "characterName");
     }
 
+    public HashMap<Integer, String> listCharactersCampaign(int campaign){
+        String query = "SELECT characterID, characterName FROM \"Characters\" WHERE campaignID=\""+campaign+"\";";
+        OfflineResultSet rs = searchRaw(query);
+        return returnIntegerNames(rs, "characterID", "characterName");
+    }
+
+
+
     private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs, String intName, String stringName){
         if(rs == null) return null;
         HashMap<Integer, String> pairs = new HashMap<Integer, String>();
@@ -122,6 +130,10 @@ public class AccountStorage {
     public int addCharacterJSON(String userID, String json) {
         return updateRaw("INSERT INTO Characters(UserID, characterJSON) VALUES('"+userID+"', '"+json+"');");
 
+    }
+
+    public int putInCampaign(int charID, int campID) {
+        return updateRaw("UPDATE Characters SET campaignID='"+campID+"' WHERE characterID='"+charID+"';");
     }
 
     // General search function, that query's the database with any select statement and gives back the resultset

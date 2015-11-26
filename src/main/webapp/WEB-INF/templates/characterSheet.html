@@ -19,7 +19,6 @@
 
     <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
     <body>
-        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
         <div class="container">
             <div class="characterBanner">
                 <h1 th:text="${character.name}"></h1>
@@ -48,7 +47,7 @@
                 </form>
             </div>
         </div>
-
+        <div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
     </body>
 
     <footer>
