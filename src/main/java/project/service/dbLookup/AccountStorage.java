@@ -127,8 +127,8 @@ public class AccountStorage {
         return updateRaw("INSERT INTO Campaigns (campaignName,ownerID) VALUES ('"+campaignName+"','"+user+"');");
     }
 
-    public int addCharacterJSON(String userID, String json) {
-        return updateRaw("INSERT INTO Characters(UserID, characterJSON) VALUES('"+userID+"', '"+json+"');");
+    public int addCharacterJSON(String userID, String json, String charName) {
+        return updateRaw("INSERT INTO Characters(UserID, characterJSON, characterName) VALUES('"+userID+"', '"+json+"', '"+charName+"');");
 
     }
 

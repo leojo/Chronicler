@@ -7,6 +7,7 @@
 @import 'tabs';
 @import 'combatTab';
 @import 'fancyList';
+@import 'button';
 
 body {
 
@@ -22,6 +23,7 @@ body {
         .tabs {
             position: relative;
             top: -$tabHeight;
+
         }
 
         .sheetContent {
@@ -29,7 +31,7 @@ body {
             width: 100%;
             top: $bannerHeight;
             bottom: 0;
-            background: $light;
+            background-image: $mainBackground;
             display: block;
             overflow: auto;
 
@@ -37,18 +39,18 @@ body {
                 display: block;
                 width: 100px;
                 height: 100px;
-                border: 1px solid black;
+                border: 1px solid #B39D8B;
                 text-align: center;
                 line-height: 100px;
                 font-size: 1.5em;
                 font-weight: 600;
-                background: white;
+                background: #F6F3F3;
 
             }
 
             .editField {
                 display: block;
-                width: 100px;
+                width: 300px;
                 height: 30px;
                 border: 1px solid black;
                 text-align: center;

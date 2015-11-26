@@ -1,16 +1,16 @@
 /* THESE BE THEME COLORS */
-$light: #f6f1ed;
+$light: #fff;
 $dark: #37371F;
-$highlight: #EAEFBD;
-$warmContrast: #f99531;
-$coolContrast: #C9E3AC;
+$highlight: #F2F6EA;
+$warmContrast: #E46100;
+$coolContrast: #AD381F;
 
 
 $headerBackground: $dark;
 $dashboardBackground: $warmContrast;
-$mainBackground: $light;
+$mainBackground: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD);
 
-$tabsOutline: $highlight;
+$tabsOutline: $warmContrast;
 $tabsBackground: $coolContrast;
 $tabSelected: $light;
 $tabHeight: 37px;

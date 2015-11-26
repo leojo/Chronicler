@@ -13,13 +13,15 @@
 body {
 
 
-    .container {
+
+        .container {
         position: absolute;
         top: $headerHeight;
         bottom: 0;
         left: $closedDshbrdWidth;
         width: 100% - $closedDshbrdWidth;
         font-family: $font;
+        background-image: $mainBackground;
 
         .tabs {
             position: relative;
@@ -31,8 +33,7 @@ body {
             width: 100%;
             top: $bannerHeight;
             bottom: 0;
-            background: $light;
-
+           
         }
 
         #loginForm, #registerForm {
