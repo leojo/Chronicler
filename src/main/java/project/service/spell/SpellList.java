@@ -32,6 +32,7 @@ public class SpellList {
 
     public SpellList(String spellList){
         this();
+        // Git why you no find me?
         Lookup find = new Lookup();
         for(String spellID : spellList.split(";")){
             if(spellID.length()==0) continue;
