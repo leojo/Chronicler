@@ -12,14 +12,12 @@ $(function() {
         $('.raceFluff').html($(this).val().toUpperCase());
     });
 
-    $('.nameSelect').keyUp(function() {
-        $('.nameSelect').change(function() {
-                console.log("CHANGED!");
-                console.log($(this).val());
-                $('.createCharBtn').val('Make '+$(this).val());
-                $('.createCharBtn').prop('disabled', false);
-            });
-    });
 
+    $('.nameSelect').change(function() {
+        console.log("CHANGED!");
+        console.log($(this).val());
+        $('.createCharBtn').val('Make '+$(this).val());
+        $('.createCharBtn').prop('disabled', false);
+    })
 })
 
