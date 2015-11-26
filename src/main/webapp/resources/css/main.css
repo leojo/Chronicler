@@ -118,7 +118,7 @@
   .tabs .tab.selected {
     position: relative;
     z-index: 2;
-    border-bottom-color: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD);
+    border-bottom-color: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3);
     background: #fff; }
     .tabs .tab.selected a:link, .tabs .tab.selected a:visited, .tabs .tab.selected a:hover, .tabs .tab.selected a:active {
       color: #37371F;
@@ -208,7 +208,7 @@
   .wrapper .fluffSpace {
     right: 0;
     width: 70%;
-    background-image: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD); }
+    background-image: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3); }
     .wrapper .fluffSpace h2 {
       margin: 40px;
       font-size: 4em; }
@@ -274,7 +274,7 @@ body .container {
   left: 4%;
   width: 96%;
   font-family: "Montserrat", sans-serif;
-  background-image: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD); }
+  background-image: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3); }
   body .container .tabs {
     position: relative;
     top: -37px; }
@@ -287,8 +287,8 @@ body .container {
     padding: 70px; }
   body .container .box {
     display: block;
-    width: 270px;
-    height: 200px;
+    width: 30%;
+    height: 260px;
     margin: 50px;
     background: #000;
     text-align: center; }

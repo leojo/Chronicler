@@ -118,7 +118,7 @@
   .tabs .tab.selected {
     position: relative;
     z-index: 2;
-    border-bottom-color: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD);
+    border-bottom-color: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3);
     background: #fff; }
     .tabs .tab.selected a:link, .tabs .tab.selected a:visited, .tabs .tab.selected a:hover, .tabs .tab.selected a:active {
       color: #37371F;
@@ -231,7 +231,7 @@ body .container {
     width: 100%;
     top: 150px;
     bottom: 0;
-    background-image: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD);
+    background-image: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3);
     display: block;
     overflow: auto; }
     body .container .sheetContent .editFieldBig {
