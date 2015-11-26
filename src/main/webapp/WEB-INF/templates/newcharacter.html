@@ -13,30 +13,40 @@
     <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
     <script th:src="@{/resources/js/tabSwitcher.js}" />
     <script th:src="@{/resources/js/dashboard.js}" />
+    <script th:src="@{/resources/js/selectorMagic.js}" />
+
 </head>
 <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
 <body>
-<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
 <div th:switch="${user.userID}" class="container flex">
     <div th:case="null" class="flex">
         <div id="loginForm" th:include="fragments/login :: loginFrag"></div>
         <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
     </div>
-    <div th:case="*">
-        <p>This is the CREATE NEW CHARACTERS page</p>
+    <div class="wrapper" th:case="*">
         <div th:switch="${campaignID}">
             <div th:case="null">
                 <form action="#" th:action="@{/newCharacter}" th:object="${charbean}" method="post">
-                    <select class="classSelect" th:field="*{className}">
-                        <option th:each="classname : ${classes}"
-                                th:value="${classname}" th:text="${classname}"></option>
-                    </select>
-                    <select class="raceSelect" th:field="*{race}">
-                        <option th:each="race:${races}"
-                                th:value="${race}" th:text="${race}">Japan</option>
+                    <div class="fluffSpace halfSpace">
+                        <h2>I WILL ROLL A </h2>
+                        <h2><span class="raceFluff"></span> <span class="classFluff"></span></h2>
+                        <h2>NAMED </h2>
+                        <input class="nameSelect" type="text" th:field="*{name}"></input>
+                        <input  class="btn createCharBtn" type="submit" value="Name Your Character" />
+                    </div>
+                    <div class = "selectionSpace halfSpace">
+                        <h2 class="descriptor">CHOOSE YOUR CLASS:</h2>
+                        <select class="classSelect selector" th:field="*{className}">
+                            <option th:each="classname : ${classes}"
+                                    th:value="${classname}" th:text="${classname}"></option>
+                        </select>
+                        <h2 class="descriptor">CHOOSE YOUR RACE:</h2>
+                        <select class="raceSelect selector" th:field="*{race}">
+                            <option th:each="race:${races}"
+                                    th:value="${race}" th:text="${race}">Japan</option>
 
-                    </select>
-                    <input type="submit" value="Submit" />
+                        </select>
+                    </div>
                 </form>
             </div>
             <div th:case="*">
@@ -54,8 +64,10 @@
                 </form>
             </div>
         </div>
+
     </div>
 </div>
+<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
 </body>
 
 <footer>
