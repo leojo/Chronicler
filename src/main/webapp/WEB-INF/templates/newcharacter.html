@@ -51,16 +51,26 @@
             </div>
             <div th:case="*">
                 <form action="#" th:action="${'/newCharacter'+campaignID}" th:object="${charbean}" method="post">
-                    <select class="classSelect" th:field="*{className}">
-                        <option th:each="classname : ${classes}"
-                                th:value="${classname}" th:text="${classname}"></option>
-                    </select>
-                    <select class="raceSelect" th:field="*{race}">
-                        <option th:each="race:${races}"
-                                th:value="${race}" th:text="${race}">Japan</option>
+                    <div class="fluffSpace halfSpace">
+                        <h2>I WILL ROLL A </h2>
+                        <h2><span class="raceFluff"></span> <span class="classFluff"></span></h2>
+                        <h2>NAMED </h2>
+                        <input class="nameSelect" type="text" th:field="*{name}" autocomplete="off"></input>
+                        <input  class="btn createCharBtn" type="submit" value="Name Your Character" />
+                    </div>
+                    <div class = "selectionSpace halfSpace">
+                        <h2 class="descriptor">CHOOSE YOUR CLASS:</h2>
+                        <select class="classSelect selector" th:field="*{className}">
+                            <option th:each="classname : ${classes}"
+                                    th:value="${classname}" th:text="${classname}"></option>
+                        </select>
+                        <h2 class="descriptor">CHOOSE YOUR RACE:</h2>
+                        <select class="raceSelect selector" th:field="*{race}">
+                            <option th:each="race:${races}"
+                                    th:value="${race}" th:text="${race}">Japan</option>
 
-                    </select>
-                    <input type="submit" value="Submit" />
+                        </select>
+                    </div>
                 </form>
             </div>
         </div>
