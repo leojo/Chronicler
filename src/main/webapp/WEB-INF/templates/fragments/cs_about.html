@@ -1,5 +1,4 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-about" th:fragment="aboutFrag">
-<p> This is the about page</p>
     <div class="about-main">
 
             <div class="mainInfo" id="name">Name:
@@ -15,40 +14,40 @@
                 <input class="editFieldBig spanInput" th:field="*{className}" th:value="${character.className}" type="text"/>
             </div>
             <div class="mainInfo" id="alignment">Alignment:
-                <span class="editable-span editFieldBig" th:text="${character.alignment}"></span>
-                <input class="editFieldBig spanInput" th:field="*{alignment}" type="text"/>
+                <span class="editable-span editField" th:text="${character.alignment}"></span>
+                <input class="editField spanInput" th:field="*{alignment}" type="text"/>
             </div>
             <div class="mainInfo" id="deity">Deity:
-                <span class="editable-span editFieldBig" th:text="${character.deity}"></span>
-                <input class="editFieldBig spanInput" th:field="*{deity}" type="text"/>
+                <span class="editable-span editField" th:text="${character.deity}"></span>
+                <input class="editField spanInput" th:field="*{deity}" type="text"/>
             </div>
             <div class="mainInfo" id="gender">Gender:
                 <span class="editable-span editField" th:text="${character.gender}"></span>
-                <input class="editFieldBig spanInput" th:field="*{gender}" type="text"/>
+                <input class="editField spanInput" th:field="*{gender}" type="text"/>
             </div>
             <div class="mainInfo" id="eyes">Eyes:
                 <span class="editable-span editField" th:text="${character.eyes}"></span>
-                <input class="editFieldBig spanInput" th:field="*{eyes}" type="text"/>
+                <input class="editField spanInput" th:field="*{eyes}" type="text"/>
             </div>
             <div class="mainInfo" id="hair">Hair:
                 <span class="editable-span editField" th:text="${character.hair}"></span>
-                <input class="editFieldBig spanInput" th:field="*{hair}" type="text"/>
+                <input class="editField spanInput" th:field="*{hair}" type="text"/>
             </div>
             <div class="mainInfo" id="height">Height:
                 <span class="editable-span editField" th:text="${character.height}"></span>
-                <input class="editFieldBig spanInput" th:field="*{height}" type="text"/>
+                <input class="editField spanInput" th:field="*{height}" type="text"/>
             </div>
             <div class="mainInfo" id="weight">Weight:
                 <span class="editable-span editField" th:text="${character.weight}"></span>
-                <input class="editFieldBig spanInput" th:field="*{weight}" type="text"/>
+                <input class="editField spanInput" th:field="*{weight}" type="text"/>
             </div>
             <div class="mainInfo" id="size">Size:
                 <span class="editable-span editField" th:text="${character.size}"></span>
-                <input class="editFieldBig spanInput" th:field="*{size}" type="text"/>
+                <input class="editField spanInput" th:field="*{size}" type="text"/>
             </div>
             <div class="mainInfo" id="skin">Skin:
                 <span class="editable-span editField" th:text="${character.skin}"></span>
-                <input class="editFieldBig spanInput" th:field="*{skin}" type="text"/>
+                <input class="editField spanInput" th:field="*{skin}" type="text"/>
             </div>
 
     </div>

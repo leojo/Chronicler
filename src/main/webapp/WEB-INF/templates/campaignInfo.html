@@ -24,7 +24,7 @@
         <div id="registerForm" th:include="fragments/register :: registerFrag"></div>
     </div>
     <div th:case="*" class="listContainer">
-        <p>This is the CAMPAIGN page</p>
+        <p>Campaign Overview: Characters</p>
         <ul class="fancyList">
             <li th:each="char : ${myChars}" class="listItem">
                 <a class="content" th:text="${char.value}" th:href="${'/character'+char.key}"></a>

@@ -242,6 +242,8 @@ body .container {
     background-image: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3);
     display: block;
     overflow: auto; }
+    body .container .sheetContent div {
+      margin-left: 15px; }
     body .container .sheetContent .editFieldBig {
       display: block;
       width: 100px;
@@ -256,12 +258,12 @@ body .container {
       display: block;
       width: 300px;
       height: 30px;
-      border: 1px solid black;
+      border: 1px solid #B39D8B;
       text-align: center;
       line-height: 30px;
       font-size: 0.7em;
       font-weight: 600;
-      background: white; }
+      background: #F6F3F3; }
     body .container .sheetContent .spanInput {
       display: none; }
 body .container.open {
