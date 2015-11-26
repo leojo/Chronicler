@@ -149,7 +149,7 @@
       .listContainer .fancyList .listItem .itemBtn {
         display: block;
         position: relative;
-        width: 20px; }
+        width: 70px; }
       .listContainer .fancyList .listItem .remove {
         position: absolute;
         top: 0px;
@@ -159,6 +159,14 @@
       align-items: center;
       justify-content: center;
       flex-flow: row wrap; }
+
+.spellName {
+  padding: 3px;
+  font-size: 1.5em;
+  width: 100%; }
+
+.spellDescr {
+  font-style: italic; }
 
 body .container {
   position: absolute;

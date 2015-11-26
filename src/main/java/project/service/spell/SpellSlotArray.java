@@ -1,6 +1,7 @@
 package project.service.spell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by leo on 25.11.2015.
@@ -17,9 +18,7 @@ public class SpellSlotArray {
         this();
         for(String pair : s.split(";")){
             if(pair.length()==0) continue;
-            String className = pair.split(":")[0];
-            int level = Integer.parseInt(pair.split(":")[1]);
-            this.spellSlots.add(new SpellSlot(className,level));
+            this.spellSlots.add(new SpellSlot(pair));
         }
     }
 
@@ -27,8 +26,14 @@ public class SpellSlotArray {
         this.spellSlots.add(ss);
     }
 
-    public ArrayList<ArrayList<SpellSlot>> getSpellSlots() {
-        return null;
+    public HashMap<Integer,ArrayList<SpellSlot>> getSpellSlots() {
+        HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = new HashMap<Integer,ArrayList<SpellSlot>>();
+        for(SpellSlot ss : this.spellSlots){
+            int level = ss.getLevel();
+            if(!spellSlotTable.containsKey(level)) spellSlotTable.put(level, new ArrayList<SpellSlot>());
+            spellSlotTable.get(level).add(ss);
+        }
+        return spellSlotTable;
     }
 
     @Override

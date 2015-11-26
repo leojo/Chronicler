@@ -1,13 +1,15 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-spell" th:fragment="spellFrag">
-    <div class="listContainer">
+    <div th:each="level : ${spellSlots}" class="listContainer">
+        <h1 th:text="${level.key}" class="fancyList"></h1>
         <ul class="fancyList">
-            <li th:each="spell : ${spellList}" class="listItem">
-                <a class="content" th:href="${'/spell'+spell.id}">
-                    <h2 th:text="${spell.name}"></h2>
-                    <h3 th:text="${spell.level}"></h3>
-                    <h4 th:text="${spell.school}"></h4>
-                    <span th:text="${spell.shortDescription}"></span>
-                </a>
+            <li th:each="spellSlot : ${level.value}" class="listItem">
+                <div th:switch="${spellSlot.spell}">
+                    <p class="content" th:case="null">Empty. Click to prepare a spell in this slot.</p>
+                    <span class="content" th:case="*">
+                        <p class="spellName" th:text="${spellSlot.spell.name}"></p>
+                        <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>
+                    </span>
+                </div>
             </li>
         </ul>
     </div>

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,UAAU;EACR,OAAO,EAAE,GAAG;EACZ,SAAS,EAAE,KAAK;EAChB,KAAK,EAAE,IAAI;;AAEb,WAAW;EACT,UAAU,EAAE,MAAM",
+"sources": ["scss/spellStyle.scss"],
+"names": [],
+"file": "spellStyle.css"
+}

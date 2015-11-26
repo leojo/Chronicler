@@ -136,7 +136,12 @@ public class Spell {
     }
 
     public String getShortDescription() {
-        return shortDescription;
+        if(this.shortDescription != null) return shortDescription;
+        if(this.description == null) return "No description available";
+        String descr = this.description.trim().replaceAll("<*>","");
+        int len =descr.length();
+        if(len<18) return descr;
+        return descr.substring(0,15)+"...";
     }
 
     public String getFullText() {
