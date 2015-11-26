@@ -1,21 +1,21 @@
 /*
-Error: Undefined variable: "$fontColor".
-        on line 7 of css/scss/tabs.scss
+Error: Undefined variable: "$highlight".
+        on line 8 of css/scss/tabs.scss
 
-2:             z-index: 1;
-3:         }
-4: 
-5:         .tabs {
-6:             position: relative;
-7:             color: $fontColor;
-8:             text-align: center;
-9:             height: $tabHeight;
-10: 
+3:             z-index: 1;
+4:         }
+5: 
+6:         .tabs {
+7:             position: relative;
+8:             color: $highlight;
+9:             text-align: center;
+10:             height: $tabHeight;
 11: 
 12: 
+13: 
 
 Backtrace:
-css/scss/tabs.scss:7
+css/scss/tabs.scss:8
 /var/lib/gems/1.9.1/gems/sass-3.4.19/lib/sass/script/tree/variable.rb:49:in `_perform'
 /var/lib/gems/1.9.1/gems/sass-3.4.19/lib/sass/script/tree/node.rb:50:in `perform'
 /var/lib/gems/1.9.1/gems/sass-3.4.19/lib/sass/tree/visitors/perform.rb:395:in `visit_prop'
@@ -67,4 +67,4 @@ css/scss/tabs.scss:7
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$fontColor\".\A         on line 7 of css/scss/tabs.scss\A \A 2:             z-index: 1;\A 3:         }\A 4: \A 5:         .tabs {\A 6:             position: relative;\A 7:             color: $fontColor;\A 8:             text-align: center;\A 9:             height: $tabHeight;\A 10: \A 11: \A 12: "; }
+  content: "Error: Undefined variable: \"$highlight\".\A         on line 8 of css/scss/tabs.scss\A \A 3:             z-index: 1;\A 4:         }\A 5: \A 6:         .tabs {\A 7:             position: relative;\A 8:             color: $highlight;\A 9:             text-align: center;\A 10:             height: $tabHeight;\A 11: \A 12: \A 13: "; }

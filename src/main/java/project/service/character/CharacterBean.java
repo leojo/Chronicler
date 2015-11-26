@@ -58,7 +58,7 @@ public class CharacterBean {
         System.out.println(charAsJSON);
         System.out.println(user);
         System.out.println("INSIDE BEAN "+this.databaseID);
-        System.out.println(db.addCharacterJSON(user, charAsJSON));
+        System.out.println(db.addCharacterJSON(user, charAsJSON, this.name));
     }
 
     public void putInCampaign(int campID) {

@@ -12,7 +12,7 @@
   height: 20px;
   background: #0C0C0B;
   font-family: "Montserrat", sans-serif;
-  color: #f6f1ed;
+  color: #fff;
   box-shadow: 0px 0px 5px #37371F;
   z-index: 1; }
   .menubar div {
@@ -30,11 +30,22 @@
 .characterBanner {
   height: 150px;
   width: 100%;
-  background: #37371F;
-  color: #f6f1ed;
+  background-image: linear-gradient(3600deg, #0E0E0E, #1B1B1B, #272727);
+  color: #fff;
   font-family: "Montserrat", sans-serif; }
-  .characterBanner h1, .characterBanner h3 {
-    margin-left: 16px; }
+  .characterBanner .textCont {
+    margin-left: 50px;
+    float: left;
+    margin-top: 10px; }
+  .characterBanner .bannerButtons {
+    float: right;
+    margin-right: 50px;
+    margin-top: 150px; }
+    .characterBanner .bannerButtons .btn {
+      font-size: 1em;
+      width: 120px;
+      height: 40px;
+      text-align: center; }
 
 .characterBanner.open {
   left: 15%;
@@ -48,9 +59,10 @@
   width: 15%;
   color: font;
   font-family: "Montserrat", sans-serif;
-  border-right: 1px solid #f6f1ed;
+  border-right: 1px solid #fff;
   box-shadow: 0px 0px 5px #37371F;
-  background-image: linear-gradient(180deg, #CC2D03, #961500, #380600); }
+  background-image: linear-gradient(180deg, #CC2D03, #961500, #380600);
+  z-index: 2; }
   .dashboard #menuButton {
     display: block;
     float: left;
@@ -79,35 +91,40 @@
     margin-right: auto; }
 
 .tabs:before {
+  position: relative;
   z-index: 1; }
 
 .tabs {
   position: relative;
-  color: #37371F;
+  color: #F2F6EA;
   text-align: center;
   height: 37px; }
   .tabs .tab {
     position: relative;
     z-index: 0;
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 2px;
     float: left;
     padding: 0.5em;
-    border: 1px solid #EAEFBD;
-    background: #C9E3AC;
+    border: 1px solid #E46100;
+    background: #AD381F;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px; }
     .tabs .tab a:link, .tabs .tab a:visited, .tabs .tab a:hover, .tabs .tab a:active {
-      color: #37371F;
+      color: #F2F6EA;
       text-decoration: none; }
   .tabs .tab.selected:before {
-    box-shadow: 2px 2px 0 #f6f1ed; }
+    box-shadow: 2px 2px 0 #fff; }
   .tabs .tab.selected {
+    position: relative;
     z-index: 2;
-    border-bottom-color: #f6f1ed;
-    background: #f6f1ed; }
+    border-bottom-color: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD);
+    background: #fff; }
+    .tabs .tab.selected a:link, .tabs .tab.selected a:visited, .tabs .tab.selected a:hover, .tabs .tab.selected a:active {
+      color: #37371F;
+      text-decoration: none; }
   .tabs .tab.selected:after {
-    box-shadow: -2px 2px 0 #f6f1ed; }
+    box-shadow: -2px 2px 0 #fff; }
 
 .tabs:after {
   position: absolute;
@@ -115,7 +132,7 @@
   width: 100%;
   left: 0;
   bottom: 0;
-  border-bottom: 3px solid #EAEFBD;
+  border-bottom: 1px solid #E46100;
   z-index: 1; }
 
 .listContainer {
@@ -129,23 +146,27 @@
       position: relative;
       display: block;
       width: 90%;
+      height: 70px;
+      margin: 10px 40px 10px 10px;
       min-width: 350px;
-      margin: 10px;
-      padding: 5px;
       box-sizing: border-box;
       border: 1px solid #505050;
       border-radius: 3px;
       background-color: #FFF;
-      box-shadow: -2px 2px 5px; }
+      box-shadow: -1px 1px 2px #7B7B7B; }
       .listContainer .fancyList .listItem .content {
         display: block;
-        width: 90%;
+        width: 100%;
+        height: 100%;
         min-width: 310px;
-        padding: 10px 40px 10px 10px;
         display: flex;
         flex-flow: row wrap;
         text-decoration: none;
         color: black; }
+      .listContainer .fancyList .listItem a {
+        background: #F3F3F3; }
+      .listContainer .fancyList .listItem a:hover {
+        background: #DDDBD8; }
       .listContainer .fancyList .listItem .itemBtn {
         display: block;
         position: relative;
@@ -252,7 +273,8 @@ body .container {
   bottom: 0;
   left: 4%;
   width: 96%;
-  font-family: "Montserrat", sans-serif; }
+  font-family: "Montserrat", sans-serif;
+  background-image: linear-gradient(180deg, #FFF, #EDE8DB, #DDD2BD); }
   body .container .tabs {
     position: relative;
     top: -37px; }
@@ -260,8 +282,7 @@ body .container {
     position: absolute;
     width: 100%;
     top: 150px;
-    bottom: 0;
-    background: #f6f1ed; }
+    bottom: 0; }
   body .container #loginForm, body .container #registerForm {
     padding: 70px; }
   body .container .box {
@@ -277,7 +298,7 @@ body .container {
       padding-top: 80px;
       padding-bottom: 80px;
       text-decoration: none;
-      color: #f6f1ed; }
+      color: #fff; }
   body .container .box:hover {
     background: #333; }
 body .container.open {

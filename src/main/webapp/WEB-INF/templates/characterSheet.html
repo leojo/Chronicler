@@ -21,9 +21,15 @@
     <body>
         <div class="container">
             <div class="characterBanner">
-                <h1 th:text="${character.name}"></h1>
-                <h3 th:text="${character.level}"></h3>
-                <h3 th:text="${character.className} +' '+${character.race}"></h3>
+                <div class="textCont">
+                    <h1 th:text="${character.name}"></h1>
+                    <h3 th:text="${character.level}"></h3>
+                    <h3 th:text="${character.className} +' '+${character.race}"></h3>
+                </div>
+                <div class="bannerButtons">
+                    <input  class="btn levelUpBtn" type="submit" value="Level Up" />
+                    <input  class="btn restBtn" type="submit" value="Rest" />
+                </div>
             </div>
 
             <ul class="tabs">
