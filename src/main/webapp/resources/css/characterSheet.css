@@ -116,6 +116,48 @@
   border-bottom: 3px solid #EAEFBD;
   z-index: 1; }
 
+.listContainer {
+  width: 100%; }
+  .listContainer .fancyList {
+    display: block;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto; }
+    .listContainer .fancyList .listItem {
+      position: relative;
+      display: block;
+      width: 90%;
+      min-width: 350px;
+      margin: 10px;
+      padding: 5px;
+      box-sizing: border-box;
+      border: 1px solid #505050;
+      border-radius: 3px;
+      background-color: #FFF;
+      box-shadow: -2px 2px 5px; }
+      .listContainer .fancyList .listItem .content {
+        display: block;
+        width: 90%;
+        min-width: 310px;
+        padding: 10px 40px 10px 10px;
+        display: flex;
+        flex-flow: row wrap;
+        text-decoration: none;
+        color: black; }
+      .listContainer .fancyList .listItem .itemBtn {
+        display: block;
+        position: relative;
+        width: 20px; }
+      .listContainer .fancyList .listItem .remove {
+        position: absolute;
+        top: 0px;
+        right: 0px; }
+    .listContainer .fancyList .flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: row wrap; }
+
 body .container {
   position: absolute;
   top: 20px;

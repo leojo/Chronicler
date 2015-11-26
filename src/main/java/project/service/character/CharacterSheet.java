@@ -62,8 +62,14 @@ public class CharacterSheet {
 		this.loadClassIDs();
 		this.loadAbilityScores();
 		this.loadSavingThrows();
-		this.knownSpells = new SpellList(this.bean.getKnownSpells_details());
-		this.spellSlots = new SpellSlotArray(this.bean.getSpellSlots_details());
+
+		String knownSpellString = this.bean.getKnownSpells_details();
+		if(knownSpellString == null) knownSpellString = "168;101;294;268;176;300;380;360;694";
+		String spellSlotString = this.bean.getSpellSlots_details();
+		if(spellSlotString == null) spellSlotString = "Wizard:1;Wizard:2;Wizard:3;Wizard:4;Wizard:5;Wizard:6;Wizard:7;Wizard:8;Wizard:9;";
+
+		this.knownSpells = new SpellList(knownSpellString);
+		this.spellSlots = new SpellSlotArray(spellSlotString);
 		this.update();
 	}
 
@@ -152,6 +158,14 @@ public class CharacterSheet {
 	private void initializeBean(CharacterBean bean) {
 		this.bean = bean;
 		this.totalClassLevel = 1;
+		String knownSpellString = this.bean.getKnownSpells_details();
+		if(knownSpellString == null) knownSpellString = "168;101;294;268;176;300;380;360;694";
+		String spellSlotString = this.bean.getSpellSlots_details();
+		if(spellSlotString == null) spellSlotString = "Wizard:1;Wizard:2;Wizard:3;Wizard:4;Wizard:5;Wizard:6;Wizard:7;Wizard:8;Wizard:9;";
+
+		this.knownSpells = new SpellList(knownSpellString);
+		this.spellSlots = new SpellSlotArray(spellSlotString);
+
 		OfflineResultSet ors = find.playerClass(bean.getClassName());
 		ors.first();
 		Integer classID = ors.getInt("id");
@@ -209,8 +223,8 @@ public class CharacterSheet {
 		this.storeClassIDs();
 		this.storeSavingThrows();
 
-		this.bean.setKnownSpells_details(knownSpells.toString());
-		this.bean.setSpellSlots_details(spellSlots.toString());
+		this.bean.setKnownSpells_details((knownSpells != null ? knownSpells.toString() : ""));
+		this.bean.setSpellSlots_details((spellSlots != null ? spellSlots.toString() : ""));
 	}
 
 	public CharacterBean getBean() {
