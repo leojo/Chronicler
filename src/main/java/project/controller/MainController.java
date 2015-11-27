@@ -46,7 +46,12 @@ public class MainController {
         model.addAttribute("user", user);
         user.setPassword(Login.encrypt(user.getPassword()));
         AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
+        if (storage.searchUser(user.getUserID()) != null) {
+            return "registerFail";
+        }
+
         storage.addUser(user.getUserID(), user.getPassword());
+        session.setAttribute("userId", user);
 
         return "index";
     }
