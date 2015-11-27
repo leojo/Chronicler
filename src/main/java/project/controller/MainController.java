@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import project.service.account.Login;
 import project.service.account.User;
+import project.service.dbLookup.AccountStorage;
 
 import javax.servlet.http.*;
 import java.sql.SQLException;
@@ -38,6 +39,16 @@ public class MainController {
         } else {
             return "loginFail";
         }
+    }
+
+    @RequestMapping(value="/register", method = RequestMethod.POST)
+    public String registerUser(@ModelAttribute User user, Model model, HttpSession session) throws SQLException {
+        model.addAttribute("user", user);
+        user.setPassword(Login.encrypt(user.getPassword()));
+        AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
+        storage.addUser(user.getUserID(), user.getPassword());
+
+        return "index";
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
