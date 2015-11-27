@@ -60,6 +60,7 @@ public class MyCharactersController {
             charSheet = new CharacterSheet(charbean,false);
             model.addAttribute("spellList", charSheet.knownSpells.getSpells());
             model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
             model.addAttribute("character", charbean);
             session.setAttribute("currentCharID", charID);
             System.out.println("LOADED CHARACTER NUMBER "+charID+" and set his session attr as "+session.getAttribute("currentCharID"));

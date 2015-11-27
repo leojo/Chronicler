@@ -25,6 +25,15 @@ public class SpellSlotArray {
         this.spellSlots.add(ss);
     }
 
+    public void remove(String className, int level){
+        for(SpellSlot slot : this.spellSlots){
+            if(slot.getClassName()==className && slot.getLevel() == level){
+                this.spellSlots.remove(slot);
+                return;
+            }
+        }
+    }
+
     public HashMap<Integer,ArrayList<SpellSlot>> getSpellSlots() {
         HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = new HashMap<Integer,ArrayList<SpellSlot>>();
         for(SpellSlot ss : this.spellSlots){
@@ -33,6 +42,41 @@ public class SpellSlotArray {
             spellSlotTable.get(level).add(ss);
         }
         return spellSlotTable;
+    }
+
+    public ArrayList<SpellSlot> getSpellSlotTypes() {
+        ArrayList<String> typeNames = new ArrayList<String>();
+        ArrayList<SpellSlot> types = new ArrayList<SpellSlot>();
+        for(SpellSlot slot : this.spellSlots){
+            String typeName = slot.getType();
+            if(!typeNames.contains(typeName)){
+                typeNames.add(typeName);
+                types.add(slot);
+            }
+        }
+        return types;
+    }
+
+    public void update(String className, int level, int number){
+        int oldCount = this.count(className, level);
+        if(number >= oldCount){
+            for (int i = 0; i < number - oldCount; i++) {
+                this.add(new SpellSlot(className,level));
+            }
+        } else {
+            // Pretty sure this will never happen
+            for (int i = 0; i < oldCount - number; i++) {
+                this.remove(className,level);
+            }
+        }
+    }
+
+    public int count(String className, int level){
+        int count = 0;
+        for(SpellSlot slot : this.spellSlots){
+            if(slot.getLevel() == level) count++;
+        }
+        return count;
     }
 
     @Override
