@@ -1,11 +1,13 @@
 package project.service.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mindrot.jbcrypt.BCrypt;
 import project.service.character.CharacterBean;
 import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -31,15 +33,20 @@ public class Login {
             return false;
         }
         rs.first();
-        if(!rs.getString("Password").equals(userInfo.getPassword())) {
-            System.out.println("Wrong password");
-            return false;
+        if(BCrypt.checkpw(userInfo.getPassword(), rs.getString("Password"))) {
+            System.out.println("Success!");
+            return true;
         }
 
 
-        System.out.println("Everything seems fine");
+        System.out.println("That's the wrong number");
         return true;
     }
+
+    public static String encrypt(String plaintext) {
+        return BCrypt.hashpw(plaintext, BCrypt.gensalt(10, new SecureRandom()));
+    }
+
 /*
     public CharacterBean getCharacter() throws Exception{
         String jsonCharacter = find.searchCharacter("Nyx", "andrea");

@@ -94,6 +94,10 @@ public class AccountStorage {
         return searchRaw(query);
     }
 
+    public int addUser(String userID, String pw_encrypted) {
+        return updateRaw("INSERT INTO Users (UserID,Password) VALUES ('"+userID+"','"+pw_encrypted+"');");
+    }
+
     public String searchCharacter(int charID, String userID) {
         OfflineResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";
