@@ -40,6 +40,7 @@ dependencies {
     compile("org.jsoup:jsoup:1.8.3")
     compile("org.xerial:sqlite-jdbc:3.8.11.2")
     compile("com.googlecode.json-simple:json-simple:1.1.1")
+    compile("org.mindrot:jbcrypt:0.3m")
     testCompile("junit:junit")
 
 }
