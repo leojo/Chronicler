@@ -4,12 +4,26 @@
         <ul class="fancyList">
             <li th:each="spellSlot : ${level.value}" class="listItem">
                 <div th:switch="${spellSlot.spell}">
-                    <p class="content" th:case="null">Empty. Click to prepare a spell in this slot.</p>
-                    <span class="content" th:case="*">
+                    <span class="content" th:case="null">
+                        <p class="spellName" th:text="${'Unprepared '+spellSlot.className+' spell'}"></p>
+                        <p class="spellDescr">Click to select a spell</p>
+                    </span>
+                    <span class="content" th:case="*" th:class="${'content '+spellSlot.status}" th:attr="spell_id=${spellSlot.spell.id}">
                         <p class="spellName" th:text="${spellSlot.spell.name}"></p>
                         <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>
                     </span>
                 </div>
+            </li>
+        </ul>
+    </div>
+    <div th:each="spellSlot : ${spellSlotTypes}" th:id="${spellSlot.type}" class="hidden listContainer">
+        <h1 th:text="${'Known '+spellSlot.className+' spells: lvl '+spellSlot.level}"></h1>
+        <ul class="fancyList">
+            <li th:each="spell : ${spellSlot.getPossibleSpells(spellList)}" class="listItem">
+                <span class="content">
+                    <p class="spellName" th:text="${spell.name}"></p>
+                    <p class="spellDescr" th:text="${spell.shortDescription}"></p>
+                </span>
             </li>
         </ul>
     </div>

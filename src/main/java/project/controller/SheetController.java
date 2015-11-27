@@ -104,10 +104,10 @@ public class SheetController {
             // TODO : Initialize character sheet from bean
             // TODO : Get bean from character sheet and update bean
             CharacterSheet cs = new CharacterSheet(charbean, true);
-            //charbean = cs.getBean();
+            charbean = cs.getBean();
             model.addAttribute("character", charbean);
             session.setAttribute("charbean", charbean);
-            //session.setAttribute("characterSheet", cs);
+            session.setAttribute("characterSheet", cs);
             //cs = session.getAttribute("characterSheet");
             try {
                 charbean.saveAsJson(user.getUserID());
@@ -125,8 +125,11 @@ public class SheetController {
         @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
         public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
             User user = (User)session.getAttribute("userId");
+            CharacterSheet cs = new CharacterSheet(charbean,false);
+            charbean = cs.getBean();
             model.addAttribute("user", user);
             model.addAttribute("character", charbean);
+            model.addAttribute("characterSheet", cs);
             System.out.println("Our bean has this as character name");
             System.out.println(charbean.getName());
             try {
