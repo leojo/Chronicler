@@ -291,14 +291,14 @@ public class CharacterSheet {
 		for (int i = 0; i < 10; i++) {
 			String spellSlot = "slots_"+i;
 			String value = advTable.getString(spellSlot);
-			System.out.println("Level "+i+" spell slots for "+className+": "+value);
+
 			if(value.equalsIgnoreCase("none")) continue;
 
 			int numSpells = 0;
 			if(value.contains("+")) numSpells = Integer.parseInt(value.substring(0,value.indexOf("+")))+1;
 			else numSpells = Integer.parseInt(value);
 
-			this.spellSlots.update(className,level,numSpells);
+			this.spellSlots.update(className,i,numSpells);
 		}
 		System.out.println(spellSlots.toString());
 
