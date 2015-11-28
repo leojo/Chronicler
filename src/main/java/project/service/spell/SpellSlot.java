@@ -38,6 +38,10 @@ public class SpellSlot {
         return true;
     }
 
+    public boolean prepare(int spellID){
+        return prepare(new Spell(spellID));
+    }
+
     public boolean containsSpell(){
         return (this.spell != null);
     }
@@ -59,6 +63,10 @@ public class SpellSlot {
 
     public Spell getSpell() {
         return spell;
+    }
+
+    public String getSpellID() {
+        return spell.getId();
     }
 
     public String getType() {return ""+this.className+this.level;}
