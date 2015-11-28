@@ -36,7 +36,7 @@
   .characterBanner .textCont {
     margin-left: 50px;
     float: left;
-    margin-top: 10px; }
+    margin-top: 20px; }
   .characterBanner .bannerButtons {
     float: right;
     margin-right: 10px;
@@ -113,7 +113,8 @@
     border-bottom: none;
     background: #AD381F;
     border-top-left-radius: 6px;
-    border-top-right-radius: 6px; }
+    border-top-right-radius: 6px;
+    left: 10px; }
     .tabs .tab a:link, .tabs .tab a:visited, .tabs .tab a:hover, .tabs .tab a:active {
       color: #F2F6EA;
       text-decoration: none; }
@@ -140,7 +141,10 @@
   z-index: 1; }
 
 .listContainer {
-  width: 100%; }
+  width: 100%;
+  position: absolute;
+  top: 10px;
+  left: 10px; }
   .listContainer .fancyList {
     display: block;
     width: 95%;
@@ -184,6 +188,9 @@
       align-items: center;
       justify-content: center;
       flex-flow: row wrap; }
+
+.hidden {
+  visibility: hidden; }
 
 .spellName {
   padding: 3px;

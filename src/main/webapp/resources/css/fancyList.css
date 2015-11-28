@@ -1,5 +1,8 @@
 .listContainer {
-  width: 100%; }
+  width: 100%;
+  position: absolute;
+  top: 10px;
+  left: 10px; }
   .listContainer .fancyList {
     display: block;
     width: 95%;
@@ -43,5 +46,8 @@
       align-items: center;
       justify-content: center;
       flex-flow: row wrap; }
+
+.hidden {
+  visibility: hidden; }
 
 /*# sourceMappingURL=fancyList.css.map */

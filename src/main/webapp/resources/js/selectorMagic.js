@@ -13,11 +13,14 @@ $(function() {
     });
 
 
-    $('.nameSelect').change(function() {
-        console.log("CHANGED!");
-        console.log($(this).val());
-        $('.createCharBtn').val('Make '+$(this).val());
-        $('.createCharBtn').prop('disabled', false);
+    $('.nameSelect').keyup(function() {
+        if($(this).val() !== "") {
+            $('.createCharBtn').val('Make '+$(this).val());
+            $('.createCharBtn').prop('disabled', false);
+        } else {
+            $('.createCharBtn').val('Name Your Character');
+            $('.createCharBtn').prop('disabled', true);
+        }
     })
 })
 
