@@ -39,15 +39,16 @@
     margin-top: 10px; }
   .characterBanner .bannerButtons {
     float: right;
-    margin-right: 50px;
-    margin-top: 150px; }
+    margin-right: 10px;
+    margin-top: 195px; }
     .characterBanner .bannerButtons .btn {
       font-size: 1em;
       width: 120px;
       height: 40px;
       text-align: center;
       position: relative;
-      bottom: 80px; }
+      bottom: 80px;
+      padding: 10px 20px 10px; }
 
 .characterBanner.open {
   left: 15%;
@@ -63,7 +64,7 @@
   font-family: "Montserrat", sans-serif;
   border-right: 1px solid #fff;
   box-shadow: 0px 0px 5px #37371F;
-  background-image: linear-gradient(180deg, #CC2D03, #961500, #380600);
+  background: #AD381F;
   z-index: 2; }
   .dashboard #menuButton {
     display: block;
@@ -107,8 +108,9 @@
     display: inline-block;
     margin: 0 2px;
     float: left;
-    padding: 0.5em;
+    padding: 0.51em;
     border: 1px solid #E46100;
+    border-bottom: none;
     background: #AD381F;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px; }
@@ -240,7 +242,7 @@
   background-image: -moz-linear-gradient(top, #cf6932, #d90000);
   background-image: -ms-linear-gradient(top, #cf6932, #d90000);
   background-image: -o-linear-gradient(top, #cf6932, #d90000);
-  background-image: linear-gradient(to bottom, #cf6932, #d90000);
+  background-image: linear-gradient(to bottom, #C84A06, #AD381F);
   -webkit-border-radius: 10;
   -moz-border-radius: 10;
   border-radius: 10px;
@@ -297,8 +299,8 @@ body .container {
     body .container .box a {
       display: inline-block;
       padding: 60px;
-      padding-top: 80px;
-      padding-bottom: 80px;
+      padding-top: 110px;
+      padding-bottom: 110px;
       text-decoration: none;
       color: #fff; }
   body .container .box:hover {

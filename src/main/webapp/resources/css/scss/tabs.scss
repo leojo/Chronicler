@@ -17,8 +17,9 @@
                 display: inline-block;
                 margin: 0 2px;
                 float: left;
-                padding: 0.5em;
+                padding: 0.51em;
                 border: 1px solid $tabsOutline;
+                border-bottom: none;
                 background: $tabsBackground;
                 border-top-left-radius: 6px;
                 border-top-right-radius: 6px;

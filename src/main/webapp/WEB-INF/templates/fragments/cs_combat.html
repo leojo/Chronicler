@@ -3,7 +3,7 @@
         <div class="combat-main">
             <div class="mainStat" id="HP">Hitpoints:
                 <span class="editable-span editFieldBig numberField" th:text="${character.maxHp}"></span>
-                <input class="spanInput" th:field="*{maxHp}" type="number" autocomplete="off"/>
+                <input class="editFieldBig spanInput" th:field="*{maxHp}" type="number" autocomplete="off"/>
             </div>
             <div class="mainStat" id="AC">Armor Class:
                 <span th:text="${character.ac}"></span>

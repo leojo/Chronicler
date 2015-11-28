@@ -26,7 +26,7 @@
     <div th:case="*">
         <p>Select a name for your campaign</p>
         <form action="#" th:action="@{/newCampaign}" th:object="${campaign}" method="post">
-            Name: <input type="text" name="Campaign-name" th:field="*{name}" placeholder="Campaign Name"/>
+            Name: <input type="text" name="Campaign-name" th:field="*{name}" placeholder="Campaign Name" autocomplete="off"/>
             <input type="submit" value="Submit" />
         </form>
     </div>

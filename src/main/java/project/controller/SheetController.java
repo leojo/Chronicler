@@ -133,7 +133,7 @@ public class SheetController {
             System.out.println("Our bean has this as character name");
             System.out.println(charbean.getName());
             try {
-                charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+                if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
                 System.out.println("ABOUT TO SAVE TO CHARACTER WITH THIS ID:");
                 System.out.println(charbean.getDatabaseID());
                 charbean.updateJson(user.getUserID());
