@@ -20,60 +20,60 @@ import java.util.Enumeration;
 @Controller
 public class SheetController {
 
-        Lookup find;
+    Lookup find;
 
-        // -----------------------------------------------
-        // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
-        // -----------------------------------------------
-        @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
-        public String newCharacter(Model model, HttpSession session) {
-            find = new Lookup();
-            model.addAttribute("races", find.listRaces());
-            model.addAttribute("classes", find.listClasses());
+    // -----------------------------------------------
+    // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
+    // -----------------------------------------------
+    @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
+    public String newCharacter(Model model, HttpSession session) {
+        find = new Lookup();
+        model.addAttribute("races", find.listRaces());
+        model.addAttribute("classes", find.listClasses());
 
-            model.addAttribute("charbean", new CharacterBean());
+        model.addAttribute("charbean", new CharacterBean());
 
-            User user = (User)session.getAttribute("userId");
-            model.addAttribute("user", user);
-            if(user.getUserID() != null)
-                return "newcharacter";
-            else
-                return "loginFail";
-        }
-
-
-        // Post: This function initializes a character sheet based on some table values
-        // for the class of charbean. This site should only be loaded when character bean has a class.
-        @RequestMapping(value = "/newCharacter", method = RequestMethod.POST)
-        public String newCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
-            // Make sure user is who we think they are, and put character bean in our model.
-            User user = (User)session.getAttribute("userId");
-            model.addAttribute("user", user);
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        if(user.getUserID() != null)
+            return "newcharacter";
+        else
+            return "loginFail";
+    }
 
 
-            if(!charbean.getClassName().equals("") && !charbean.getRace().equals("")) {
-                // TODO : Initialize character sheet from bean
-                // TODO : Get bean from character sheet and update bean
-                CharacterSheet cs = new CharacterSheet(charbean, true);
-                charbean = cs.getBean();
-                model.addAttribute("spellList", cs.knownSpells.getSpells());
-                model.addAttribute("spellSlots",cs.spellSlots.getSpellSlots());
-                model.addAttribute("spellSlotTypes",cs.spellSlots.getSpellSlotTypes());
-                model.addAttribute("character", charbean);
-                session.setAttribute("charbean", charbean);
-                //session.setAttribute("characterSheet", cs);
-                //cs = session.getAttribute("characterSheet");
-                try {
-                    charbean.saveAsJson(user.getUserID());
-                    session.setAttribute("currentCharID", charbean.getDatabaseID());
+    // Post: This function initializes a character sheet based on some table values
+    // for the class of charbean. This site should only be loaded when character bean has a class.
+    @RequestMapping(value = "/newCharacter", method = RequestMethod.POST)
+    public String newCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+        // Make sure user is who we think they are, and put character bean in our model.
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
 
-                }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
-                    System.out.println("Sadly we couldn't save your character, this is disastrous.");
-                }
 
-                    return "characterSheet";
-            } else return "loginFail";
-        }
+        if(!charbean.getClassName().equals("") && !charbean.getRace().equals("")) {
+            // TODO : Initialize character sheet from bean
+            // TODO : Get bean from character sheet and update bean
+            CharacterSheet cs = new CharacterSheet(charbean, true);
+            charbean = cs.getBean();
+            model.addAttribute("spellList", cs.knownSpells.getSpells());
+            model.addAttribute("spellSlots",cs.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",cs.spellSlots.getSpellSlotTypes());
+            model.addAttribute("character", charbean);
+            session.setAttribute("charbean", charbean);
+            //session.setAttribute("characterSheet", cs);
+            //cs = session.getAttribute("characterSheet");
+            try {
+                charbean.saveAsJson(user.getUserID());
+                session.setAttribute("currentCharID", charbean.getDatabaseID());
+
+            }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                System.out.println("Sadly we couldn't save your character, this is disastrous.");
+            }
+
+            return "characterSheet";
+        } else return "loginFail";
+    }
 
     // -----------------------------------------------
     // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
@@ -125,26 +125,28 @@ public class SheetController {
         } else return "loginFail";
     }
 
-        @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
-        public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
-            User user = (User)session.getAttribute("userId");
-            CharacterSheet cs = new CharacterSheet(charbean,false);
-            charbean = cs.getBean();
-            model.addAttribute("user", user);
-            model.addAttribute("character", charbean);
-            model.addAttribute("characterSheet", cs);
-            System.out.println("Our bean has this as character name");
-            System.out.println(charbean.getName());
-            try {
-                if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
-                System.out.println("ABOUT TO SAVE TO CHARACTER WITH THIS ID:");
-                System.out.println(charbean.getDatabaseID());
-                charbean.updateJson(user.getUserID());
-            } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
-                System.out.println("Sadly we couldn't save your character, this is disastrous.");
-            }
-            return "characterSheet";
+    @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
+    public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        CharacterSheet cs = new CharacterSheet(charbean,false);
+        charbean = cs.getBean();
+        model.addAttribute("user", user);
+        model.addAttribute("character", charbean);
+        model.addAttribute("characterSheet", cs);
+        System.out.println("Our bean has this as character name");
+        System.out.println(charbean.getName());
+        try {
+            if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+            System.out.println("ABOUT TO SAVE TO CHARACTER WITH THIS ID:");
+            System.out.println(charbean.getDatabaseID());
+            charbean.updateJson(user.getUserID());
+        } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+            System.out.println("Sadly we couldn't save your character, this is disastrous.");
         }
+        return "characterSheet";
+    }
+
+
 
     @RequestMapping(value = "character{charID}#levelUp", method = RequestMethod.GET)
     public String levelUp(@ModelAttribute CharacterBean charbean, Model model, HttpSession session, @PathVariable int charID){
