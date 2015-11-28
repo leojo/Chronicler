@@ -1,5 +1,8 @@
 .listContainer {
     width: 100%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 
 
     .fancyList {
@@ -61,4 +64,8 @@
         }
     }
 
+}
+
+.hidden {
+    visibility: hidden;
 }
