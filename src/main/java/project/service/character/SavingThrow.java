@@ -45,9 +45,9 @@ public class SavingThrow {
 
 	public void update(CharacterSheet character) {
 		int BaseSave = 0;
-		for (int c : character.classID.keySet()) {
+		for (int c : character.classLevels.keySet()) {
 			// TODO: This probably needs optimizing, i.e. minimizing number of times the table is retrieved from db
-			OfflineResultSet advancement = character.find.advTableByClassID(c,character.classID.get(c));
+			OfflineResultSet advancement = character.find.advTableByClassID(c,character.classLevels.get(c));
 			advancement.first();
 			Integer ClassSave = Integer.valueOf(advancement.getString(this.shortName.toLowerCase() + "_save")); // Get the Save for this level
 
