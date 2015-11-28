@@ -1,8 +1,12 @@
 package project.service.character;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.dbLookup.OfflineResultSet;
 import project.service.enums.AbilityID;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +38,11 @@ class Skill {
 		this.totalValue = 0;
 		this.bonuses = new HashMap<>();
 		this.update();
+	}
+
+	public static Skill buildFromJSON(String JSONString) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(JSONString, Skill.class);
 	}
 
 	public void update() {
@@ -84,6 +93,16 @@ class Skill {
 			return true;
 		}
 		return false;
+	}
+
+	public String toJSON() {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 
 	@Override
