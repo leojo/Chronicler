@@ -28,7 +28,7 @@ public class CharacterBean {
     private String specialAbs, languages;
     // skills
     private int availableSkillPoints;
-    //private Skill[] skills;
+    private Skill[] skills;
 
 
     ObjectMapper mapper;
@@ -610,6 +610,14 @@ public class CharacterBean {
 
     public void setSkill_details(String skill_details) {
         this.skill_details = skill_details;
+    }
+
+    public Skill[] getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Skill[] skills) {
+        this.skills = skills;
     }
 
     public String getItem_details() {
