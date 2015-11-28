@@ -26,7 +26,7 @@ public class CharacterSheet {
 
 	// VARIABLES THAT ARE NOT COMMON WITH BEAN AND THEREFORE NEED TO BE UPDATED
 	// Note: These need special edit function in the system if they are to be edited.
-	public Map<Integer, Integer> classID; //Placeholders
+	public Map<Integer, Integer> classLevels; //Placeholders
 	public Integer raceID;
 	public Integer totalClassLevel;
 	public Map<AbilityID, AbilityScore> abilityScores;
@@ -86,12 +86,12 @@ public class CharacterSheet {
 			String[] details = pair.split(":");
 			Integer id = Integer.parseInt(details[0]);
 			Integer level = Integer.parseInt(details[1]);
-			this.classID.put(id,level);
+			this.classLevels.put(id, level);
 		}
 	}
 	private void storeClassIDs(){
 		final String[] level_details = {""};
-		this.classID.forEach((k, v) -> level_details[0] += k + ":" + v + ";");
+		this.classLevels.forEach((k, v) -> level_details[0] += k + ":" + v + ";");
 		this.bean.setLevel_details(level_details[0]);
 	}
 
@@ -166,7 +166,7 @@ public class CharacterSheet {
 		String race = bean.getRace();
 		System.err.println(race);
 		this.setRacialMods(race);
-		this.classID = new HashMap<>();
+		this.classLevels = new HashMap<>();
 		this.levelUp(classID);
 
 		String knownSpellString = this.bean.getKnownSpells_details();
@@ -238,16 +238,16 @@ public class CharacterSheet {
 
 	// Levels the character up in the given class (given by class ID)
 	public void levelUp(int classID) {
-		// TODO: Check prerequisites if multiclassing
-		if(this.classID == null) this.classID = new HashMap<Integer,Integer>();
-		this.classID.compute(classID, (k, v) -> (v == null) ? 1 : v + 1);
-		OfflineResultSet currentClass = find.playerClass(classID+"/exact");
+		if(this.classLevels == null) this.classLevels = new HashMap<Integer,Integer>(); // Initialize if needed
+		this.classLevels.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); // Increment or initialize the level for classID
+		OfflineResultSet currentClass = find.playerClass(classID+"/exact"); // Get basic info for class
 		currentClass.first();
 		int baseSkillPoints = currentClass.getInt("skill_points")*(this.totalClassLevel==1?4:1);
-		if(this.abilityScores == null) this.resetAbilities();
+		if(this.abilityScores == null) this.resetAbilities();  // Initialize if needed
 		AbilityID skillAbilityID = AbilityID.fromString(currentClass.getString("skill_points_ability"));
 		int bonusSkillPoints = this.abilityScores.get(skillAbilityID).totalValue*(this.totalClassLevel==1?4:1);
 		this.bean.setAvailableSkillPoints(baseSkillPoints + bonusSkillPoints);
+		this.updateSpellSlots(classID, this.classLevels.get(classID));
 		this.update();
 		if(this.totalClassLevel%4 == 0 && this.totalClassLevel>0){
 			this.bean.setAvailableAbilityPoints(this.bean.getAvailableSkillPoints()+1);
@@ -255,7 +255,7 @@ public class CharacterSheet {
 		if(this.totalClassLevel%3 == 0 && this.totalClassLevel>0){
 			this.bean.setAvailableFeats(this.bean.getAvailableFeats() + 1);
 		}
-		if(this.hitDice == null) this.hitDice = new HashMap<Integer, Integer>();
+		if(this.hitDice == null) this.hitDice = new HashMap<Integer, Integer>();  // Initialize if needed
 		Integer hdType = Integer.parseInt(currentClass.getString("hit_die").substring(1));
 		Integer hdNum = 1;
 		if(this.hitDice.containsKey(hdType)) hdNum+=this.hitDice.get(hdType);
@@ -281,6 +281,27 @@ public class CharacterSheet {
 		this.updateAC();
 		this.updateInitiative();
 		this.updateTotalLevel();
+	}
+
+	private void updateSpellSlots(int classID, int level) {
+		if(this.spellSlots == null) this.spellSlots = new SpellSlotArray();
+		OfflineResultSet advTable = this.find.advTableByClassID(classID, level);
+		advTable.first();
+		String className = advTable.getString("name");
+		for (int i = 0; i < 10; i++) {
+			String spellSlot = "slots_"+i;
+			String value = advTable.getString(spellSlot);
+			System.out.println("Level "+i+" spell slots for "+className+": "+value);
+			if(value.equalsIgnoreCase("none")) continue;
+
+			int numSpells = 0;
+			if(value.contains("+")) numSpells = Integer.parseInt(value.substring(0,value.indexOf("+")))+1;
+			else numSpells = Integer.parseInt(value);
+
+			this.spellSlots.update(className,level,numSpells);
+		}
+		System.out.println(spellSlots.toString());
+
 	}
 
 	private Integer getInitiative(){
@@ -319,12 +340,12 @@ public class CharacterSheet {
 	}
 
 	private void resetClassIDs(){
-		this.classID = new HashMap<Integer,Integer>();
+		this.classLevels = new HashMap<Integer,Integer>();
 	}
 
 	public void updateTotalLevel(){
 		this.totalClassLevel = 0;
-		for(Integer level : classID.values()){
+		for(Integer level : classLevels.values()){
 			totalClassLevel += level;
 		}
 	}
@@ -332,8 +353,8 @@ public class CharacterSheet {
 	public Integer updateBAB() {
 		int BAB = 0;
 
-		for (int i : this.classID.keySet()) {
-			OfflineResultSet advancement = this.find.advTableByClassID(i,this.classID.get(i));
+		for (int i : this.classLevels.keySet()) {
+			OfflineResultSet advancement = this.find.advTableByClassID(i,this.classLevels.get(i));
 			advancement.first();
 			Integer ClassBAB = 0; // Get the first number
 			ClassBAB = Integer.valueOf(advancement.getString("base_attack_bonus").split("/")[0]);

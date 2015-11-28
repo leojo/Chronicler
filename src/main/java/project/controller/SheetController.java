@@ -55,7 +55,10 @@ public class SheetController {
                 // TODO : Initialize character sheet from bean
                 // TODO : Get bean from character sheet and update bean
                 CharacterSheet cs = new CharacterSheet(charbean, true);
-                //charbean = cs.getBean();
+                charbean = cs.getBean();
+                model.addAttribute("spellList", cs.knownSpells.getSpells());
+                model.addAttribute("spellSlots",cs.spellSlots.getSpellSlots());
+                model.addAttribute("spellSlotTypes",cs.spellSlots.getSpellSlotTypes());
                 model.addAttribute("character", charbean);
                 session.setAttribute("charbean", charbean);
                 //session.setAttribute("characterSheet", cs);

@@ -57,15 +57,15 @@ public class SpellSlotArray {
         return types;
     }
 
-    public void update(String className, int level, int number){
+    public void update(String className, int level, int numSpells){
         int oldCount = this.count(className, level);
-        if(number >= oldCount){
-            for (int i = 0; i < number - oldCount; i++) {
+        if(numSpells >= oldCount){
+            for (int i = 0; i < numSpells - oldCount; i++) {
                 this.add(new SpellSlot(className,level));
             }
         } else {
             // Pretty sure this will never happen
-            for (int i = 0; i < oldCount - number; i++) {
+            for (int i = 0; i < oldCount - numSpells; i++) {
                 this.remove(className,level);
             }
         }
