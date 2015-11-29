@@ -2,7 +2,7 @@
 
         <div class="combat-main">
             <div class="mainStat" id="HP">Hitpoints:
-                <span class="editable-span editFieldBig numberField" th:text="${character.maxHp}"></span>
+                <span class="editable-span editFieldBig numberField" th:text="${character.maxHp}" overflow="hidden"></span>
                 <input class="editFieldBig spanInput" th:field="*{maxHp}" type="number" autocomplete="off"/>
             </div>
             <div class="mainStat" id="AC">Armor Class:
@@ -26,7 +26,7 @@
                 <input class="spanInput" th:field="*{bab}" th:value="${character.bab}" type="number" autocomplete="off"/>
             </div>
             <div class="mainStat" id="speed">Speed:
-                <span class="editable-span  editFieldBig numberField" th:text="${character.speed}"></span> feet
+                <span class="editable-span  editFieldBig numberField" th:text="${character.speed}" overflow="hidden"></span> feet
                 <input class="editFieldBig spanInput" th:field="*{speed}" type="number" autocomplete="off"/>
             </div>
             <div class="mainStat" id="spellRes">Spell Resistance:

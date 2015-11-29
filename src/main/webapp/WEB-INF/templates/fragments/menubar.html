@@ -1,7 +1,9 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="menubarFrag">
-    <div th:switch="${user.userID}">
-        <p th:case="null" th:text="NotLoggedIn"></p>
-        <a href="/logout">Logout</a>
-        <p th:case="*" th:text="${user.userID}"></p>
-    </div>
+    <span th:switch="${user.userID}">
+        <a th:case="null" th:text="Login" href="/"></a>
+        <span th:case="*">
+            <p th:text="${user.userID}"></p>
+            <a href="/logout">Logout</a>
+        </span>
+    </span>
 </div>

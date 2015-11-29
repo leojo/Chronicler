@@ -6,9 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import project.service.account.Login;
-import project.service.account.User;
-import project.service.dbLookup.AccountStorage;
+import project.persistence.account.Login;
+import project.persistence.account.User;
+import project.persistence.dbLookup.AccountStorage;
 
 import javax.servlet.http.*;
 import java.sql.SQLException;
@@ -66,6 +66,7 @@ public class MainController {
     public String about(Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         if(user == null) model.addAttribute("user", new User());
+        else model.addAttribute("user", user);
 
         return "about";
     }

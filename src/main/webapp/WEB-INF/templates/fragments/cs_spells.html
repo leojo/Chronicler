@@ -10,7 +10,7 @@
                             <p class="spellName" th:text="${'Unprepared '+spellSlot.className+' spell'}"></p>
                             <p class="spellDescr">Click to select a spell</p>
                         </span>
-                        <input type="button" class="spellResetBtn" value="Change"></input>
+                        <input type="button" class="spellResetBtn" value="Reset"></input>
                         <span class="content prepped" th:case="*" th:attr="spell_id=${spellSlot.spell.id}">
                             <p class="spellName" th:text="${spellSlot.spell.name}"></p>
                             <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>

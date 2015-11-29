@@ -2,21 +2,14 @@ package project.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import project.service.account.User;
-import project.service.character.CharacterBean;
-import project.service.character.CharacterSheet;
-import project.service.dbLookup.AccountStorage;
-import project.service.dbLookup.Lookup;
-import project.service.spell.Spell;
-import project.service.spell.SpellSlot;
-import project.service.spell.SpellSlotArray;
+import project.persistence.account.User;
+import project.persistence.dbLookup.Lookup;
+import project.persistence.spell.Spell;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collection;
 
 /**
  * Created by andrea on 23.11.2015.
