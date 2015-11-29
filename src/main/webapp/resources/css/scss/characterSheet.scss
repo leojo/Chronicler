@@ -40,6 +40,8 @@ body {
             div {
                 margin-left: 15px;
             }
+
+
             .editFieldBig {
                 display: block;
                 width: 100px;
@@ -51,6 +53,12 @@ body {
                 font-weight: 600;
                 background: #F6F3F3;
 
+            }
+
+            #name {
+                .editFieldBig {
+                    width: 300px;
+                }
             }
 
             .editField {
