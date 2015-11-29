@@ -153,6 +153,9 @@
   border-radius: 4px;
   box-shadow: 1px 1px 1px #d8d1d1; }
 
+.prepped {
+  background: rgba(176, 78, 46, 0.45); }
+
 .listContainer {
   width: 100%;
   position: absolute;

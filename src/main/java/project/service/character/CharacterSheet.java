@@ -352,7 +352,7 @@ public class CharacterSheet {
 	public void updateTotalLevel(){
 		this.totalClassLevel = 0;
 		for(Integer level : classLevels.values()){
-			totalClassLevel += level;
+			this.totalClassLevel += level;
 		}
 	}
 
@@ -484,7 +484,6 @@ public class CharacterSheet {
 		}
 	}
 
-
 	/*
 	 * Convenience functions for retrieving values from containers
 	 */
@@ -497,10 +496,21 @@ public class CharacterSheet {
 	}
 
 
+	public void rest() {
+		this.bean.setMaxHp(this.bean.getMaxHp()+4);
+		this.spellSlots.getSpellSlots()
+				.values()
+				.forEach(slotlevel -> slotlevel.forEach(slot -> {
+					slot.setAvailable(true);
+					slot.setSpell(null);
+				}));
+		this.updateBean();
+	}
 
 	public static void main(String[] args) {
 
     }
+
 }
 
 

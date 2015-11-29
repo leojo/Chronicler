@@ -17,6 +17,7 @@
         <script th:src="@{/resources/js/editableFields.js}" />
         <script th:src="@{/resources/js/spellPopup.js}" />
         <script th:src="@{/resources/js/levelUp.js}" />
+        <script th:src="@{/resources/js/rest.js}" />
     </head>
 
     <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
@@ -29,9 +30,7 @@
                     <h3 th:text="${character.race} +' '+${character.className}"></h3>
                 </div>
                 <div class="bannerButtons">
-                    <!--<input class="btn levelUpBtn" type="button" value="Level Up" th:onclick="${'levelUp('+character.databaseID+')'}"></input>-->
-                    <!--<a  class="btn levelUpBtn" href="#levelUp">Level Up</a>-->
-                    <a  class="btn restBtn" href="#rest" >Rest</a>
+                    <input class="btn restBtn" type="button" value="Rest" th:onclick="${'rest('+character.databaseID+')'}" ></input>
                 </div>
             </div>
 

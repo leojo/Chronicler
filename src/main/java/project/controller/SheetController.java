@@ -219,6 +219,41 @@ public class SheetController {
     }
 
 
+
+    @RequestMapping(value = "rest{charID}", method = RequestMethod.GET)
+    public String rest(@PathVariable int charID, Model model, HttpSession session){
+        System.out.println("ZZZ...");
+
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        Lookup find = new Lookup();
+        model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
+        CharacterBean charbean;
+        CharacterSheet charSheet;
+        if(user.getUserID() != null) {
+            charbean = new CharacterBean();
+            charbean.setDatabaseID(charID);
+            charbean = loadBeanFromJson(charbean, user.getUserID());
+            session.setAttribute("charbean", charbean);
+            charSheet = new CharacterSheet(charbean,false);
+            charSheet.rest();
+            charbean = charSheet.getBean();
+            try {
+                charbean.updateJson(user.getUserID());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("spellList", charSheet.knownSpells.getSpells());
+            model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("character", charbean);
+            session.setAttribute("currentCharID", charID);
+            return "characterSheet";
+        } else
+            return "loginFail";
+    }
+
     @RequestMapping(value = "deleteCharacter{charID}", method = RequestMethod.GET)
     public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
