@@ -58,7 +58,6 @@ public class SpellSlotArray {
     }
 
     public void updateSpells(ArrayList<String> newSpellInfo){
-        System.out.println("The number of total spell slots is "+this.spellSlots.size());
         HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = getSpellSlots();
         for(String spell : newSpellInfo){
             String[] info = spell.split(":");
@@ -71,7 +70,6 @@ public class SpellSlotArray {
     }
 
     public void updateSpellStatus(ArrayList<String> newPrepInfo) {
-        System.out.println("The number of total spell slots is "+this.spellSlots.size());
         HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = getSpellSlots();
         for(String spell : newPrepInfo){
             String[] info = spell.split(":");

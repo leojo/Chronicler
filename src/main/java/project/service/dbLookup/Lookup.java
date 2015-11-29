@@ -149,7 +149,6 @@ public class Lookup {
             if(!rs.next()){
                 rs.close();
                 c.close();
-                System.err.println("Connection closed");
                 return null; // return null if the ResultSet is empty
             }
             OfflineResultSet ors = new OfflineResultSet(rs);

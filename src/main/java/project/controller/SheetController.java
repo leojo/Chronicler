@@ -191,6 +191,7 @@ public class SheetController {
         model.addAttribute("user", user);
         model.addAttribute("character", charbean);
         model.addAttribute("characterSheet", cs);
+        model.addAttribute("inventory", cs.inventory);
         try {
             if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
             charbean.updateJson(user.getUserID());
@@ -204,8 +205,6 @@ public class SheetController {
 
     @RequestMapping(value = "levelUp{charID}_{classID}", method = RequestMethod.GET)
     public String levelUp(@PathVariable int charID, @PathVariable String classID, Model model, HttpSession session){
-        System.out.println("Level up!!!");
-        System.out.println("leveling up character "+charID+" one level in class "+classID);
 
         User user = (User)session.getAttribute("userId");
         if (user == null) {
