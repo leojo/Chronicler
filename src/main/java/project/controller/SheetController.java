@@ -184,8 +184,8 @@ public class SheetController {
             return "redirect:/";
         }
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+        charbean.copyDetails(oldBean);
 
-        charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
         CharacterSheet cs = new CharacterSheet(charbean,false);
         charbean = cs.getBean();
         model.addAttribute("user", user);
@@ -305,7 +305,7 @@ public class SheetController {
             return "redirect:/";
         }
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
-        charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
+        charbean.copyDetails(oldBean);
 
         CharacterSheet cs = new CharacterSheet(charbean,false);
         ArrayList<String> newSpellInfo = new ArrayList<String>();

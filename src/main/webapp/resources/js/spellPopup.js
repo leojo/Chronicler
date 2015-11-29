@@ -1,14 +1,17 @@
 $(function() {
 
 	$.fn.extend({
-		// Post: Makes array of span elements editable.
+		// Allows user to open up spell offer by clicking on spellslot.
+		// This is unbound from the spell slot once it has filled again.
 		makeSpellOffer: function () {
 
 			// Make sure no spell offer is open
 			$('.spellOffer').hide();
 			var spellOfferOpen = false;
+
 			$(this).each(function () {
 				var $spellSlot = $(this);
+				$spellSlot.addClass('unprepared');
 				var $resetBtn = $spellSlot.find('.spellResetBtn');
 				var $spellSlotInput = $spellSlot.find(".spellSlotInput");
 				var $slotLevel = $spellSlot.parent().parent().attr('class').slice(-1);
@@ -23,17 +26,29 @@ $(function() {
 
 					}
 				};
-				$spellOffer.click(function (event) {
-					event.stopPropagation();
-				});
-
 
 				// Hide spans and show editable fields in their place
 				$spellSlot.click(function (e) {
+					e.stopPropagation();
 					if(!spellOfferOpen) {
+
+
 						$spellOffer.show();
+
+						console.log("spell offer offset");
+						console.log($spellOffer.offset());
+						$spellOffer.offset({top: 0, left: 0});
+						console.log("spell offer offset 0");
+						console.log($spellOffer.offset());
+						console.log("spell SLOT offset");
+						console.log($spellSlot.offset());
+						$spellOffer.offset($spellSlot.offset());
+						console.log("spell offer offset 1");
+                        console.log($spellOffer.offset());
+
 						spellOfferOpen = true;
-						$spells.click(function() {
+						$spells.click(function(evt) {
+							evt.stopPropagation();
 							$spellID = $(this).attr('spell_id');
 							console.log("does spell ID look like a jquery object");
 
@@ -43,6 +58,8 @@ $(function() {
 							$spellSlot.makeSpendable();
 							$('.spellOffer').hide();
 							spellOfferOpen  = false;
+							$spellSlot.unbind('click');
+							$spellSlot.makeSpendable();
 							submitChanges();
 						});
 					} else return;
@@ -52,6 +69,8 @@ $(function() {
 			return this;
 		},
 
+		// Allows user to use up spell by clicking on it.
+		// Becomes despendable again when the user has clicked.
 		makeSpendable: function() {
 			$(this).each(function() {
 				var $spellSlot = $(this);
@@ -59,7 +78,6 @@ $(function() {
 				console.log($spellSlotStatus);
 				var submitSpend = function () {
 					if ($spellSlotStatus.val() !== '') {
-						console.log("submitting form!");
 						$('#sheetForm').ajaxSubmit({url: 'updateSpellslot', type: 'post'});
 						$spellSlot.unbind('click');
 
@@ -69,13 +87,9 @@ $(function() {
 				$spellSlot.click(function() {
 					$(this).removeClass('available');
 					$(this).addClass('spent');
-					console.log("This is the spellSlotStatus we're about to change");
-					console.log($spellSlotStatus);
-					console.log("Value before"+$spellSlotStatus.val());
 					$spellSlotStatus.val('spent');
-					console.log("Value after"+$spellSlotStatus.val());
-					console.log($spellSlotStatus)
 					submitSpend();
+					$spellSlot.unbind('click');
 				});
 			});
 
@@ -85,15 +99,10 @@ $(function() {
 			$(this).each(function() {
 				var $spellSlot = $(this);
 				$spellSlot.find('.spellResetBtn').click(function(e) {
-					console.log("HITTING RESET BUTTON");
 					e.stopPropagation();
-					console.log("this is the spellslot");
-					console.log($spellSlot);
-					console.log("and its html");
-					console.log($spellSlot.html());
 					$spellSlot.find('span').replaceWith('<span class="content unprepped"><p class="spellName">Unprepared spell</p><p class="spellDescr">Click to select a spell</p></span>');
-					console.log($spellSlot.html());
 					$spellSlot.addClass('unprepared');
+					$spellSlot.unbind('click');
 					$spellSlot.makeSpellOffer();
 				});
 			});
@@ -105,8 +114,10 @@ $(function() {
 		}
 	});
 	//$('.available').parent().parent().addClass('available');
- 	$('.unprepped').parent().parent().makeSpellOffer();
-	$('.available').makeSpendable();
+ 	$('.unprepped').parent().parent().addClass('unprepared');
+ 	$('.prepped').parent().parent().addClass('prepared');
+ 	$('.unprepared').makeSpellOffer();
+	$('.prepared').makeSpendable();
 	$('.spellSlot').makeResetable();
 
 
