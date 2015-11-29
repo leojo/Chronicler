@@ -9,6 +9,7 @@ $(function() {
 			var spellOfferOpen = false;
 			$(this).each(function () {
 				var $spellSlot = $(this);
+				var $resetBtn = $spellSlot.find('.spellResetBtn');
 				var $spellSlotInput = $spellSlot.find(".spellSlotInput");
 				var $slotLevel = $spellSlot.parent().parent().attr('class').slice(-1);
 				var $spellOffer = $($('.spellOffer'+$slotLevel)[0]);
@@ -26,10 +27,11 @@ $(function() {
 					event.stopPropagation();
 				});
 
-				// Hide spans and show editable fields in their place
-				$spellSlot.click(function (e) {
 
-					console.log("click detected!");
+				// Hide spans and show editable fields in their place
+				$resetBtn.click(function (e) {
+					$spellSlot.removeClass('available');
+					$spellSlot.removeClass('spent');
 					if(!spellOfferOpen) {
 						$spellOffer.show();
 						spellOfferOpen = true;
@@ -37,7 +39,8 @@ $(function() {
 							$spellID = $(this).attr('spell_id');
 							$spellSlotInput.val($spellID);
 							$spellSlot.find('span').replaceWith($(this).html());
-							$spellSlot.addClass('prepped');
+							$spellSlot.addClass('available');
+							$spellSlot.makeSpendable();
 							$('.spellOffer').hide();
 							spellOfferOpen  = false;
 							submitChanges();
@@ -47,9 +50,36 @@ $(function() {
 				});
 			});
 			return this;
+		},
+
+		makeSpendable: function() {
+			var $spellSlot = $(this);
+			var $spellSlotStatus = $spellSlot.find('.spellSlotStatus');
+			var submitSpend = function () {
+				if ($spellSlotStatus.val() !== '') {
+					console.log("submitting form!");
+					$('#sheetForm').ajaxSubmit({url: 'updateSpellslot', type: 'post'});
+					$spellSlot.unbind('click');
+
+				}
+			};
+
+			$spellSlot.click(function() {
+				$(this).removeClass('available');
+				$(this).addClass('spent');
+				$spellSlotStatus.val('spent');
+				submitSpend();
+			});
+		},
+
+		resetSpells: function() {
+			$spellSlot.removeClass('spent');
+			$spellSlot.addClass('available');
 		}
 	});
+	//$('.available').parent().parent().addClass('available');
  	$('.spellSlot').makeSpellOffer();
+	$('.available').makeSpendable();
 });
 
 

@@ -283,6 +283,19 @@ public class SheetController {
                 newSpellInfo.add(level+":"+slotNum+":"+spellID);
             }
         }
+
+        ArrayList<String> newPrepInfo = new ArrayList<String>();
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
+            if(entry.getKey().startsWith("spellID")){
+                String spellSlotID = entry.getKey().substring(8);
+                Integer level = Integer.parseInt(spellSlotID.split("_")[0]);
+                Integer slotNum = Integer.parseInt(spellSlotID.split("_")[1]);
+                String spellStatus = entry.getValue();
+                newSpellInfo.add(level+":"+slotNum+":"+spellStatus);
+            }
+        }
+
+
         cs.spellSlots.updateSpells(newSpellInfo);
         charbean = cs.getBean();
 

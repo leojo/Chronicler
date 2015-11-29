@@ -12,4 +12,11 @@
 .prepped {
   background: rgba(176, 78, 46, 0.45); }
 
+.spellResetBtn {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 5px;
+  top: 5px; }
+
 /*# sourceMappingURL=spellTab.css.map */

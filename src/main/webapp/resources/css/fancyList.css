@@ -41,6 +41,10 @@
         position: absolute;
         top: 0px;
         right: 0px; }
+    .listContainer .fancyList .available {
+      background: #D45F39; }
+    .listContainer .fancyList .spent {
+      background: #926657; }
     .listContainer .fancyList .flex {
       display: flex;
       align-items: center;
