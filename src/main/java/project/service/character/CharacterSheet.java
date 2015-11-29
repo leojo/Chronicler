@@ -1,5 +1,6 @@
 package project.service.character;
 
+import org.eclipse.jdt.internal.compiler.lookup.SourceTypeBinding;
 import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 import project.service.enums.AbilityID;
@@ -67,10 +68,10 @@ public class CharacterSheet {
 		this.loadAbilityScores();
 		this.loadSavingThrows();
 
+
 		this.knownSpells = new SpellList(this.bean.getKnownSpells_details());
 		this.spellSlots = new SpellSlotArray(this.bean.getSpellSlots_details());
 		this.feats = new FeatList(this.bean.getFeat_details());
-		System.out.println("Inv details from bean: "+this.bean.getInventory_details());
 		this.inventory = new Inventory(this.bean.getInventory_details());
 		/*--------------------- WISH LIST ---------------------
 		this.items = new ItemList(this.bean.getItem_details());
@@ -104,33 +105,41 @@ public class CharacterSheet {
 	private void loadAbilityScores() {
 		this.resetAbilities();
 		String ability_details = this.bean.getAbility_details();
-		if(ability_details == null || ability_details.equals("")) return;
+		if(ability_details == null || ability_details.equals("")){
+			System.err.println("EMPTY ABILITY SCORE STRING!");
+			return;
+		}
 		String[] ability_info = ability_details.split(";");
-		// The string should be on the form: "XXXkey1:value1,key2:value2,;YYYkey3:value3,;" and should be read as
+		// The string should be on the form: "XXX)key1:value1,key2:value2,;YYY)key3:value3,;" and should be read as
 		// The ability XXX has bonuses key1 and key2 with values value1 and value2 respectively. The ability YYY has bonus key3 with value value3.
 		for(String info : ability_info){
 			if(info.length()==0)continue;
-			AbilityID id = AbilityID.fromString(info.substring(0, 3));
-			String[] bonuses = info.substring(3).split(",");
+			AbilityID id = AbilityID.fromString(info.split("\\)")[0]);
+			String[] bonuses = info.split("\\)")[1].split(",");
 			AbilityScore score = new AbilityScore(id);
 			for(String bonus : bonuses){
 				if(bonus.length()==0)continue;
 				String key = bonus.split(":")[0];
 				Integer value = Integer.parseInt(bonus.split(":")[1]);
-				score.setBonus(key,value);
+				score.setBonus(key, value);
 			}
 			this.abilityScores.put(id,score);
 		}
 	}
 
 	private void storeAbilityScores(){
+		String abilityString = getAbilityScoreString();
+		this.bean.setAbility_details(abilityString);
+	}
+
+	private String getAbilityScoreString(){
 		final String[] details = {""};
-		this.abilityScores.forEach((k, v) -> details[0] += k.toString() + v.toString() + ";");
-		this.bean.setAbility_details(details[0]);
+		this.abilityScores.forEach((k, v) -> details[0] += k.toString() +")"+ v.toString() + ";");
+		return details[0];
 	}
 
 	private void loadSavingThrows() {
-		this.resetAbilities();
+		this.resetSavingThrows();
 		String save_details = this.bean.getSave_details();
 		if(save_details == null || save_details.equals("")) return;
 		String[] save_info = save_details.split(";");
@@ -138,8 +147,8 @@ public class CharacterSheet {
 		// The Save XXX has bonuses key1 and key2 with values value1 and value2 respectively. The save YYY has bonus key3 with value value3.
 		for(String info : save_info){
 			if(info.length()==0)continue;
-			SavingThrowID id = SavingThrowID.valueOf(info.split("[)]")[0]);
-			String[] bonuses = info.split("[)]")[1].split(",");
+			SavingThrowID id = SavingThrowID.valueOf(info.split("\\)")[0]);
+			String[] bonuses = info.split("\\)")[1].split(",");
 			SavingThrow save = new SavingThrow(this,id);
 			for(String bonus : bonuses){
 				if(bonus.length()==0)continue;
@@ -165,7 +174,6 @@ public class CharacterSheet {
 		ors.first();
 		Integer classID = ors.getInt("id");
 		String race = bean.getRace();
-		System.err.println(race);
 		this.setRacialMods(race);
 		this.classLevels = new HashMap<>();
 
@@ -200,19 +208,33 @@ public class CharacterSheet {
 			String[] info = abilityBonusPair.split(":");
 			AbilityID id = AbilityID.fromString(info[0]);
 			Integer bonus = Integer.parseInt(info[1]);
-			System.out.println("Applying bonus "+bonus+" to ability "+info[0]);
 			this.abilityScores.get(id).setBonus("Racial",bonus);
 			this.updateAbilityScores();
 		}
 	}
 
 	private void updateBean() {
+
+		this.abilityScores.get(AbilityID.STR).update();
+		this.abilityScores.get(AbilityID.DEX).update();
+		this.abilityScores.get(AbilityID.CON).update();
+		this.abilityScores.get(AbilityID.INT).update();
+		this.abilityScores.get(AbilityID.WIS).update();
+		this.abilityScores.get(AbilityID.CHA).update();
+
 		this.bean.setSTR(this.abilityScores.get(AbilityID.STR).totalValue);
 		this.bean.setDEX(this.abilityScores.get(AbilityID.DEX).totalValue);
 		this.bean.setCON(this.abilityScores.get(AbilityID.CON).totalValue);
 		this.bean.setINT(this.abilityScores.get(AbilityID.INT).totalValue);
 		this.bean.setWIS(this.abilityScores.get(AbilityID.WIS).totalValue);
 		this.bean.setCHA(this.abilityScores.get(AbilityID.CHA).totalValue);
+
+		this.bean.setSTRmod(this.abilityScores.get(AbilityID.STR).modifier);
+		this.bean.setCONmod(this.abilityScores.get(AbilityID.CON).modifier);
+		this.bean.setDEXmod(this.abilityScores.get(AbilityID.DEX).modifier);
+		this.bean.setINTmod(this.abilityScores.get(AbilityID.INT).modifier);
+		this.bean.setWISmod(this.abilityScores.get(AbilityID.WIS).modifier);
+		this.bean.setCHAmod(this.abilityScores.get(AbilityID.CHA).modifier);
 
 		this.bean.setFort(this.savingThrows.get(SavingThrowID.FORT).totalValue);
 		this.bean.setWill(this.savingThrows.get(SavingThrowID.WILL).totalValue);
@@ -224,6 +246,9 @@ public class CharacterSheet {
 		this.bean.setGrapple(this.getGrappleModifier());
 		this.bean.setInitiative(this.getInitiative());
 
+		this.bean.setLevel(this.getLevelDesctiption());
+		System.out.println("set level to "+this.bean.getLevel());
+
 		this.storeAbilityScores();
 		this.storeClassIDs();
 		this.storeSavingThrows();
@@ -232,6 +257,21 @@ public class CharacterSheet {
 		this.bean.setSpellSlots_details(spellSlots.toString());
 		this.bean.setFeat_details(feats.toString());
 		this.bean.setInventory_details(inventory.toString());
+	}
+
+	private String getLevelDesctiption() {
+		String levelDescription = "";
+		boolean first = true;
+		for(Integer id : classLevels.keySet()){
+			OfflineResultSet ors = find.playerClass(id.toString());
+			ors.first();
+			String className = ors.getString("name");
+			Integer classLevel = classLevels.get(id);
+			if(!first) levelDescription += " / ";
+			else first = false;
+			levelDescription += className+" "+classLevel;
+		}
+		return levelDescription;
 	}
 
 	public CharacterBean getBean() {
@@ -245,8 +285,6 @@ public class CharacterSheet {
 		this.classLevels.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); // Increment or initialize the level for classID
 		OfflineResultSet currentClass = find.playerClass(classID+"/exact"); // Get basic info for class
 		currentClass.first();
-		System.err.println("Leveling up as a "+currentClass.getString("name")+" (lvl "+this.classLevels.get(classID)+")");
-		System.out.println("Spell slots before leveling: "+this.bean.getSpellSlots_details());
 		int baseSkillPoints = currentClass.getInt("skill_points")*(this.totalClassLevel==1?4:1);
 		if(this.abilityScores == null) this.resetAbilities();  // Initialize if needed
 		AbilityID skillAbilityID = AbilityID.fromString(currentClass.getString("skill_points_ability"));
@@ -272,7 +310,6 @@ public class CharacterSheet {
 			this.bean.setMaxHp(this.bean.getMaxHp()+conMod+hdType/2+1);
 		}
 		updateBean();
-		System.err.println("Spell slots after leveling: "+this.bean.getSpellSlots_details());
 	}
 
 	public void levelUp(String className){
