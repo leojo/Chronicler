@@ -27,10 +27,8 @@ public class AccountStorage {
     private Connection connect(String dbUrl){
         Connection c = null;
         try {
-            System.out.println("Establishing connection to "+dbUrl+"...");
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:" + dbUrl);
-            System.out.println("Connection established!");
             c.setAutoCommit(false);
         } catch ( Exception e ) {
             System.err.println("Error in connect: "+e.getClass().getName() + ": " + e.getMessage() );
@@ -154,7 +152,6 @@ public class AccountStorage {
             OfflineResultSet ors = new OfflineResultSet(rs);
             rs.close();
             c.close();
-            System.err.println("Connection closed");
             return ors;
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
@@ -173,7 +170,6 @@ public class AccountStorage {
             stmt.close();
             c.commit();
             c.close();
-            System.err.println("Connection closed");
         } catch (Exception e) {
             System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();

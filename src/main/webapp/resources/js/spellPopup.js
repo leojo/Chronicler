@@ -30,6 +30,7 @@ $(function() {
 
 				// Hide spans and show editable fields in their place
 				$resetBtn.click(function (e) {
+					e.stopPropagation();
 					$spellSlot.removeClass('available');
 					$spellSlot.removeClass('spent');
 					if(!spellOfferOpen) {
@@ -55,7 +56,7 @@ $(function() {
 		makeSpendable: function() {
 			var $spellSlot = $(this);
 			var $spellSlotStatus = $spellSlot.find('.spellSlotStatus');
-			console.log($spellSlotStatus);
+			console.dir($spellSlotStatus);
 			var submitSpend = function () {
 				if ($spellSlotStatus.val() !== '') {
 					console.log("submitting form!");
@@ -66,13 +67,15 @@ $(function() {
 			};
 
 			$spellSlot.click(function() {
+				console.log("Looking at:");
+				console.dir($(this));
 				$(this).removeClass('available');
 				$(this).addClass('spent');
 				console.log("This is the spellSlotStatus we're about to change");
 				console.log($spellSlotStatus);
-				console.log("Value before"+$spellSlotStatus.val());
+				console.log("Value before "+$spellSlotStatus.val());
 				$spellSlotStatus.val('spent');
-				console.log("Value after"+$spellSlotStatus.val());
+				console.log("Value after "+$spellSlotStatus.val());
 				console.log($spellSlotStatus)
 				submitSpend();
 			});
