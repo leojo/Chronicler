@@ -57,6 +57,19 @@ public class SpellSlotArray {
         return types;
     }
 
+    public void updateSpells(ArrayList<String> newSpellInfo){
+        System.out.println("The number of total spell slots is "+this.spellSlots.size());
+        HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = getSpellSlots();
+        for(String spell : newSpellInfo){
+            String[] info = spell.split(":");
+            Integer level = Integer.parseInt(info[0]);
+            Integer slotNum = Integer.parseInt(info[1]);
+            Integer spellID = Integer.parseInt(info[2]);
+            if(spellID == 0) continue;
+            spellSlotTable.get(level).get(slotNum).setSpell(new Spell(spellID));
+        }
+    }
+
     public void update(String className, int level, int numSpells){
         int oldCount = this.count(className, level);
         if(numSpells >= oldCount){
