@@ -37,8 +37,8 @@
             <ul class="tabs">
                 <li class="tab selected"><a href='#combatTab'>Combat</a></li>
                 <li class="tab" ><a href='#spellTab'>Spells</a></li>
-                <li class="tab" ><a href='#featTab'>Feats</a></li>
-                <li class="tab"><a href='#skillTab'>Skills</a></li>
+                <li class="tab hiddenTab"><a href='#featTab'>Feats</a></li>
+                <li class="tab hiddenTab"><a href='#skillTab'>Skills</a></li>
                 <li class="tab"><a href='#inventoryTab'>Inventory</a></li>
                 <li class="tab"><a href='#aboutTab'>About character</a></li>
                 <li class="tab"><a href='#levelUp'>Level up</a></li>
@@ -49,8 +49,8 @@
                 <!-- this is where we put includes and hide/show depending on tab -->
                     <div id="combatTab" th:include="fragments/cs_combat :: combatFrag"></div>
                     <div id="spellTab" th:include="fragments/cs_spells :: spellFrag"></div>
-                    <div id="featTab" class="hidden" th:include="fragments/cs_feats :: featFrag"></div>
-                    <div id="skillTab" class="hidden" th:include="fragments/cs_skills :: skillFrag"></div>
+                    <div id="featTab" th:include="fragments/cs_feats :: featFrag"></div>
+                    <div id="skillTab" th:include="fragments/cs_skills :: skillFrag"></div>
                     <div id="inventoryTab" th:include="fragments/cs_inventory :: inventoryFrag"></div>
                     <div id="aboutTab" th:include="fragments/cs_about :: aboutFrag"></div>
                     <div id="levelUp" th:include="fragments/cs_classSelection :: classSelectFrag"></div>
