@@ -1,9 +1,10 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-spell" th:fragment="spellFrag">
     <div  class="listContainer">
-        <div th:each="level : ${spellSlots}">
+        <form id="spellForm">
+        <div th:each="level : ${spellSlots}" th:class="${'spellGroup level'+level.key}">
             <h1 th:text="${level.key}" class="fancyList"></h1>
             <ul class="fancyList">
-                <li th:each="spellSlot : ${level.value}" class="listItem">
+                <li th:each="spellSlot : ${level.value}" class="listItem spellSlot">
                     <div th:switch="${spellSlot.spell}">
                         <span class="content" th:case="null">
                             <p class="spellName" th:text="${'Unprepared '+spellSlot.className+' spell'}"></p>
@@ -13,15 +14,16 @@
                             <p class="spellName" th:text="${spellSlot.spell.name}"></p>
                             <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>
                         </span>
+                        <input type="text" class="spellSlotInput hidden" value="0"/>
                     </div>
                 </li>
             </ul>
-        </div>
+        </div></form>
     </div>
-    <div th:each="spellSlot : ${spellSlotTypes}" th:id="${spellSlot.type}" class="hidden listContainer">
+    <div th:each="spellSlot : ${spellSlotTypes}" th:id="${spellSlot.type}" th:class="${'listContainer spellOffer spellOffer'+spellSlot.level}">
         <h1 th:text="${'Known '+spellSlot.className+' spells: lvl '+spellSlot.level}"></h1>
         <ul class="fancyList">
-            <li th:each="spell : ${spellSlot.getPossibleSpells(spellList)}" class="listItem">
+            <li th:each="spell : ${spellSlot.getPossibleSpells(spellList)}" th:attr="spell_id=${spell.id}" class="listItem offerSpell">
                 <span class="content">
                     <p class="spellName" th:text="${spell.name}"></p>
                     <p class="spellDescr" th:text="${spell.shortDescription}"></p>

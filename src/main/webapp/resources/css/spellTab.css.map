@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AAAA,WAAY;EACR,QAAQ,EAAE,QAAQ;EAClB,OAAO,EAAE,CAAC;EACV,UAAU,EAAE,gDAAgD;EAC5D,KAAK,EAAE,GAAG;EACV,IAAI,EAAE,GAAG;EACT,GAAG,EAAE,GAAG;EACR,MAAM,EAAE,eAAe;EACvB,aAAa,EAAE,GAAG;EAClB,UAAU,EAAE,mBAA8B",
+"sources": ["scss/spellTab.scss"],
 "names": [],
 "file": "spellTab.css"
 }
