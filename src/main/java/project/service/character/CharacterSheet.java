@@ -268,6 +268,13 @@ public class CharacterSheet {
 		updateBean();
 	}
 
+	public void levelUp(String className){
+		OfflineResultSet ors = find.playerClass(className);
+		ors.first();
+		Integer classID = ors.getInt("id");
+		levelUp(classID);
+	}
+
 	/*
 	 * Functions to update calculated fields
 	 */

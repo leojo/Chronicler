@@ -29,9 +29,9 @@
                     <h3 th:text="${character.race} +' '+${character.className}"></h3>
                 </div>
                 <div class="bannerButtons">
-                    <input class="btn levelUpBtn" type="button" value="Level Up" th:onclick="${'levelUp('+character.databaseID+')'}"></input>
-                    <!--a  class="btn levelUpBtn" href="#levelUp">Level Up</a-->
-                    <a  class="btn restBtn" href="#" >Rest</a>
+                    <!--<input class="btn levelUpBtn" type="button" value="Level Up" th:onclick="${'levelUp('+character.databaseID+')'}"></input>-->
+                    <!--<a  class="btn levelUpBtn" href="#levelUp">Level Up</a>-->
+                    <a  class="btn restBtn" href="#rest" >Rest</a>
                 </div>
             </div>
 
@@ -42,6 +42,7 @@
                 <li class="tab"><a href='#skillTab'>Skills</a></li>
                 <li class="tab"><a href='#inventoryTab'>Inventory</a></li>
                 <li class="tab"><a href='#aboutTab'>About character</a></li>
+                <li class="tab"><a href='#levelUp'>Level up</a></li>
             </ul>
 
             <div class="sheetContent">
@@ -53,6 +54,7 @@
                     <div id="skillTab" th:include="fragments/cs_skills :: skillFrag"></div>
                     <div id="inventoryTab" th:include="fragments/cs_inventory :: inventoryFrag"></div>
                     <div id="aboutTab" th:include="fragments/cs_about :: aboutFrag"></div>
+                    <div id="levelUp" th:include="fragments/cs_classSelection :: classSelectFrag"></div>
                 </form>
             </div>
         </div>

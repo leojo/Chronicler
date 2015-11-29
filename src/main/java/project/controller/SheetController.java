@@ -136,6 +136,9 @@ public class SheetController {
     // -----------------------------------------------------
     @RequestMapping(value = "/character{charID}", method = RequestMethod.GET)
     public String openCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        find = new Lookup();
+        model.addAttribute("classes", find.listClasses());
+
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
         storage = new AccountStorage("data/userAccounts.sqlite");
@@ -181,7 +184,7 @@ public class SheetController {
 
 
     @RequestMapping(value = "levelUp{charID}_{classID}", method = RequestMethod.GET)
-    public String levelUp(@PathVariable int charID, @PathVariable int classID, Model model, HttpSession session){
+    public String levelUp(@PathVariable int charID, @PathVariable String classID, Model model, HttpSession session){
         System.out.println("Level up!!!");
         System.out.println("leveling up character "+charID+" one level in class "+classID);
 
