@@ -65,13 +65,7 @@ public class SpellSlotArray {
             Integer level = Integer.parseInt(info[0]);
             Integer slotNum = Integer.parseInt(info[1]);
             Integer spellID = Integer.parseInt(info[2]);
-            System.out.println("Updating spellslot "+level+","+slotNum+" with spell "+spellID);
-            System.out.println("is the spellSlotTable null?? ");
-            System.out.println(spellSlotTable==null);
-            System.out.println("does the spellSlot table have a level "+level+"?? ");
-            System.out.println(spellSlotTable.get(level)!=null);
-            System.out.println("does the spellSlot table have a slot number "+slotNum+"?? ");
-            System.out.println(spellSlotTable.get(level).get(slotNum)!=null);
+            if(spellID == 0) continue;
             spellSlotTable.get(level).get(slotNum).setSpell(new Spell(spellID));
         }
     }

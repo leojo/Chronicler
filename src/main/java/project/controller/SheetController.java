@@ -233,6 +233,8 @@ public class SheetController {
     @RequestMapping(value = "/updateSpellslot", method = RequestMethod.POST)
     public String updateSpellslots(@RequestParam Map<String, String> allRequestParams, @ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+        charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
 
         CharacterSheet cs = new CharacterSheet(charbean,false);
         ArrayList<String> newSpellInfo = new ArrayList<String>();
