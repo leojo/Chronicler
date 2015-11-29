@@ -24,10 +24,11 @@
         <h1 th:text="${'Known '+spellSlot.className+' spells: lvl '+spellSlot.level}"></h1>
         <ul class="fancyList">
             <li th:each="spell : ${spellSlot.getPossibleSpells(spellList)}" th:attr="spell_id=${spell.id}" class="listItem offerSpell">
-                <span class="content">
-                    <p class="spellName" th:text="${spell.name}"></p>
-                    <p class="spellDescr" th:text="${spell.shortDescription}"></p>
-                </span>
+
+                    <span class="content">
+                        <p class="spellName" th:text="${spell.name}"></p>
+                        <p class="spellDescr" th:text="${spell.shortDescription}"></p>
+                    </span>
             </li>
         </ul>
     </div>
