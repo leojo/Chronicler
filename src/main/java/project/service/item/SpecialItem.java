@@ -21,17 +21,19 @@ public class SpecialItem extends Item{
         String id = info[0];
 
         Lookup find = new Lookup();
-        OfflineResultSet mundaneItem = find.mundaneItem(id + "/exact");
-        mundaneItem.first();
-        this.specialAbility = mundaneItem.getString("special_ability");
-        this.aura = mundaneItem.getString("aura");
-        this.casterLevel= mundaneItem.getString("caster_level");
-        this.price = mundaneItem.getString("price");
-        this.manifesterLevel = mundaneItem.getString("manifester_level");
-        this.prereq= mundaneItem.getString("prereq");
+        OfflineResultSet specialItem = find.specialItem(id + "/exact");
+        specialItem.first();
 
-        if(info.length == 2) setName(info[1]);
-        if(info.length == 3) setCharges(Integer.parseInt(info[2]));
+        this.specialAbility = specialItem.getString("special_ability");
+        this.aura = specialItem.getString("aura");
+        this.casterLevel= specialItem.getString("caster_level");
+        this.price = specialItem.getString("price");
+        this.manifesterLevel = specialItem.getString("manifester_level");
+        this.prereq= specialItem.getString("prereq");
+
+        if(info.length >= 2) setName(info[1]);
+        if(info.length >= 3) setEquipped(Boolean.parseBoolean(info[2]));
+        if(info.length == 4) setCharges(Integer.parseInt(info[3]));
     }
 
     public String getSpecialAbility() {

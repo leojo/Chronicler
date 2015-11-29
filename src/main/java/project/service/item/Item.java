@@ -20,6 +20,7 @@ public class Item {
 
     public Item(String desc, boolean special){
         this.special = special;
+        System.out.println("Got this descriptor for an item in the super class: "+desc);
 
         String[] info = desc.split(":");
         String id = info[0];

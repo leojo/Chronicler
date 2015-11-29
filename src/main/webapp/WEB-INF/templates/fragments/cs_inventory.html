@@ -1,2 +1,25 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-inventory" th:fragment="inventoryFrag">
+    <div  class="listContainer">
+
+        <h1>Equipped</h1>
+        <div class="Equipped">
+            <ul class="fancyList">
+                <li th:each="item, stat : ${inventory.getEquipped()}" class="listItem playerItem">
+                    <span class="content">
+                        <p class="itemName" th:text="${item.name}"></p>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <h1>In Backpack</h1>
+        <div class="In Backpack">
+            <ul class="fancyList">
+                <li th:each="item, stat : ${inventory.getNotEquipped()}" class="listItem playerItem">
+                    <span class="content">
+                        <p class="itemName" th:text="${item.name}"></p>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>

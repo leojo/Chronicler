@@ -70,6 +70,7 @@ public class SheetController {
             model.addAttribute("spellList", cs.knownSpells.getSpells());
             model.addAttribute("spellSlots",cs.spellSlots.getSpellSlots());
             model.addAttribute("spellSlotTypes",cs.spellSlots.getSpellSlotTypes());
+            model.addAttribute("inventory",cs.inventory);
             model.addAttribute("character", charbean);
             session.setAttribute("charbean", charbean);
             //session.setAttribute("characterSheet", cs);
@@ -168,6 +169,7 @@ public class SheetController {
             model.addAttribute("spellList", charSheet.knownSpells.getSpells());
             model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
             model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("inventory",charSheet.inventory);
             model.addAttribute("character", charbean);
             session.setAttribute("currentCharID", charID);
             return "characterSheet";
@@ -231,6 +233,7 @@ public class SheetController {
             model.addAttribute("spellList", charSheet.knownSpells.getSpells());
             model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
             model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("inventory",charSheet.inventory);
             model.addAttribute("character", charbean);
             session.setAttribute("currentCharID", charID);
             return "characterSheet";
@@ -270,6 +273,7 @@ public class SheetController {
             model.addAttribute("spellList", charSheet.knownSpells.getSpells());
             model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
             model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("inventory",charSheet.inventory);
             model.addAttribute("character", charbean);
             session.setAttribute("currentCharID", charID);
             return "characterSheet";

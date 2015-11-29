@@ -6,6 +6,7 @@ import project.service.enums.AbilityID;
 import project.service.enums.SavingThrowID;
 import project.service.feat.FeatList;
 import project.service.feat.FeatSlot;
+import project.service.item.Inventory;
 import project.service.spell.SpellList;
 import project.service.spell.SpellSlotArray;
 
@@ -38,7 +39,7 @@ public class CharacterSheet {
 	public Map<String, Integer> AC;
 	public Map<String, Integer> initiative;
 	public Map<String, Integer> grapple;
-	public Vector<OfflineResultSet> inventory; // TODO: Change this to use an Item class
+	public Inventory inventory = new Inventory();
 	public Vector<OfflineResultSet> equipped;
 
 	// Spells
@@ -69,6 +70,8 @@ public class CharacterSheet {
 		this.knownSpells = new SpellList(this.bean.getKnownSpells_details());
 		this.spellSlots = new SpellSlotArray(this.bean.getSpellSlots_details());
 		this.feats = new FeatList(this.bean.getFeat_details());
+		System.out.println("Inv details from bean: "+this.bean.getInventory_details());
+		this.inventory = new Inventory(this.bean.getInventory_details());
 		/*--------------------- WISH LIST ---------------------
 		this.items = new ItemList(this.bean.getItem_details());
 		this.skills = new SkillList(this.bean.getSkill_details());
@@ -228,6 +231,7 @@ public class CharacterSheet {
 		this.bean.setKnownSpells_details(knownSpells.toString());
 		this.bean.setSpellSlots_details(spellSlots.toString());
 		this.bean.setFeat_details(feats.toString());
+		this.bean.setInventory_details(inventory.toString());
 	}
 
 	public CharacterBean getBean() {
@@ -452,7 +456,7 @@ public class CharacterSheet {
 	 */
 
 	public void pickupItem(OfflineResultSet item) {
-		this.inventory.add(item);
+
 	}
 
 	public void pickupMundaneItem(String itemName) {
@@ -461,28 +465,15 @@ public class CharacterSheet {
 	}
 
 	public void dropItem(String itemName) {
-		for (OfflineResultSet item : inventory) {
-			if (item.getString("name") == itemName) {
-                this.inventory.remove(item);
-            }
 
-		}
 	}
 
 	public void equipItem(String itemName) {
-		for (OfflineResultSet item : inventory) {
-			if (item.getString("name") == itemName) {
-                this.equipped.add(item);
-            }
-		}
+
 	}
 
 	public void unequipItem(String itemName) {
-		for (OfflineResultSet item : inventory) {
-			if (item.getString("name") == itemName) {
-                this.equipped.remove(item);
-            }
-		}
+
 	}
 
 	/*

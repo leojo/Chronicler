@@ -104,14 +104,14 @@ public class Lookup {
 
     public OfflineResultSet specialItem(String searchTerm){
         // This is the order in which we want to search through the fields of the items
-        String[] field = {"name","full_text","category"};
+        String[] field = {"id","name","full_text","category"};
         String query_template = "SELECT * FROM item WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
 
     public OfflineResultSet mundaneItem(String searchTerm){
         // This is the order in which we want to search through the fields of the items
-        String[] field = {"name","full_text","family","category","cost"};
+        String[] field = {"id","name","full_text","family","category","cost"};
         String query_template = "SELECT * FROM equipment WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
     }
