@@ -29,7 +29,7 @@
             <li th:each="char : ${myChars}" class="listItem">
                 <a class="content" th:text="${char.value}" th:href="${'/character'+char.key}"></a>
 
-                <input class="itemBtn remove" type="button" text="DEL" th:onclick="${'deleteCharacter('+char.key+')'}"></input>
+                <input class="itemBtn remove" type="button" value="Delete" th:onclick="${'deleteCharacter('+char.key+')'}"></input>
             </li>
         </ul>
 
