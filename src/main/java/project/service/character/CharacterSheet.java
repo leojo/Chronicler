@@ -495,7 +495,6 @@ public class CharacterSheet {
 				.values()
 				.forEach(slotlevel -> slotlevel.forEach(slot -> {
 					slot.setAvailable(true);
-					slot.setSpell(null);
 				}));
 		this.updateBean();
 	}
