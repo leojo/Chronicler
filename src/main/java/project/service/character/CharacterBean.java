@@ -21,6 +21,7 @@ public class CharacterBean {
     private int fort, reflex, will;
     // stat vars
     private int STR, DEX, CON, INT, WIS, CHA;
+    private int STRmod, DEXmod, CONmod, INTmod, WISmod, CHAmod;
     private int availableAbilityPoints;
 
     public HashMap<Integer, ArrayList<SpellSlot>> getSpellSlots() {
@@ -272,6 +273,54 @@ public class CharacterBean {
 
     public void setCHA(int CHA) {
         this.CHA = CHA;
+    }
+
+    public int getSTRmod() {
+        return STRmod;
+    }
+
+    public void setSTRmod(int STRmod) {
+        this.STRmod = STRmod;
+    }
+
+    public int getDEXmod() {
+        return DEXmod;
+    }
+
+    public void setDEXmod(int DEXmod) {
+        this.DEXmod = DEXmod;
+    }
+
+    public int getCONmod() {
+        return CONmod;
+    }
+
+    public void setCONmod(int CONmod) {
+        this.CONmod = CONmod;
+    }
+
+    public int getINTmod() {
+        return INTmod;
+    }
+
+    public void setINTmod(int INTmod) {
+        this.INTmod = INTmod;
+    }
+
+    public int getWISmod() {
+        return WISmod;
+    }
+
+    public void setWISmod(int WISmod) {
+        this.WISmod = WISmod;
+    }
+
+    public int getCHAmod() {
+        return CHAmod;
+    }
+
+    public void setCHAmod(int CHAmod) {
+        this.CHAmod = CHAmod;
     }
 
     public String getName() {
@@ -540,6 +589,7 @@ public class CharacterBean {
             knownSpells_details = "96;193;207;168;161;",spellSlots_details = "",feat_details = "",item_details = "",skill_details = "",
             inventory_details = "false:57:Greataxe:true;false:45:Battleaxe:false;false:37:Rusty old axe:false;false:101:Banded mal:true;true:1297:Amulet of Natural Armor +1:true;";
 
+    // <editor-fold desc="Getters and setters">
     public String getInventory_details() {
         return inventory_details;
     }
@@ -652,5 +702,22 @@ public class CharacterBean {
         this.item_details = item_details;
     }
 
+    // </editor-fold>
+
+    public void copyDetails(CharacterBean bean){
+        this.setInventory_details(bean.getInventory_details());
+        this.setAbility_details(bean.getAbility_details());
+        this.setSave_details(bean.getSave_details());
+        this.setHD_details(bean.getHD_details());
+        this.setAC_details(bean.getAC_details());
+        this.setInitiative_details(bean.getInitiative_details());
+        this.setGrapple_details(bean.getGrapple_details());
+        this.setKnownSpells_details(bean.getKnownSpells_details());
+        this.setSpellSlots_details(bean.getSpellSlots_details());
+        this.setFeat_details(bean.getFeat_details());
+        this.setItem_details(bean.getItem_details());
+        this.setSkill_details(bean.getSkill_details());
+        this.setInventory_details(bean.getInventory_details());
+    }
     //------------------------------------------------------------------
 }

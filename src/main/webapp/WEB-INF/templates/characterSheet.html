@@ -26,8 +26,8 @@
             <div class="characterBanner">
                 <div class="textCont">
                     <h1 th:text="${character.name}"></h1>
+                    <h3 th:text="${character.race}"></h3>
                     <h3 th:text="${character.level}"></h3>
-                    <h3 th:text="${character.race} +' '+${character.className}"></h3>
                 </div>
                 <div class="bannerButtons">
                     <input class="btn restBtn" type="button" value="Rest" th:onclick="${'rest('+character.databaseID+')'}" ></input>

@@ -52,6 +52,48 @@
                 <input class="spanInput" th:field="*{will}" th:value="${character.will}" type="number" autocomplete="off"/>
             </div>
         </div>
-        <div class="combat-gear"></div>
-
+        <div class="ability-scores">
+            <div class="abilityScore" id="STR">
+                Strength score (STR):
+                <span th:text="${character.STR}"></span>
+                <input class="spanInput" th:field="*{STR}" th:value="${character.STR}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.STRmod}"></span>
+            </div>
+            <div class="abilityScore" id="CON">
+                Constitution score (CON):
+                <span th:text="${character.CON}"></span>
+                <input class="spanInput" th:field="*{CON}" th:value="${character.CON}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.CONmod}"></span>
+            </div>
+            <div class="abilityScore" id="DEX">
+                Dexterity score (DEX):
+                <span th:text="${character.DEX}"></span>
+                <input class="spanInput" th:field="*{DEX}" th:value="${character.DEX}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.DEXmod}"></span>
+            </div>
+            <div class="abilityScore" id="INT">
+                Intelligence score (INT):
+                <span th:text="${character.INT}"></span>
+                <input class="spanInput" th:field="*{INT}" th:value="${character.INT}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.INTmod}"></span>
+            </div>
+            <div class="abilityScore" id="WIS">
+                Wisdom score (WIS):
+                <span th:text="${character.WIS}"></span>
+                <input class="spanInput" th:field="*{WIS}" th:value="${character.WIS}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.WISmod}"></span>
+            </div>
+            <div class="abilityScore" id="CHA">
+                Charisma score (CHA):
+                <span th:text="${character.CHA}"></span>
+                <input class="spanInput" th:field="*{CHA}" th:value="${character.CHA}" type="number" autocomplete="off"/>
+                Modifier:
+                <span th:text="${character.CHAmod}"></span>
+            </div>
+        </div>
 </div>

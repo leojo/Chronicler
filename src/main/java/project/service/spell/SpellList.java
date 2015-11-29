@@ -42,7 +42,6 @@ public class SpellList {
                 continue;
             }
             ors.first();
-            System.out.println("creating spell "+spellID);
             Spell s = new Spell(ors);
             this.spells.add(s);
         }
