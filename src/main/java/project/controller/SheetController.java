@@ -10,8 +10,11 @@ import project.service.character.CharacterBean;
 import project.service.character.CharacterSheet;
 import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
+import project.service.item.SpecialItem;
+import project.service.spell.Spell;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -232,10 +235,18 @@ public class SheetController {
         User user = (User)session.getAttribute("userId");
 
         CharacterSheet cs = new CharacterSheet(charbean,false);
-        charbean = cs.getBean();
+        ArrayList<String> newSpellInfo = new ArrayList<String>();
         for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
-            if(entry.getKey().startsWith("spellID")) System.out.println(entry.getKey() + "/" + entry.getValue());
+            if(entry.getKey().startsWith("spellID")){
+                String spellSlotID = entry.getKey().substring(8);
+                Integer level = Integer.parseInt(spellSlotID.split("_")[0]);
+                Integer slotNum = Integer.parseInt(spellSlotID.split("_")[1]);
+                Integer spellID = Integer.parseInt(entry.getValue());
+                newSpellInfo.add(level+":"+slotNum+":"+spellID);
+            }
         }
+        cs.spellSlots.updateSpells(newSpellInfo);
+        charbean = cs.getBean();
 
 /*
 
