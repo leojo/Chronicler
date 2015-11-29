@@ -68,6 +68,18 @@ public class SpecialItem extends Item{
         this.charges = charges;
     }
 
+
+    public String getShortDescription() {
+        String desc = "No description available.";
+        if(getCategory().equalsIgnoreCase("Wondrous")){
+            String fullText = getFullText();
+            int descStart = fullText.indexOf("</b>")+5; // Magic number baby! (its the length of the string "</b> ")
+            int descStop = fullText.indexOf("</p>",descStart);
+            desc = fullText.substring(descStart,descStop);
+        }
+        return desc;
+    }
+
     @Override
     public String toString(){
         String s = getId() + ":" + getName() + ":" + isEquipped();
