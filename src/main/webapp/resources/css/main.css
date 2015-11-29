@@ -347,7 +347,7 @@ body .container {
     width: 30%;
     height: 260px;
     margin: 50px;
-    background-size: 100%;
+    background-size: cover;
     text-align: center; }
     body .container .box a {
       display: inline-block;
