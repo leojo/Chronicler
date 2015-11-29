@@ -29,6 +29,9 @@ public class SpellController {
     @RequestMapping(value = "/spell{spellID}", method = RequestMethod.GET)
     public String openCharacter(@PathVariable int spellID, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         Spell spell = new Spell(spellID);
         model.addAttribute(spell);
