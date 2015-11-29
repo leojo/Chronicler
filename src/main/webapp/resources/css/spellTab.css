@@ -1,16 +1,13 @@
 .spellOffer {
   position: absolute;
   z-index: 4;
-  background: rgba(176, 78, 46, 0.94) none repeat scroll 0% 0%;
-  width: 80%;
-  left: 10%;
+  background: #333232;
+  width: 85%;
+  left: 7%;
   top: 19%;
   border: 1 px solid grey;
   border-radius: 4px;
   box-shadow: 1px 1px 1px #d8d1d1; }
-
-.prepped {
-  background: rgba(176, 78, 46, 0.45); }
 
 .spellResetBtn {
   width: 50px;
