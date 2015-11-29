@@ -278,6 +278,8 @@ body .container {
       font-size: 1.5em;
       font-weight: 600;
       background: #F6F3F3; }
+    body .container .sheetContent #name .editFieldBig {
+      width: 300px; }
     body .container .sheetContent .editField {
       display: block;
       width: 300px;
