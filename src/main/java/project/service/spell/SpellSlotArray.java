@@ -87,7 +87,7 @@ public class SpellSlotArray {
     public int count(String className, int level){
         int count = 0;
         for(SpellSlot slot : this.spellSlots){
-            if(slot.getLevel() == level) count++;
+            if(slot.getLevel() == level && slot.getClassName() == className) count++;
         }
         return count;
     }

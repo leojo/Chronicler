@@ -241,6 +241,8 @@ public class CharacterSheet {
 		this.classLevels.compute(classID, (k, v) -> (v == null) ? 1 : v + 1); // Increment or initialize the level for classID
 		OfflineResultSet currentClass = find.playerClass(classID+"/exact"); // Get basic info for class
 		currentClass.first();
+		System.err.println("Leveling up as a "+currentClass.getString("name")+" (lvl "+this.classLevels.get(classID)+")");
+		System.out.println("Spell slots before leveling: "+this.bean.getSpellSlots_details());
 		int baseSkillPoints = currentClass.getInt("skill_points")*(this.totalClassLevel==1?4:1);
 		if(this.abilityScores == null) this.resetAbilities();  // Initialize if needed
 		AbilityID skillAbilityID = AbilityID.fromString(currentClass.getString("skill_points_ability"));
@@ -266,6 +268,14 @@ public class CharacterSheet {
 			this.bean.setMaxHp(this.bean.getMaxHp()+conMod+hdType/2+1);
 		}
 		updateBean();
+		System.err.println("Spell slots after leveling: "+this.bean.getSpellSlots_details());
+	}
+
+	public void levelUp(String className){
+		OfflineResultSet ors = find.playerClass(className);
+		ors.first();
+		Integer classID = ors.getInt("id");
+		levelUp(classID);
 	}
 
 	/*
@@ -299,8 +309,6 @@ public class CharacterSheet {
 
 			this.spellSlots.update(className,i,numSpells);
 		}
-		System.out.println(spellSlots.toString());
-
 	}
 
 	private Integer getInitiative(){
@@ -495,7 +503,6 @@ public class CharacterSheet {
 				.values()
 				.forEach(slotlevel -> slotlevel.forEach(slot -> {
 					slot.setAvailable(true);
-					slot.setSpell(null);
 				}));
 		this.updateBean();
 	}

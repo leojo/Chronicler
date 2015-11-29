@@ -1,8 +1,9 @@
 levelUp = function(id) {
-    var classID = 11;
+    var className = $("#classSelector").val();
+    console.log("Leveling up as a "+className);
     $.ajax({
         type:'GET',
-        url: "/levelUp"+id+"_"+classID,
+        url: "/levelUp"+id+"_"+className,
         complete: function(){
             window.location.reload(true);
         }

@@ -39,6 +39,9 @@ public class SheetController {
         model.addAttribute("charbean", new CharacterBean());
 
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         if(user.getUserID() != null)
             return "newcharacter";
@@ -53,6 +56,9 @@ public class SheetController {
     public String newCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         // Make sure user is who we think they are, and put character bean in our model.
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
 
 
@@ -75,8 +81,7 @@ public class SheetController {
             }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
-
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
@@ -92,6 +97,9 @@ public class SheetController {
         model.addAttribute("charbean", new CharacterBean());
 
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         if(user.getUserID() != null)
             return "newcharacter";
@@ -105,6 +113,9 @@ public class SheetController {
     public String newCharacterCampaignPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session, @PathVariable int campID) {
         // Make sure user is who we think they are, and put character bean in our model.
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
 
 
@@ -126,7 +137,7 @@ public class SheetController {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
 
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
@@ -136,7 +147,13 @@ public class SheetController {
     // -----------------------------------------------------
     @RequestMapping(value = "/character{charID}", method = RequestMethod.GET)
     public String openCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        find = new Lookup();
+        model.addAttribute("classes", find.listClasses());
+
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         storage = new AccountStorage("data/userAccounts.sqlite");
         model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
@@ -161,6 +178,9 @@ public class SheetController {
     @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
     public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
 
         charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
@@ -181,11 +201,14 @@ public class SheetController {
 
 
     @RequestMapping(value = "levelUp{charID}_{classID}", method = RequestMethod.GET)
-    public String levelUp(@PathVariable int charID, @PathVariable int classID, Model model, HttpSession session){
+    public String levelUp(@PathVariable int charID, @PathVariable String classID, Model model, HttpSession session){
         System.out.println("Level up!!!");
         System.out.println("leveling up character "+charID+" one level in class "+classID);
 
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         storage = new AccountStorage("data/userAccounts.sqlite");
         Lookup find = new Lookup();
@@ -222,6 +245,9 @@ public class SheetController {
         System.out.println("ZZZ...");
 
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         storage = new AccountStorage("data/userAccounts.sqlite");
         Lookup find = new Lookup();
@@ -254,6 +280,9 @@ public class SheetController {
     @RequestMapping(value = "deleteCharacter{charID}", method = RequestMethod.GET)
     public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         storage = new AccountStorage("data/userAccounts.sqlite");
         storage.deleteCharacter(charID);
@@ -269,6 +298,9 @@ public class SheetController {
     @RequestMapping(value = "/updateSpellslot", method = RequestMethod.POST)
     public String updateSpellslots(@RequestParam Map<String, String> allRequestParams, @ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
         charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
 
@@ -330,6 +362,9 @@ public class SheetController {
     public String listCharacters(Model model, HttpSession session) {
 
         User user = (User)session.getAttribute("userId");
+        if (user == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
 
         storage = new AccountStorage("data/userAccounts.sqlite");

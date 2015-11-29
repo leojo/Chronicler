@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div xmlns:th="http://www.thymeleaf.org" class="sheet-levelup" th:fragment="classSelectFrag">
+    <select id="classSelector" class="classSelect selector" th:field="*{className}">
+        <option th:each="classname : ${classes}"
+                th:value="${classname}" th:text="${classname}"></option>
+    </select>
+    <input class="btn levelUpBtn" type="button" value="Confirm" th:onclick="${'levelUp('+character.databaseID+')'}"></input>
+</div>

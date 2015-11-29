@@ -27,6 +27,9 @@ public class CampaignController {
     public String myCampaigns(Model model, HttpSession session) {
 	    storage = new AccountStorage("data/userAccounts.sqlite");
         User user = (User)session.getAttribute("userId");
+	    if (user == null) {
+		    return "redirect:/";
+	    }
         model.addAttribute("user", user);
 		System.err.println("Getting campaigns...");
 		HashMap<Integer, String> campaigns = storage.getCampaigns(user.getUserID());
@@ -39,6 +42,9 @@ public class CampaignController {
     @RequestMapping(value = "/newCampaign", method = RequestMethod.GET)
     public String newCampaign(Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+	    if (user == null) {
+		    return "redirect:/";
+	    }
         model.addAttribute("user", user);
 
 	    Campaign campaign = new Campaign();
@@ -50,6 +56,9 @@ public class CampaignController {
 	@RequestMapping(value = "/newCampaign", method = RequestMethod.POST)
     public String newCampaignPost(@ModelAttribute Campaign campaign, Model model, HttpSession session) {
 		User user = (User)session.getAttribute("userId");
+		if (user == null) {
+			return "redirect:/";
+		}
 		model.addAttribute("user", user);
 
 		storage = new AccountStorage("data/userAccounts.sqlite");
@@ -64,6 +73,9 @@ public class CampaignController {
 	@RequestMapping(value = "/campaign{campID}", method = RequestMethod.GET)
 	public String openCharacter(@PathVariable int campID, Model model, HttpSession session) {
 		User user = (User)session.getAttribute("userId");
+		if (user == null) {
+			return "redirect:/";
+		}
 		model.addAttribute("user", user);
 		System.out.println("URL PARAMETER "+campID);
 		storage = new AccountStorage("data/userAccounts.sqlite");
@@ -78,6 +90,9 @@ public class CampaignController {
 	@RequestMapping(value = "deleteCampaign{charID}", method = RequestMethod.GET)
 	public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
 		User user = (User)session.getAttribute("userId");
+		if (user == null) {
+			return "redirect:/";
+		}
 		model.addAttribute("user", user);
 
 		System.out.println("WE PRESSED THAT BUTTON BOOM");
