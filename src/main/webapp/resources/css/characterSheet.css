@@ -13,7 +13,7 @@
   background: #0C0C0B;
   font-family: "Montserrat", sans-serif;
   color: #fff;
-  box-shadow: 0px 0px 5px #37371F;
+  box-shadow: 0px 0px 1px #C9C9C9;
   z-index: 1; }
   .menubar div {
     float: right;
@@ -139,6 +139,17 @@
   bottom: 0;
   border-bottom: 1px solid #E46100;
   z-index: 1; }
+
+.spellOffer {
+  position: absolute;
+  z-index: 4;
+  background: rgba(176, 78, 46, 0.94) none repeat scroll 0% 0%;
+  width: 80%;
+  left: 10%;
+  top: 19%;
+  border: 1 px solid grey;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px #d8d1d1; }
 
 .listContainer {
   width: 100%;
