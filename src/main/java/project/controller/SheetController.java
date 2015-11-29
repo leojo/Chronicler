@@ -180,9 +180,10 @@ public class SheetController {
 
 
 
-    @RequestMapping(value = "levelUp{charID}", method = RequestMethod.GET)
-    public String levelUp(@PathVariable int charID, Model model, HttpSession session){
+    @RequestMapping(value = "levelUp{charID}_{classID}", method = RequestMethod.GET)
+    public String levelUp(@PathVariable int charID, @PathVariable int classID, Model model, HttpSession session){
         System.out.println("Level up!!!");
+        System.out.println("leveling up character "+charID+" one level in class "+classID);
 
         User user = (User)session.getAttribute("userId");
         model.addAttribute("user", user);
@@ -197,7 +198,7 @@ public class SheetController {
             charbean = loadBeanFromJson(charbean, user.getUserID());
             session.setAttribute("charbean", charbean);
             charSheet = new CharacterSheet(charbean,false);
-            charSheet.levelUp(10); //Everyone must be a sorcerer :P
+            charSheet.levelUp(classID);
             charbean = charSheet.getBean();
             try {
                 charbean.updateJson(user.getUserID());
