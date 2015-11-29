@@ -47,7 +47,7 @@ public class CampaignController {
 	    }
         model.addAttribute("user", user);
 
-	    Campaign campaign = new Campaign();
+	    Campaign campaign = new Campaign(user);
 	    model.addAttribute("campaign", campaign);
 
         return "newcampaign";
