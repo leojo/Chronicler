@@ -1,5 +1,6 @@
 package project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import project.service.dbLookup.Lookup;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by andrea on 23.11.2015.
@@ -157,6 +159,7 @@ public class SheetController {
     public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+
         charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
         CharacterSheet cs = new CharacterSheet(charbean,false);
         charbean = cs.getBean();
@@ -174,10 +177,38 @@ public class SheetController {
 
 
 
-    @RequestMapping(value = "character{charID}#levelUp", method = RequestMethod.GET)
-    public String levelUp(@ModelAttribute CharacterBean charbean, Model model, HttpSession session, @PathVariable int charID){
+    @RequestMapping(value = "levelUp{charID}", method = RequestMethod.GET)
+    public String levelUp(@PathVariable int charID, Model model, HttpSession session){
         System.out.println("Level up!!!");
-        return "characterSheet";
+
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        Lookup find = new Lookup();
+        model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
+        CharacterBean charbean;
+        CharacterSheet charSheet;
+        if(user.getUserID() != null) {
+            charbean = new CharacterBean();
+            charbean.setDatabaseID(charID);
+            charbean = loadBeanFromJson(charbean, user.getUserID());
+            session.setAttribute("charbean", charbean);
+            charSheet = new CharacterSheet(charbean,false);
+            charSheet.levelUp(10); //Everyone must be a sorcerer :P
+            charbean = charSheet.getBean();
+            try {
+                charbean.updateJson(user.getUserID());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("spellList", charSheet.knownSpells.getSpells());
+            model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("character", charbean);
+            session.setAttribute("currentCharID", charID);
+            return "characterSheet";
+        } else
+            return "loginFail";
     }
 
 
@@ -189,6 +220,44 @@ public class SheetController {
         storage.deleteCharacter(charID);
 
         return "myCharacters";
+    }
+
+    // ----------------------------------------------------
+    // SPELL SLOT STUFF - MAYBE PUT IN SEPARATE CONTROLLER?
+    // ----------------------------------------------------
+
+
+    @RequestMapping(value = "/updateSpellslot", method = RequestMethod.POST)
+    public String updateSpellslots(@RequestParam Map<String, String> allRequestParams, @ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+
+        CharacterSheet cs = new CharacterSheet(charbean,false);
+        charbean = cs.getBean();
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
+            if(entry.getKey().startsWith("spellID")) System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+
+/*
+
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet())
+        {
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+*/
+
+
+        model.addAttribute("user", user);
+        model.addAttribute("characterSheet", cs);
+
+        model.addAttribute("character", charbean);
+
+        try {
+            if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+            charbean.updateJson(user.getUserID());
+        } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+            System.out.println("Sadly we couldn't save your character, this is disastrous.");
+        }
+        return "characterSheet";
     }
 
     // ------------------

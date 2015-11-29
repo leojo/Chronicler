@@ -11,6 +11,26 @@ public class SpellSlot {
     private final int level;
     private final String className;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
+
+    public int getCurrentID() {
+        return currentID;
+    }
+
+    public void setCurrentID(int currentID) {
+        this.currentID = currentID;
+    }
+
+    private int currentID;
+
     public SpellSlot(int level, String className){
         this.level = level;
         this.className = className;

@@ -1,10 +1,10 @@
 <div xmlns:th="http://www.thymeleaf.org" class="sheet-spell" th:fragment="spellFrag">
     <div  class="listContainer">
-        <form id="spellForm">
+
         <div th:each="level : ${spellSlots}" th:class="${'spellGroup level'+level.key}">
             <h1 th:text="${level.key}" class="fancyList"></h1>
             <ul class="fancyList">
-                <li th:each="spellSlot : ${level.value}" class="listItem spellSlot">
+                <li th:each="spellSlot, stat : ${level.value}" class="listItem spellSlot">
                     <div th:switch="${spellSlot.spell}">
                         <span class="content" th:case="null">
                             <p class="spellName" th:text="${'Unprepared '+spellSlot.className+' spell'}"></p>
@@ -14,11 +14,11 @@
                             <p class="spellName" th:text="${spellSlot.spell.name}"></p>
                             <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>
                         </span>
-                        <input type="text" class="spellSlotInput hidden" value="0"/>
+                        <input type="text" th:name="${'spellID_'+level.key+'_'+stat.index}" class="spellSlotInput hidden" value="0"/>
                     </div>
                 </li>
             </ul>
-        </div></form>
+        </div>
     </div>
     <div th:each="spellSlot : ${spellSlotTypes}" th:id="${spellSlot.type}" th:class="${'listContainer spellOffer spellOffer'+spellSlot.level}">
         <h1 th:text="${'Known '+spellSlot.className+' spells: lvl '+spellSlot.level}"></h1>

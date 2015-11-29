@@ -2,6 +2,11 @@ package project.service.character;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import project.service.dbLookup.AccountStorage;
+import project.service.spell.SpellSlot;
+import project.service.spell.SpellSlotArray;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by andrea on 27.10.2015.
@@ -17,7 +22,17 @@ public class CharacterBean {
     // stat vars
     private int STR, DEX, CON, INT, WIS, CHA;
     private int availableAbilityPoints;
+
+    public HashMap<Integer, ArrayList<SpellSlot>> getSpellSlots() {
+        return spellSlots;
+    }
+
+    public void setSpellSlots(HashMap<Integer, ArrayList<SpellSlot>> spellSlots) {
+        this.spellSlots = spellSlots;
+    }
+
     // fluff vars
+    private HashMap<Integer, ArrayList<SpellSlot>> spellSlots;
 
 
 

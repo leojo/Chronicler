@@ -18,7 +18,7 @@ $(function() {
 					console.log($spellSlotInput.val());
 					if ($spellSlotInput.val() !== '') {
 						console.log("submitting form!");
-						$('#spellForm').ajaxSubmit({url: 'updateSpellslot', type: 'post'});
+						$('#sheetForm').ajaxSubmit({url: 'updateSpellslot', type: 'post'});
 						//$(document).unbind('click', submitChanges);
 					}
 				};
