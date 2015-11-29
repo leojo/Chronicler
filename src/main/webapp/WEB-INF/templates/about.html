@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment = "page"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Interactive character sheet"/>
+    <title>Chronicler</title>
+
+    <link th:href="@{/resources/css/main.css}" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'/>
+    <script th:src="@{/resources/js/jquery-1.11.3.min.js}" />
+    <script th:src="@{/resources/js/tabSwitcher.js}" />
+    <script th:src="@{/resources/js/dashboard.js}" />
+</head>
+<header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
+<body>
+<h2 id="infoTitle">About this page</h2>
+<p id="info">Chronicler is a helper tool for Dungeons and Dragons. It is intended for use by both players and DMs. Chronicler offers a semi-automated character sheet editor for players as well as a campaign manager for Dungeon Masters. Chronicler is <a href="https://github.com/leojo/Chronicler/">open source</a> and free to use.</p>
+<div class="dashboard closed" th:include="fragments/dashboard :: dashboardFrag"></div>
+</body>
+
+<footer>
+</footer>
+
+</html>

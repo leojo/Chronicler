@@ -62,6 +62,16 @@ public class MainController {
         return "redirect:/";
     }
 
+    @RequestMapping(value="/about", method = RequestMethod.GET)
+    public String about(Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        if(user == null) model.addAttribute("user", new User());
+
+        return "about";
+    }
+
+
+
 }
 
 
