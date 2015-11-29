@@ -6,7 +6,7 @@
             <ul class="fancyList">
                 <li th:each="spellSlot, stat : ${level.value}" th:class="${'listItem spellSlot '+spellSlot.status}">
                     <div th:switch="${spellSlot.spell}">
-                        <span class="content" th:case="null">
+                        <span class="content unprepped" th:case="null">
                             <p class="spellName" th:text="${'Unprepared '+spellSlot.className+' spell'}"></p>
                             <p class="spellDescr">Click to select a spell</p>
                         </span>
