@@ -5,6 +5,8 @@ import project.persistence.dbLookup.OfflineResultSet;
 
 /**
  * Created by leo on 28.11.2015.
+ *
+ * NOTE: This has yet to be connected to the front end
  */
 public class Feat {
     private final String id;

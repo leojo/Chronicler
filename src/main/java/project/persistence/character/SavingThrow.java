@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by whiskeyjack on 10/28/15.
+ * Created by BjornBjarnsteins on 10/28/15.
+ *
+ * Contains info about saving throws used by character sheets
+ *
  */
 
 public class SavingThrow {
