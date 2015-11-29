@@ -61,6 +61,33 @@
             }
         }
 
+        .campaignItem{
+            .content{
+                padding-left: 1%;
+                width: 99%;
+            }
+            h4{
+                position: relative;
+                top: -40px;
+                left: 10px;
+                width: 50%;
+            }
+            .newCharBtn{
+                text-decoration: none;
+                text-align: center;
+                width: 155px;
+                top: 20px;
+                padding: 4px;
+                margin: 5px;
+                background-color: #139424;
+                border-radius: 5px;
+                color: white;
+            }
+            .newCharBtn:hover{
+                background-color: #15D42E;
+            }
+        }
+
         .available {
             background: #D45F39;
 

@@ -21,7 +21,6 @@ public class Login {
     }
 
     public boolean evalLogin(User userInfo){
-        System.out.println("about to evaluate the login!");
         System.out.println("user ID:"+userInfo.getUserID());
         OfflineResultSet rs = find.searchUser(userInfo.getUserID());
         if(rs == null) {
@@ -30,12 +29,11 @@ public class Login {
         }
         rs.first();
         if(BCrypt.checkpw(userInfo.getPassword(), rs.getString("Password"))) {
-            System.out.println("Success!");
             return true;
         }
 
 
-        System.out.println("That's the wrong number");
+        System.out.println("Login failed");
         return false;
     }
 
@@ -43,12 +41,4 @@ public class Login {
         return BCrypt.hashpw(plaintext, BCrypt.gensalt(10, new SecureRandom()));
     }
 
-/*
-    public CharacterBean getCharacter() throws Exception{
-        String jsonCharacter = find.searchCharacter("Nyx", "andrea");
-        CharacterBean cb = mapper.readValue(jsonCharacter, CharacterBean.class);
-        System.out.println("Working?");
-        System.out.println(cb.getMaxHp());
-        return cb;
-    }*/
 }

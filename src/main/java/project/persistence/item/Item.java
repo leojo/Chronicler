@@ -5,6 +5,8 @@ import project.persistence.dbLookup.OfflineResultSet;
 
 /**
  * Created by leo on 28.11.2015.
+ *
+ * A single item
  */
 public class Item {
     private final String id;

@@ -11,7 +11,6 @@ public class User {
     }
 
     public void setUserID(String userID) {
-        System.out.println("IS THIS TRIGGERING? What is the userID? "+userID);
         this.userID = userID;
     }
 

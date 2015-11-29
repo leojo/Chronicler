@@ -212,6 +212,26 @@
         position: absolute;
         top: 0px;
         right: 0px; }
+    .listContainer .fancyList .campaignItem .content {
+      padding-left: 1%;
+      width: 99%; }
+    .listContainer .fancyList .campaignItem h4 {
+      position: relative;
+      top: -40px;
+      left: 10px;
+      width: 50%; }
+    .listContainer .fancyList .campaignItem .newCharBtn {
+      text-decoration: none;
+      text-align: center;
+      width: 155px;
+      top: 20px;
+      padding: 4px;
+      margin: 5px;
+      background-color: #139424;
+      border-radius: 5px;
+      color: white; }
+    .listContainer .fancyList .campaignItem .newCharBtn:hover {
+      background-color: #15D42E; }
     .listContainer .fancyList .available {
       background: #D45F39; }
       .listContainer .fancyList .available.unprepared {
