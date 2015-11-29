@@ -9,7 +9,10 @@ import java.util.HashMap;
  * Created by andrea on 28.10.2015.
  */
 public class AccountStorage {
-
+    /*
+     * This class has utility functions used to access the account database,
+     * e.g. to load character sheets or campaigns owned by each user
+     */
 
     private final String URL;
 

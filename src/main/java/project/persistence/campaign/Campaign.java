@@ -8,6 +8,8 @@ import java.util.Vector;
 
 /**
  * Created by bjornbjarnst on 10/28/15.
+ *
+ * Container class for Campaign info
  */
 public class Campaign {
 	private String name;

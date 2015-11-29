@@ -1,7 +1,7 @@
 package project.persistence.enums;
 
 /**
- * Created by whiskeyjack on 10/15/15.
+ * Created by BjornBjarnsteins on 10/15/15.
  */
 public enum AbilityID {
 	STR, DEX, CON, INT, WIS, CHA;
