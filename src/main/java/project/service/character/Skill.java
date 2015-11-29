@@ -107,10 +107,6 @@ class Skill {
 
 	@Override
 	public String toString() {
-		return "Skill{" +
-				       "totalValue=" + totalValue +
-				       ", name='" + name + '\'' +
-				       ", baseSkill=" + baseSkill +
-				       '}';
+		return this.toJSON();
 	}
 }
