@@ -12,20 +12,20 @@ import java.util.Vector;
 public class Campaign {
 	private String name;
 	private Vector<User> players;
-	private Vector<User> DMs;
+	private User DM;
 	private Map<String, String> imagePaths; // Map<[Image title], [Image path]>
 	private String notes;
 
-	public Campaign(String name) {
+	public Campaign(String name, User DM) {
 		this.name = name;
 		this.players = new Vector<>();
-		this.DMs = new Vector<>();
+		this.DM = DM;
 		this.imagePaths = new HashMap<>();
 		this.notes = "";
 	}
 
-	public Campaign() {
-		this("");
+	public Campaign(User DM){
+		this("Unnamed",DM);
 	}
 
 	public void addPlayer(User user) {
@@ -56,12 +56,12 @@ public class Campaign {
 		this.players = players;
 	}
 
-	public Vector<User> getDMs() {
-		return DMs;
+	public User getDM() {
+		return DM;
 	}
 
-	public void setDMs(Vector<User> DMs) {
-		this.DMs = DMs;
+	public void setDM(User DM) {
+		this.DM = DM;
 	}
 
 	public Map<String, String> getImagePaths() {
@@ -78,5 +78,9 @@ public class Campaign {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	public String getOwner(){
+		return DM.getUserID();
 	}
 }

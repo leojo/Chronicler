@@ -31,7 +31,8 @@
                 <a class="content" th:text="${c.value}" th:href="${'/campaign'+c.key}"></a>
                 <a class="itemBtn remove" type="button" th:href="${'newCharacter'+c.key}">Create character</a>
                 <span class="campaignInfo">
-                    
+                    <h4 th:text="${'Owner: '+user.userID}"></h4>
+                    <!--<p th:text="${c.getCharacters()}"></p>-->
                 </span>
                 <input class="itemBtn remove" type="button" value="DEL" th:onclick="${'deleteCampaign('+c.key+')'}"></input>
             </li>
