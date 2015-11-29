@@ -66,6 +66,7 @@ public class MainController {
     public String about(Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         if(user == null) model.addAttribute("user", new User());
+        else model.addAttribute("user", user);
 
         return "about";
     }
