@@ -70,6 +70,18 @@ public class SpellSlotArray {
         }
     }
 
+    public void updateSpellStatus(ArrayList<String> newPrepInfo) {
+        System.out.println("The number of total spell slots is "+this.spellSlots.size());
+        HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = getSpellSlots();
+        for(String spell : newPrepInfo){
+            String[] info = spell.split(":");
+            Integer level = Integer.parseInt(info[0]);
+            Integer slotNum = Integer.parseInt(info[1]);
+            String status = info[2];
+            spellSlotTable.get(level).get(slotNum).setAvailable(!status.equalsIgnoreCase("spent"));
+        }
+    }
+
     public void update(String className, int level, int numSpells){
         int oldCount = this.count(className, level);
         if(numSpells >= oldCount){

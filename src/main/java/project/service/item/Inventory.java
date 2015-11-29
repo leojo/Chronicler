@@ -16,9 +16,14 @@ public class Inventory {
             if(itemInfo.equals("")) continue;
             boolean special = Boolean.parseBoolean(itemInfo.substring(0,itemInfo.indexOf(":")));
             String itemDesc = itemInfo.substring(itemInfo.indexOf(":")+1);
-            System.out.println("Sending this descriptor down to a subclass : "+itemDesc);
-            if(special) this.items.add(new SpecialItem(itemDesc));
-            else this.items.add(new MundaneItem(itemDesc));
+            if(special){
+                System.out.println("Sending this descriptor down to a SpecialItem : "+itemDesc);
+                this.items.add(new SpecialItem(itemDesc));
+            }
+            else{
+                System.out.println("Sending this descriptor down to MundaneItem : "+itemDesc);
+                this.items.add(new MundaneItem(itemDesc));
+            }
         }
     }
 
@@ -54,7 +59,7 @@ public class Inventory {
     public String toString() {
         String s  = "";
         for(Item item : items){
-            s += item.isSpecial()+"|"+item.toString()+";";
+            s += item.isSpecial()+":"+item.toString()+";";
         }
         return s;
     }

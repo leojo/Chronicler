@@ -322,17 +322,18 @@ public class SheetController {
 
         ArrayList<String> newPrepInfo = new ArrayList<String>();
         for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
-            if(entry.getKey().startsWith("spellID")){
-                String spellSlotID = entry.getKey().substring(8);
+            if(entry.getKey().startsWith("spellStatus")){
+                String spellSlotID = entry.getKey().substring(12);
                 Integer level = Integer.parseInt(spellSlotID.split("_")[0]);
                 Integer slotNum = Integer.parseInt(spellSlotID.split("_")[1]);
                 String spellStatus = entry.getValue();
-                newSpellInfo.add(level+":"+slotNum+":"+spellStatus);
+                newPrepInfo.add(level+":"+slotNum+":"+spellStatus);
             }
         }
 
 
         cs.spellSlots.updateSpells(newSpellInfo);
+        cs.spellSlots.updateSpellStatus(newPrepInfo);
         charbean = cs.getBean();
 
 /*
@@ -346,7 +347,7 @@ public class SheetController {
 
         model.addAttribute("user", user);
         model.addAttribute("characterSheet", cs);
-
+        model.addAttribute("inventory", cs.inventory);
         model.addAttribute("character", charbean);
 
         try {
