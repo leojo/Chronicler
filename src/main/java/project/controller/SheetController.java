@@ -1,5 +1,6 @@
 package project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -174,10 +175,38 @@ public class SheetController {
 
 
 
-    @RequestMapping(value = "character{charID}#levelUp", method = RequestMethod.GET)
-    public String levelUp(@ModelAttribute CharacterBean charbean, Model model, HttpSession session, @PathVariable int charID){
+    @RequestMapping(value = "levelUp{charID}", method = RequestMethod.GET)
+    public String levelUp(@PathVariable int charID, Model model, HttpSession session){
         System.out.println("Level up!!!");
-        return "characterSheet";
+
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        Lookup find = new Lookup();
+        model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
+        CharacterBean charbean;
+        CharacterSheet charSheet;
+        if(user.getUserID() != null) {
+            charbean = new CharacterBean();
+            charbean.setDatabaseID(charID);
+            charbean = loadBeanFromJson(charbean, user.getUserID());
+            session.setAttribute("charbean", charbean);
+            charSheet = new CharacterSheet(charbean,false);
+            charSheet.levelUp(10); //Everyone must be a sorcerer :P
+            charbean = charSheet.getBean();
+            try {
+                charbean.updateJson(user.getUserID());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            model.addAttribute("spellList", charSheet.knownSpells.getSpells());
+            model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("character", charbean);
+            session.setAttribute("currentCharID", charID);
+            return "characterSheet";
+        } else
+            return "loginFail";
     }
 
 
