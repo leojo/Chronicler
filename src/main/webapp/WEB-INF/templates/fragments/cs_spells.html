@@ -16,7 +16,7 @@
                             <p class="spellDescr" th:text="${spellSlot.spell.shortDescription}"></p>
                         </span>
                         <input type="text" th:name="${'spellID_'+level.key+'_'+stat.index}" class="spellSlotInput hidden" value="0"/>
-                        <input type="text" th:name="${'spellStatus_'+level.key+'_'+stat.index}" class="spellSlotStatus hidden" value="${spellSlot.status}"/>
+                        <input type="text" th:name="${'spellStatus_'+level.key+'_'+stat.index}" class="spellSlotStatus hidden" th:value="${spellSlot.status}"/>
                     </div>
                 </li>
             </ul>

@@ -52,7 +52,7 @@ public class SpellSlot {
         return this.spell;
     }
 
-    public String getStatus(){ return (this.available ? "available" : "depleted");}
+    public String getStatus(){ return (this.available ? "available" : "spent");}
 
     public String getClassName() {
         return className;
