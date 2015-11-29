@@ -197,6 +197,9 @@
         flex-flow: row wrap;
         text-decoration: none;
         color: black; }
+      .listContainer .fancyList .listItem .fullLine {
+        display: inline-block;
+        width: 100%; }
       .listContainer .fancyList .listItem a {
         background: #F3F3F3; }
       .listContainer .fancyList .listItem a:hover {
@@ -347,7 +350,7 @@ body .container {
     width: 30%;
     height: 260px;
     margin: 50px;
-    background-size: 100%;
+    background-size: cover;
     text-align: center; }
     body .container .box a {
       display: inline-block;

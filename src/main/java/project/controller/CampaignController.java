@@ -6,15 +6,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import project.service.account.User;
-import project.service.campaign.Campaign;
-import project.service.character.CharacterBean;
-import project.service.dbLookup.AccountStorage;
-import project.service.dbLookup.OfflineResultSet;
+import project.persistence.account.User;
+import project.persistence.campaign.Campaign;
+import project.persistence.character.CharacterBean;
+import project.persistence.dbLookup.AccountStorage;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-import java.util.Vector;
 
 /**
  * Created by andrea on 23.11.2015.

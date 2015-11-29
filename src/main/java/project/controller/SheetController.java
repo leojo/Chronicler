@@ -5,17 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.service.account.User;
-import project.service.character.CharacterBean;
-import project.service.character.CharacterSheet;
-import project.service.dbLookup.AccountStorage;
-import project.service.dbLookup.Lookup;
-import project.service.item.SpecialItem;
-import project.service.spell.Spell;
+import project.persistence.account.User;
+import project.persistence.character.CharacterBean;
+import project.persistence.character.CharacterSheet;
+import project.persistence.dbLookup.AccountStorage;
+import project.persistence.dbLookup.Lookup;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
