@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by leo on 25.11.2015.
+ *
+ * This class represents a single spell slot
  */
 public class SpellSlot {
     private Spell spell;
@@ -22,6 +24,7 @@ public class SpellSlot {
         this(level,className);
     }
 
+    //Constructor to load form toString output.
     public SpellSlot(String fromString){
         String[] info = fromString.split(":");
         this.className = info[0];

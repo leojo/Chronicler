@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 /**
  * Created by leo on 25.11.2015.
+ *
+ * Class that represents the collection of spell slots for a single character.
  */
 public class SpellSlotArray {
     private final ArrayList<SpellSlot> spellSlots;
@@ -13,6 +15,7 @@ public class SpellSlotArray {
         this.spellSlots = new ArrayList<SpellSlot>();
     }
 
+    // constructor to load from toString output
     public SpellSlotArray(String s){
         this();
         for(String pair : s.split(";")){
@@ -34,6 +37,7 @@ public class SpellSlotArray {
         }
     }
 
+    // get the spellslots nicely formated for thymeleaf to foreach through them
     public HashMap<Integer,ArrayList<SpellSlot>> getSpellSlots() {
         HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = new HashMap<Integer,ArrayList<SpellSlot>>();
         for(SpellSlot ss : this.spellSlots){
@@ -44,6 +48,7 @@ public class SpellSlotArray {
         return spellSlotTable;
     }
 
+    // get a list of the unique spell slot types.
     public ArrayList<SpellSlot> getSpellSlotTypes() {
         ArrayList<String> typeNames = new ArrayList<String>();
         ArrayList<SpellSlot> types = new ArrayList<SpellSlot>();
@@ -57,6 +62,7 @@ public class SpellSlotArray {
         return types;
     }
 
+    //Update the spells in the array
     public void updateSpells(ArrayList<String> newSpellInfo){
         HashMap<Integer,ArrayList<SpellSlot>> spellSlotTable = getSpellSlots();
         for(String spell : newSpellInfo){

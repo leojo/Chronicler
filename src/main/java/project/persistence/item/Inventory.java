@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by leo on 28.11.2015.
+ *
+ * Class to keep track of a single characters inventory
  */
 public class Inventory {
     public ArrayList<Item> items = new ArrayList<Item>();

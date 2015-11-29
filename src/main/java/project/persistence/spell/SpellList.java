@@ -8,6 +8,8 @@ import java.util.Collections;
 
 /**
  * Created by leo on 25.11.2015.
+ *
+ * This class represents a list of spell slot.
  */
 public class SpellList {
     private final ArrayList<Spell> spells;
@@ -28,6 +30,7 @@ public class SpellList {
         }
     }
 
+    // Constructor to load from toString output.
     public SpellList(String spellList){
         this();
         // Git why you no find me?
@@ -66,6 +69,8 @@ public class SpellList {
         return true;
     }
 
+    // removes first
+    // returns true if removed successfully
     public boolean remove(Spell s){
         return spells.removeAll(Collections.singleton(s));
     }
