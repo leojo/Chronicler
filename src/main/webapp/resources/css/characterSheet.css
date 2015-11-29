@@ -142,17 +142,6 @@
   border-bottom: 1px solid #E46100;
   z-index: 1; }
 
-.spellOffer {
-  position: absolute;
-  z-index: 4;
-  background: rgba(176, 78, 46, 0.94) none repeat scroll 0% 0%;
-  width: 80%;
-  left: 10%;
-  top: 19%;
-  border: 1 px solid grey;
-  border-radius: 4px;
-  box-shadow: 1px 1px 1px #d8d1d1; }
-
 .listContainer {
   width: 100%;
   position: absolute;
@@ -204,6 +193,20 @@
 
 .hidden {
   visibility: hidden; }
+
+.spellOffer {
+  position: absolute;
+  z-index: 4;
+  background: rgba(176, 78, 46, 0.94) none repeat scroll 0% 0%;
+  width: 80%;
+  left: 10%;
+  top: 19%;
+  border: 1 px solid grey;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px #d8d1d1; }
+
+.prepped {
+  background: rgba(176, 78, 46, 0.45); }
 
 .spellName {
   padding: 3px;
