@@ -41,6 +41,43 @@ body {
                 margin-left: 15px;
             }
 
+            #levelUp {
+                margin-top: 50px;
+                margin-left: 50px;
+            }
+
+/*            .combat-main {
+                position: absolute;
+                width: 60%;
+                right: 0px;
+
+                div {
+                    display: inline-block;
+                    width: 100%;
+
+                    text-align: right;
+
+                    span {
+                        float: right;
+                        margin-right: 90px;
+                        margin-top: 20px;
+                    }
+                }
+            }
+
+            .combat-saves {
+                position: absolute;
+                width: 40%;
+                height: 40%;
+                bottom: 0px;
+            }
+
+            .ability-scores {
+                position: absolute;
+                width: 40%;
+                height: 60%;
+                top: 0px;
+            }*/
 
             .editFieldBig {
                 display: block;
@@ -52,13 +89,17 @@ body {
                 font-size: 1.5em;
                 font-weight: 600;
                 background: #F6F3F3;
-
+                overflow: hidden;
             }
 
             #name {
                 .editFieldBig {
                     width: 300px;
                 }
+            }
+
+            #race, #className {
+                display: none;
             }
 
             .editField {
@@ -71,6 +112,7 @@ body {
                 font-size: 0.7em;
                 font-weight: 600;
                 background: #F6F3F3;
+                overflow: hidden;
             }
 
             .spanInput {

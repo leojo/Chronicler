@@ -18,6 +18,8 @@
   .menubar div {
     float: right;
     padding-left: 5px; }
+  .menubar span {
+    float: right; }
   .menubar p {
     float: right; }
   .menubar a {
@@ -44,12 +46,14 @@
     position: relative; }
     .characterBanner .bannerButtons .btn {
       font-size: 1em;
-      width: 120px;
-      height: 40px;
+      width: 80px;
+      height: 30px;
       text-align: center;
-      top: 15px;
+      vertical-align: center;
       position: relative;
-      padding: 10px 20px 10px; }
+      padding: 10px 20px;
+      line-height: -0px;
+      top: 15px; }
 
 .characterBanner.open {
   left: 15%;
@@ -83,7 +87,7 @@
         float: down; }
         .dashboard nav ul li a {
           text-decoration: none;
-          color: black; }
+          color: white; }
 
 .dashboard.closed {
   width: 4%; }
@@ -120,6 +124,8 @@
     .tabs .tab a:link, .tabs .tab a:visited, .tabs .tab a:hover, .tabs .tab a:active {
       color: #F2F6EA;
       text-decoration: none; }
+    .tabs .tab.hiddenTab {
+      display: none; }
   .tabs .tab.selected:before {
     box-shadow: 2px 2px 0 #fff; }
   .tabs .tab.selected {
@@ -219,7 +225,7 @@
 
 .spellResetBtn {
   width: 50px;
-  height: 50px;
+  height: 25px;
   position: absolute;
   right: 5px;
   top: 5px; }
@@ -284,9 +290,44 @@ body .container {
     bottom: 0;
     background-image: linear-gradient(180deg, #FFF, #F6F3EA, #EFEAE3);
     display: block;
-    overflow: auto; }
+    overflow: auto;
+    /*            .combat-main {
+                    position: absolute;
+                    width: 60%;
+                    right: 0px;
+    
+                    div {
+                        display: inline-block;
+                        width: 100%;
+    
+                        text-align: right;
+    
+                        span {
+                            float: right;
+                            margin-right: 90px;
+                            margin-top: 20px;
+                        }
+                    }
+                }
+    
+                .combat-saves {
+                    position: absolute;
+                    width: 40%;
+                    height: 40%;
+                    bottom: 0px;
+                }
+    
+                .ability-scores {
+                    position: absolute;
+                    width: 40%;
+                    height: 60%;
+                    top: 0px;
+                }*/ }
     body .container .sheetContent div {
       margin-left: 15px; }
+    body .container .sheetContent #levelUp {
+      margin-top: 50px;
+      margin-left: 50px; }
     body .container .sheetContent .editFieldBig {
       display: block;
       width: 100px;
@@ -296,9 +337,12 @@ body .container {
       line-height: 100px;
       font-size: 1.5em;
       font-weight: 600;
-      background: #F6F3F3; }
+      background: #F6F3F3;
+      overflow: hidden; }
     body .container .sheetContent #name .editFieldBig {
       width: 300px; }
+    body .container .sheetContent #race, body .container .sheetContent #className {
+      display: none; }
     body .container .sheetContent .editField {
       display: block;
       width: 300px;
@@ -308,7 +352,8 @@ body .container {
       line-height: 30px;
       font-size: 0.7em;
       font-weight: 600;
-      background: #F6F3F3; }
+      background: #F6F3F3;
+      overflow: hidden; }
     body .container .sheetContent .spanInput {
       display: none; }
 body .container.open {
