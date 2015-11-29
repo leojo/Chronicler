@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by whiskeyjack on 10/28/15.
+ * Created by BjornBjarnsteins on 10/28/15.
+ *
+ * Contains information about ability scores used by character sheets
+ *
  */
 
 public class AbilityScore {
@@ -18,6 +21,7 @@ public class AbilityScore {
 	int modifier;
 
 	public AbilityScore(AbilityID id) {
+		// Setup name and shortname based on AbilityID
 		switch (id) {
 			case STR:
 				this.name = "Strength";

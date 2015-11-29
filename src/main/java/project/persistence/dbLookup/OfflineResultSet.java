@@ -7,6 +7,11 @@ import java.util.*;
 
 /**
  * Created by leo on 23.11.2015.
+ *
+ * Java ResultSets are live connections to a database. This was
+ * inconvenient for us, so this class mines all the info from a ResultSet
+ * and stores it in memory
+ *
  */
 public class OfflineResultSet {
     private final List<HashMap<String,Object>> resultSet;

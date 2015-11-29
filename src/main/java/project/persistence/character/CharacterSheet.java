@@ -14,6 +14,13 @@ import java.util.*;
 
 /**
  * Created by BjornBjarnsteins on 10/2/15.
+ *
+ * This class contains the core functionality of a DnD 3.5 character sheet
+ *
+ * CharacterSheet contains several collections of stats (AbilityScore, SavingThrow, etc.)
+ * These are kept up to date with objects that each have an update function. These update
+ * functions are called from within CharacterSheet
+ *
  */
 public class CharacterSheet {
 	// Git why you no find me?
@@ -80,6 +87,7 @@ public class CharacterSheet {
 		this.update();
 	}
 
+	// Loads class ids from the class string contained by the bean
 	private void loadClassIDs() {
 		this.resetClassIDs();
 		String level_details = this.bean.getLevel_details();
@@ -95,12 +103,14 @@ public class CharacterSheet {
 			this.classLevels.put(id, level);
 		}
 	}
+
 	private void storeClassIDs(){
 		final String[] level_details = {""};
 		this.classLevels.forEach((k, v) -> level_details[0] += k + ":" + v + ";");
 		this.bean.setLevel_details(level_details[0]);
 	}
 
+	// Loads ability score from the storage string in the bean
 	private void loadAbilityScores() {
 		this.resetAbilities();
 		String ability_details = this.bean.getAbility_details();
@@ -137,6 +147,7 @@ public class CharacterSheet {
 		return details[0];
 	}
 
+	// Loads saving throws from the string contained in the bean
 	private void loadSavingThrows() {
 		this.resetSavingThrows();
 		String save_details = this.bean.getSave_details();
@@ -165,6 +176,7 @@ public class CharacterSheet {
 		this.bean.setAbility_details(details[0]);
 	}
 
+	// Sets up the character bean
 	private void initializeBean(CharacterBean bean) {
 		this.bean = bean;
 		this.totalClassLevel = 1;
@@ -245,7 +257,7 @@ public class CharacterSheet {
 		this.bean.setGrapple(this.getGrappleModifier());
 		this.bean.setInitiative(this.getInitiative());
 
-		this.bean.setLevel(this.getLevelDesctiption());
+		this.bean.setLevel(this.getLevelDescription());
 		System.out.println("set level to "+this.bean.getLevel());
 
 		this.storeAbilityScores();
@@ -258,7 +270,7 @@ public class CharacterSheet {
 		this.bean.setInventory_details(inventory.toString());
 	}
 
-	private String getLevelDesctiption() {
+	private String getLevelDescription() {
 		String levelDescription = "";
 		boolean first = true;
 		for(Integer id : classLevels.keySet()){

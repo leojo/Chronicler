@@ -5,6 +5,10 @@ import project.persistence.spell.SpellList;
 import java.sql.*;
 import java.util.ArrayList;
 
+/*
+ * Various convenience functions for accessing the content database, i.e.
+ * classes, items, races, etc.
+ */
 public class Lookup {
 
     private String URL;
