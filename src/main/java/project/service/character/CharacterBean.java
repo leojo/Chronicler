@@ -29,8 +29,6 @@ public class CharacterBean {
     // skills
     private int availableSkillPoints;
     //private Skill[] skills;
-    // feats
-    private int availableFeats;
 
 
     ObjectMapper mapper;
@@ -421,14 +419,6 @@ public class CharacterBean {
     public void setFeats(Feat[] feats) {
         this.feats = feats;
     }
-
-    public Item[] getItems() {
-        return items;
-    }
-
-    public void setItems(Item[] items) {
-        this.items = items;
-    }
     */
     public static void main(String[] args) {
         CharacterBean cb = new CharacterBean();
@@ -524,14 +514,6 @@ public class CharacterBean {
         this.availableSkillPoints = availableSkillPoints;
     }
 
-    public int getAvailableFeats() {
-        return availableFeats;
-    }
-
-    public void setAvailableFeats(int availableFeats) {
-        this.availableFeats = availableFeats;
-    }
-
 
 
 
@@ -539,8 +521,8 @@ public class CharacterBean {
 
     // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
     //------------------------------------------------------------------
-    private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details,
-            knownSpells_details = "96;193;207;168;161;",spellSlots_details;
+    private String level_details = "",ability_details = "",save_details = "",HD_details = "",AC_details = "",initiative_details = "",grapple_details = "",
+            knownSpells_details = "96;193;207;168;161;",spellSlots_details = "",feat_details = "",item_details = "",skill_details = "";//new SkillList().toString();
 
     public String getLevel_details() {
         return level_details;
@@ -614,5 +596,29 @@ public class CharacterBean {
         this.spellSlots_details = spellSlots_details;
     }
 
-//------------------------------------------------------------------
+    public String getFeat_details() {
+        return feat_details;
+    }
+
+    public void setFeat_details(String feat_details) {
+        this.feat_details = feat_details;
+    }
+
+    public String getSkill_details() {
+        return skill_details;
+    }
+
+    public void setSkill_details(String skill_details) {
+        this.skill_details = skill_details;
+    }
+
+    public String getItem_details() {
+        return item_details;
+    }
+
+    public void setItem_details(String item_details) {
+        this.item_details = item_details;
+    }
+
+    //------------------------------------------------------------------
 }

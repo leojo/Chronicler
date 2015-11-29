@@ -4,6 +4,8 @@ import project.service.dbLookup.Lookup;
 import project.service.dbLookup.OfflineResultSet;
 import project.service.enums.AbilityID;
 import project.service.enums.SavingThrowID;
+import project.service.feat.FeatList;
+import project.service.feat.FeatSlot;
 import project.service.spell.SpellList;
 import project.service.spell.SpellSlotArray;
 
@@ -40,13 +42,13 @@ public class CharacterSheet {
 	public Vector<OfflineResultSet> equipped;
 
 	// Spells
-	public SpellList knownSpells;
-	public SpellSlotArray spellSlots;
+	public SpellList knownSpells = new SpellList();
+	public SpellSlotArray spellSlots = new SpellSlotArray();
 
 
 	// TODO: Make compatible with bean
 	public Map<Integer, Skill> skills;
-	public Map<Integer, OfflineResultSet> feats; // TODO: Refactor to map for consistency
+	public FeatList feats = new FeatList();
 	// items
 
 	// bio, appearance??? Do something with this?
@@ -64,13 +66,14 @@ public class CharacterSheet {
 		this.loadAbilityScores();
 		this.loadSavingThrows();
 
-		String knownSpellString = this.bean.getKnownSpells_details();
-		if(knownSpellString == null) knownSpellString = "";
-		String spellSlotString = this.bean.getSpellSlots_details();
-		if(spellSlotString == null) spellSlotString = "";
+		this.knownSpells = new SpellList(this.bean.getKnownSpells_details());
+		this.spellSlots = new SpellSlotArray(this.bean.getSpellSlots_details());
+		this.feats = new FeatList(this.bean.getFeat_details());
+		/*--------------------- WISH LIST ---------------------
+		this.items = new ItemList(this.bean.getItem_details());
+		this.skills = new SkillList(this.bean.getSkill_details());
+		 -----------------------------------------------------*/
 
-		this.knownSpells = new SpellList(knownSpellString);
-		this.spellSlots = new SpellSlotArray(spellSlotString);
 		this.update();
 	}
 
@@ -145,11 +148,6 @@ public class CharacterSheet {
 		}
 	}
 
-	private void loadKnownSpells(){
-		String knownSpells = this.bean.getKnownSpells_details();
-
-	}
-
 	private void storeSavingThrows(){
 		final String[] details = {""};
 		this.abilityScores.forEach((k, v) -> details[0] += k.toString() + ")" + v.toString() + ";");
@@ -167,7 +165,6 @@ public class CharacterSheet {
 		System.err.println(race);
 		this.setRacialMods(race);
 		this.classLevels = new HashMap<>();
-		this.levelUp(classID);
 
 		String knownSpellString = this.bean.getKnownSpells_details();
 		if(knownSpellString == null) knownSpellString = "";
@@ -177,6 +174,7 @@ public class CharacterSheet {
 		this.knownSpells = new SpellList(knownSpellString);
 		this.spellSlots = new SpellSlotArray(spellSlotString);
 
+		this.levelUp(classID);
 		this.updateBean();
 	}
 
@@ -227,8 +225,9 @@ public class CharacterSheet {
 		this.storeClassIDs();
 		this.storeSavingThrows();
 
-		this.bean.setKnownSpells_details((knownSpells != null ? knownSpells.toString() : ""));
-		this.bean.setSpellSlots_details((spellSlots != null ? spellSlots.toString() : ""));
+		this.bean.setKnownSpells_details(knownSpells.toString());
+		this.bean.setSpellSlots_details(spellSlots.toString());
+		this.bean.setFeat_details(feats.toString());
 	}
 
 	public CharacterBean getBean() {
@@ -253,7 +252,7 @@ public class CharacterSheet {
 			this.bean.setAvailableAbilityPoints(this.bean.getAvailableSkillPoints()+1);
 		}
 		if(this.totalClassLevel%3 == 0 && this.totalClassLevel>0){
-			this.bean.setAvailableFeats(this.bean.getAvailableFeats() + 1);
+			this.feats.add(new FeatSlot("Any"));
 		}
 		if(this.hitDice == null) this.hitDice = new HashMap<Integer, Integer>();  // Initialize if needed
 		Integer hdType = Integer.parseInt(currentClass.getString("hit_die").substring(1));
@@ -425,15 +424,6 @@ public class CharacterSheet {
 
 	public void initSavingThrows(){
 		this.savingThrows = new HashMap<>();
-	}
-
-	/*
-	 * Feats
-	 */
-
-	public void acquireFeat(OfflineResultSet feat) {
-		// TODO: check for prerequisites
-		this.feats.put(feat.getInt("id"), feat);
 	}
 
 	/*
