@@ -40,14 +40,15 @@
   .characterBanner .bannerButtons {
     float: right;
     margin-right: 10px;
-    margin-top: 195px; }
+    top: 100px;
+    position: relative; }
     .characterBanner .bannerButtons .btn {
       font-size: 1em;
       width: 120px;
       height: 40px;
       text-align: center;
+      top: 15px;
       position: relative;
-      bottom: 80px;
       padding: 10px 20px 10px; }
 
 .characterBanner.open {
@@ -101,7 +102,8 @@
   position: relative;
   color: #F2F6EA;
   text-align: center;
-  height: 37px; }
+  height: 37px;
+  margin-right: 220px; }
   .tabs .tab {
     position: relative;
     z-index: 0;

@@ -16,6 +16,7 @@
         <script th:src="@{http://malsup.github.com/jquery.form.js}" />
         <script th:src="@{/resources/js/editableFields.js}" />
         <script th:src="@{/resources/js/spellPopup.js}" />
+        <script th:src="@{/resources/js/levelUp.js}" />
     </head>
 
     <header class="menubar" th:include="fragments/menubar :: menubarFrag"></header>
@@ -28,7 +29,8 @@
                     <h3 th:text="${character.race} +' '+${character.className}"></h3>
                 </div>
                 <div class="bannerButtons">
-                    <a  class="btn levelUpBtn" href="#levelUp">Level Up</a>
+                    <input class="btn levelUpBtn" type="button" value="Level Up" th:onclick="${'levelUp('+character.databaseID+')'}"></input>
+                    <!--a  class="btn levelUpBtn" href="#levelUp">Level Up</a-->
                     <a  class="btn restBtn" href="#" >Rest</a>
                 </div>
             </div>

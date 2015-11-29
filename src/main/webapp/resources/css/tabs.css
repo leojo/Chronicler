@@ -10,7 +10,7 @@ Error: Undefined variable: "$highlight".
 8:             color: $highlight;
 9:             text-align: center;
 10:             height: $tabHeight;
-11: 
+11:             margin-right: 220px;
 12: 
 13: 
 
@@ -67,4 +67,4 @@ css/scss/tabs.scss:8
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$highlight\".\A         on line 8 of css/scss/tabs.scss\A \A 3:             z-index: 1;\A 4:         }\A 5: \A 6:         .tabs {\A 7:             position: relative;\A 8:             color: $highlight;\A 9:             text-align: center;\A 10:             height: $tabHeight;\A 11: \A 12: \A 13: "; }
+  content: "Error: Undefined variable: \"$highlight\".\A         on line 8 of css/scss/tabs.scss\A \A 3:             z-index: 1;\A 4:         }\A 5: \A 6:         .tabs {\A 7:             position: relative;\A 8:             color: $highlight;\A 9:             text-align: center;\A 10:             height: $tabHeight;\A 11:             margin-right: 220px;\A 12: \A 13: "; }
