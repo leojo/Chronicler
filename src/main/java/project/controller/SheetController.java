@@ -75,8 +75,7 @@ public class SheetController {
             }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
-
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
@@ -126,7 +125,7 @@ public class SheetController {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
 
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
