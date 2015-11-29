@@ -537,7 +537,16 @@ public class CharacterBean {
     // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
     //------------------------------------------------------------------
     private String level_details = "",ability_details = "",save_details = "",HD_details = "",AC_details = "",initiative_details = "",grapple_details = "",
-            knownSpells_details = "96;193;207;168;161;",spellSlots_details = "",feat_details = "",item_details = "",skill_details = "";//new SkillList().toString();
+            knownSpells_details = "96;193;207;168;161;",spellSlots_details = "",feat_details = "",item_details = "",skill_details = "",
+            inventory_details = "false:57:Greataxe:true;false:45:Battleaxe:false;false:37:Rusty old axe:false;false:101:Banded mal:true;true:1297:Amulet of Natural Armor +1:true;";
+
+    public String getInventory_details() {
+        return inventory_details;
+    }
+
+    public void setInventory_details(String inventory_details) {
+        this.inventory_details = inventory_details;
+    }
 
     public String getLevel_details() {
         return level_details;
