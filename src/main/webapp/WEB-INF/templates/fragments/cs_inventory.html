@@ -6,7 +6,8 @@
             <ul class="fancyList">
                 <li th:each="item, stat : ${inventory.getEquipped()}" class="listItem playerItem">
                     <span class="content">
-                        <p class="itemName" th:text="${item.name}"></p>
+                        <span><h3 class="itemName" th:text="${item.name}"></h3></span>
+                        <p class="itemDesc" th:utext="${item.getShortDescription()}"></p>
                     </span>
                 </li>
             </ul>
@@ -16,7 +17,8 @@
             <ul class="fancyList">
                 <li th:each="item, stat : ${inventory.getNotEquipped()}" class="listItem playerItem">
                     <span class="content">
-                        <p class="itemName" th:text="${item.name}"></p>
+                        <span><h3 class="itemName" th:text="${item.name}"></h3></span>
+                        <p class="itemDesc" th:utext="${item.getShortDescription()}"></p>
                     </span>
                 </li>
             </ul>

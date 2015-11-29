@@ -47,22 +47,42 @@ body {
             width: 30%;
             height: 260px;
             margin: 50px;
-            background: #000;
+            //background: #000;
+            background-size: 100%;
             text-align: center;
 
             a {
                 display: inline-block;
-                padding: 60px;
-                padding-top: 110px;
-                padding-bottom: 110px;
+                padding: 186px;
+                padding-top: 109px;
+                padding-bottom: 109px;
                 text-decoration: none;
+                font-size: 107%;
                 color: $light;
+                text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
             }
         }
 
         .box:hover {
-            background: #333;
+          opacity: 0.7;
         }
+
+        #mycharacters {
+          background-image: url("../images/my_characters.jpg");
+        }
+
+        #mycampaigns {
+          background-image: url("../images/my_campaigns.jpg");
+        }
+
+        #newcharacter {
+          background-image: url("../images/new_character.jpg");
+        }
+
+        #newcampaign {
+          background-image: url("../images/new_campaign.jpg");
+        }
+
     }
 
     .container.open {

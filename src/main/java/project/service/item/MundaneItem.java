@@ -93,6 +93,34 @@ public class MundaneItem extends Item{
     }
 
     @Override
+    public String getShortDescription() {
+        String desc = "";
+        switch (getFamily()) {
+            case "Weapons":
+                desc = "";
+                desc += "Type: "+getCategory().split(" ")[0];
+                desc += " "+getSubcategory();
+                desc += ",  Damage: "+getDmgMedium();
+                if(!(getRangeIncrement().equalsIgnoreCase("none") || getRangeIncrement().equalsIgnoreCase("-")))
+                    desc += ",  Range Increment: "+getRangeIncrement();
+                desc += ",  Damage type: "+getType();
+                desc += ",  Critical: "+getCrit();
+                return desc;
+            case "Armor and Shields":
+                desc = "";
+                desc += getSubcategory();
+                desc += ",  AC bonus: "+getArmorShieldBonus();
+                desc += ",  Armor check penalty: "+getAcPen();
+                desc += ",  Max dex bonus: "+getMaxDex();
+                desc += ",  Max speed (for medium creatures): "+getSpeed30();
+                desc += ",  Arcane Spell Failure: "+getSpellFail();
+                return desc;
+            default:
+                return "No description available for "+getFamily();
+        }
+    }
+
+    @Override
     public String toString() {
         return getId() + ":" + getName() + ":" + isEquipped();
     }

@@ -10,6 +10,7 @@ public class Inventory {
     public ArrayList<Item> items = new ArrayList<Item>();
 
     public Inventory(String desc){
+        if(desc.equals("")) desc = "false:57:Greataxe:true;false:45:Battleaxe:false;false:37:Rusty old axe:false;false:101:Banded mal:true;true:1297:Amulet of Natural Armor +1:true;";
         for(String itemInfo : desc.split(";")){
             if(itemInfo.equals("")) continue;
             boolean special = Boolean.parseBoolean(itemInfo.substring(0,itemInfo.indexOf(":")));
@@ -24,7 +25,7 @@ public class Inventory {
     }
 
     public Inventory() {
-        /* We want to be able to create an empty inventory without the hacky use of "" */
+        this("");
     }
 
     public void add(Item item){

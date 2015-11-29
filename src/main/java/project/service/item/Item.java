@@ -88,8 +88,12 @@ public class Item {
         this.equipped = equipped;
     }
 
+    public String getShortDescription(){
+        return "You should not be seeing this, it should be handled in subclasses (short description)";
+    }
+
     @Override
     public String toString() {
-        return "You should not be seeing this, it should be handled in subclasses";
+        return "You should not be seeing this, it should be handled in subclasses (to string)";
     }
 }
