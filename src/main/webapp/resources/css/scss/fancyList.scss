@@ -58,11 +58,28 @@
 
         .available {
             background: #D45F39;
+
+            &.unprepared {
+                background: #fff;
+            }
+
         }
 
         .spent {
              background: #926657;
 
+             &.unprepared {
+                background: #C6C6C6;
+             }
+
+        }
+
+        .unprepared .available {
+            background: #fff;
+        }
+
+        .unprepared .spent {
+            background: #333;
         }
 
         .flex {

@@ -43,8 +43,16 @@
         right: 0px; }
     .listContainer .fancyList .available {
       background: #D45F39; }
+      .listContainer .fancyList .available.unprepared {
+        background: #fff; }
     .listContainer .fancyList .spent {
       background: #926657; }
+      .listContainer .fancyList .spent.unprepared {
+        background: #C6C6C6; }
+    .listContainer .fancyList .unprepared .available {
+      background: #fff; }
+    .listContainer .fancyList .unprepared .spent {
+      background: #333; }
     .listContainer .fancyList .flex {
       display: flex;
       align-items: center;
