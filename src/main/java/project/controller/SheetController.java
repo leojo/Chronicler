@@ -81,8 +81,7 @@ public class SheetController {
             }catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
-
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
@@ -138,7 +137,7 @@ public class SheetController {
                 System.out.println("Sadly we couldn't save your character, this is disastrous.");
             }
 
-            return "characterSheet";
+            return  "redirect:/character"+charbean.getDatabaseID();
         } else return "loginFail";
     }
 
@@ -148,6 +147,9 @@ public class SheetController {
     // -----------------------------------------------------
     @RequestMapping(value = "/character{charID}", method = RequestMethod.GET)
     public String openCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        find = new Lookup();
+        model.addAttribute("classes", find.listClasses());
+
         User user = (User)session.getAttribute("userId");
         if (user == null) {
             return "redirect:/";
@@ -199,7 +201,7 @@ public class SheetController {
 
 
     @RequestMapping(value = "levelUp{charID}_{classID}", method = RequestMethod.GET)
-    public String levelUp(@PathVariable int charID, @PathVariable int classID, Model model, HttpSession session){
+    public String levelUp(@PathVariable int charID, @PathVariable String classID, Model model, HttpSession session){
         System.out.println("Level up!!!");
         System.out.println("leveling up character "+charID+" one level in class "+classID);
 
