@@ -17,7 +17,7 @@ springBoot {
 }
 
 jar {
-    baseName = 'gs-rest-service'
+    baseName = 'gs-rest-persistence'
     version =  '0.1.0'
 }
 
