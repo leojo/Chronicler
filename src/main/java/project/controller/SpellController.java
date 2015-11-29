@@ -31,4 +31,24 @@ public class SpellController {
         model.addAttribute(spell);
         return "spellDetails";
     }
+
+
+    @RequestMapping(value = "/updateSpellslot", method = RequestMethod.POST)
+    public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+        charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
+        CharacterSheet cs = new CharacterSheet(charbean,false);
+        charbean = cs.getBean();
+        model.addAttribute("user", user);
+        model.addAttribute("character", charbean);
+        model.addAttribute("characterSheet", cs);
+        try {
+            if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+            charbean.updateJson(user.getUserID());
+        } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+            System.out.println("Sadly we couldn't save your character, this is disastrous.");
+        }
+        return "characterSheet";
+    }
 }

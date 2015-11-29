@@ -1,18 +1,18 @@
 package project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import project.service.account.User;
 import project.service.character.CharacterBean;
 import project.service.character.CharacterSheet;
+import project.service.dbLookup.AccountStorage;
 import project.service.dbLookup.Lookup;
 
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 /**
  * Created by andrea on 23.11.2015.
@@ -21,10 +21,10 @@ import java.util.Enumeration;
 public class SheetController {
 
     Lookup find;
-
-    // -----------------------------------------------
-    // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
-    // -----------------------------------------------
+    AccountStorage storage;
+    // ---------------------------------------------
+    // NEW CHARACTER - DOES NOT BELONG TO A CAMPAIGN
+    // ---------------------------------------------
     @RequestMapping(value = "/newCharacter", method = RequestMethod.GET)
     public String newCharacter(Model model, HttpSession session) {
         find = new Lookup();
@@ -75,9 +75,9 @@ public class SheetController {
         } else return "loginFail";
     }
 
-    // -----------------------------------------------
-    // NEW CHAR STUFF -> USED FOR CLASS/RACE SELECTION
-    // -----------------------------------------------
+    // -----------------------------------------
+    // NEW CHARACTER - DOES BELONG TO A CAMPAIGN
+    // -----------------------------------------
     @RequestMapping(value = "/newCharacter{campID}", method = RequestMethod.GET)
     public String newCharacterCampaign(Model model, @PathVariable int campID, HttpSession session) {
         find = new Lookup();
@@ -125,20 +125,46 @@ public class SheetController {
         } else return "loginFail";
     }
 
+
+    // -----------------------------------------------------
+    // EXISTING CHARACTER: LOAD - LEVELUP - UPDATE - DELETE
+    // -----------------------------------------------------
+    @RequestMapping(value = "/character{charID}", method = RequestMethod.GET)
+    public String openCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        model.addAttribute("myChars", storage.listCharacters(user.getUserID()));
+        CharacterBean charbean;
+        CharacterSheet charSheet;
+        if(user.getUserID() != null) {
+            charbean = new CharacterBean();
+            charbean.setDatabaseID(charID);
+            charbean = loadBeanFromJson(charbean, user.getUserID());
+            session.setAttribute("charbean", charbean);
+            charSheet = new CharacterSheet(charbean,false);
+            model.addAttribute("spellList", charSheet.knownSpells.getSpells());
+            model.addAttribute("spellSlots",charSheet.spellSlots.getSpellSlots());
+            model.addAttribute("spellSlotTypes",charSheet.spellSlots.getSpellSlotTypes());
+            model.addAttribute("character", charbean);
+            session.setAttribute("currentCharID", charID);
+            return "characterSheet";
+        } else
+            return "loginFail";
+    }
+
     @RequestMapping(value = "/updateCharacter", method = RequestMethod.POST)
     public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
+        CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+        charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
         CharacterSheet cs = new CharacterSheet(charbean,false);
         charbean = cs.getBean();
         model.addAttribute("user", user);
         model.addAttribute("character", charbean);
         model.addAttribute("characterSheet", cs);
-        System.out.println("Our bean has this as character name");
-        System.out.println(charbean.getName());
         try {
             if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
-            System.out.println("ABOUT TO SAVE TO CHARACTER WITH THIS ID:");
-            System.out.println(charbean.getDatabaseID());
             charbean.updateJson(user.getUserID());
         } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
             System.out.println("Sadly we couldn't save your character, this is disastrous.");
@@ -153,4 +179,55 @@ public class SheetController {
         System.out.println("Level up!!!");
         return "characterSheet";
     }
+
+
+    @RequestMapping(value = "deleteCharacter{charID}", method = RequestMethod.GET)
+    public String deleteCharacter(@PathVariable int charID, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        storage.deleteCharacter(charID);
+
+        return "myCharacters";
+    }
+
+    // ------------------
+    // CHARACTER LISTINGS
+    // ------------------
+
+    @RequestMapping(value = "/myCharacters", method = RequestMethod.GET)
+    public String listCharacters(Model model, HttpSession session) {
+
+        User user = (User)session.getAttribute("userId");
+        model.addAttribute("user", user);
+
+        storage = new AccountStorage("data/userAccounts.sqlite");
+        HashMap<Integer, String> characters = storage.listCharacters(user.getUserID());
+        if(characters == null) return new SheetController().newCharacter(model,session);
+        model.addAttribute("myChars", characters);
+        model.addAttribute("character", new CharacterBean());
+        if(user.getUserID() != null)
+            return "myCharacters";
+        else
+            return "loginFail";
+    }
+
+    // ------------------------------
+    // CHARACTER SHEET UTIL FUNCTIONS
+    // ------------------------------
+    public CharacterBean loadBeanFromJson(CharacterBean bean, String user) {
+        ObjectMapper mapper = new ObjectMapper();
+        AccountStorage db = new AccountStorage("data/userAccounts.sqlite");
+        String charJSON = db.searchCharacter(bean.getDatabaseID(), user);
+        try {
+            bean = mapper.readValue(charJSON, CharacterBean.class);
+
+        } catch(Exception e) {
+            System.out.println("Something went wrong parsing your character");
+        }
+
+        return bean;
+    }
+
+
 }

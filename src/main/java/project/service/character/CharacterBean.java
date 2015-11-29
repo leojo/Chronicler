@@ -540,7 +540,7 @@ public class CharacterBean {
     // THESE ARE FOR SAVING/LOADING PURPOSES ONLY AND WILL NOT BE SHOWN!
     //------------------------------------------------------------------
     private String level_details,ability_details,save_details,HD_details,AC_details,initiative_details,grapple_details,
-            knownSpells_details,spellSlots_details;
+            knownSpells_details = "96;193;207;168;161;",spellSlots_details;
 
     public String getLevel_details() {
         return level_details;
