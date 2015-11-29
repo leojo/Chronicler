@@ -13,6 +13,7 @@ import project.service.dbLookup.Lookup;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by andrea on 23.11.2015.
@@ -157,6 +158,7 @@ public class SheetController {
     public String myCharacterPost(@ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
         User user = (User)session.getAttribute("userId");
         CharacterBean oldBean = (CharacterBean)session.getAttribute("charbean");
+
         charbean.setSpellSlots_details(oldBean.getSpellSlots_details());
         CharacterSheet cs = new CharacterSheet(charbean,false);
         charbean = cs.getBean();
@@ -189,6 +191,44 @@ public class SheetController {
         storage.deleteCharacter(charID);
 
         return "myCharacters";
+    }
+
+    // ----------------------------------------------------
+    // SPELL SLOT STUFF - MAYBE PUT IN SEPARATE CONTROLLER?
+    // ----------------------------------------------------
+
+
+    @RequestMapping(value = "/updateSpellslot", method = RequestMethod.POST)
+    public String updateSpellslots(@RequestParam Map<String, String> allRequestParams, @ModelAttribute CharacterBean charbean, Model model, HttpSession session) {
+        User user = (User)session.getAttribute("userId");
+
+        CharacterSheet cs = new CharacterSheet(charbean,false);
+        charbean = cs.getBean();
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet()) {
+            if(entry.getKey().startsWith("spellID")) System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+
+/*
+
+        for (Map.Entry<String, String> entry : allRequestParams.entrySet())
+        {
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
+*/
+
+
+        model.addAttribute("user", user);
+        model.addAttribute("characterSheet", cs);
+
+        model.addAttribute("character", charbean);
+
+        try {
+            if(session.getAttribute("currentCharID") != null) charbean.setDatabaseID((int)session.getAttribute("currentCharID"));
+            charbean.updateJson(user.getUserID());
+        } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+            System.out.println("Sadly we couldn't save your character, this is disastrous.");
+        }
+        return "characterSheet";
     }
 
     // ------------------
