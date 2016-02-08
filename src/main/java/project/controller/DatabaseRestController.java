@@ -9,11 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by andrea on 8.2.2016.
  */
 @RestController
+@RequestMapping("getString")
 public class DatabaseRestController {
 
-    @RequestMapping(value = "/getString{thisString}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/{thisString}", method = RequestMethod.GET, produces = "application/json")
     public String StringResponse(@PathVariable String thisString) {
         return thisString;
     }
 
+    /*
+    public class response{
+        private final String s;
+
+        public response(String string){
+            s = string;
+        }
+    }*/
 }
