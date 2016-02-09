@@ -16,6 +16,7 @@ public class AccountStorage {
 
     private final String URL;
 
+    public AccountStorage() {this.URL = "data/userAccounts.sqlite";}
     public AccountStorage(String dbUrl) {
         this.URL = dbUrl;
     }

@@ -6,6 +6,16 @@ package project.persistence.account;
 public class User {
     private String userID, password; //remember to encrypt and stuff later on
 
+    public User(String userID,String password){
+        this.userID = userID;
+        this.password = password;
+    }
+
+    public User(){
+        this.userID="";
+        this.password="";
+    }
+
     public String getUserID() {
         return userID;
     }

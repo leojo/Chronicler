@@ -1,33 +1,42 @@
 package project.controller;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.atomic.AtomicLong;
+import project.persistence.account.Login;
+import project.persistence.account.User;
+import project.persistence.dbLookup.AccountStorage;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by andrea on 8.2.2016.
  */
 @RestController
 public class DatabaseRestController {
+    @RequestMapping("/login")
+    public Object greeting(@RequestParam(value="username") String username, @RequestParam("password") String password) {
+        //return new Echo(username, password);
+        Login l = new Login();
+        AccountStorage search = new AccountStorage();
+        User u = new User(username, password);
+        if(l.evalLogin(u)){
+            HashMap<Integer,String> characters = search.listCharacters(username);
 
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
-
-    @RequestMapping("/greeting")
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Greeting(counter.incrementAndGet(),
-                String.format(template, name));
+            ArrayList<String> characterJSONs = new ArrayList<>();
+            for(Integer key : characters.keySet()){
+                String characterJSON = search.searchCharacter(key,username);
+                characterJSONs.add(characterJSON);
+            }
+            return new Echo((String[])characterJSONs.toArray());
+        } else {
+            return new Echo("Failure", username, password);
+        }
     }
 
+    public class Echo{
+        public String[] input;
 
-    public class Greeting {
-        private final long id;
-        private final String content;
-        public Greeting(long id, String content) {
-            this.id = id;
-            this.content = content;
+        public Echo(String... strings){
+            this.input = strings;
         }
-        public long getId() { return id; }
-        public String getContent() { return content; }
     }
 }
