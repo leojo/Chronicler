@@ -1,9 +1,13 @@
 package project.controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.persistence.account.Login;
 import project.persistence.account.User;
 import project.persistence.dbLookup.AccountStorage;
+
+import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,23 +16,26 @@ import java.util.HashMap;
  */
 @RestController
 public class DatabaseRestController {
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object Login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        //return new Echo(username, password);
-        Login l = new Login();
-        AccountStorage search = new AccountStorage();
-        User u = new User(username, password);
-        if(l.evalLogin(u)){
-            /*HashMap<Integer,String> characters = search.listCharacters(username);
 
-            ArrayList<String> characterJSONs = new ArrayList<>();
-            for(Integer key : characters.keySet()){
-                String characterJSON = search.searchCharacter(key,username);
-                characterJSONs.add(characterJSON);
-            }*/
-            return new Echo("Login", "Successful", username);
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public Echo androidLoginGet(Model model, HttpSession session) {
+        // Make sure user is who we think they are, and put character bean in our model.
+        User user = (User)session.getAttribute("userId");
+        if(user == null) model.addAttribute("user", new User());
+        else model.addAttribute("user", user);
+        return new Echo("GETREQUEST");
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Echo androidLoginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException {
+        model.addAttribute("user", user);
+        String username = user.getUserID();
+        Login login = new Login();
+        if(login.evalLogin(user)) {
+            session.setAttribute("userId", user);
+            return new Echo("Login", "Successful",username);
         } else {
-            return new Echo("Failure", username, password);
+            return new Echo("Failure", username);
         }
     }
 
