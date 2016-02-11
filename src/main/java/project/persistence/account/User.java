@@ -12,7 +12,7 @@ public class User {
     }
 
     public User(){
-        this.userID="";
+        this.userID=null;
         this.password="";
     }
 

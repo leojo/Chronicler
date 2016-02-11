@@ -19,21 +19,21 @@ import java.util.HashMap;
  */
 @RestController
 public class DatabaseRestController {
-    @RequestMapping("/login")
-    public Object greeting(@RequestParam(value="username") String username, @RequestParam("password") String password) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Object Login(@RequestParam("username") String username, @RequestParam("password") String password) {
         //return new Echo(username, password);
         Login l = new Login();
         AccountStorage search = new AccountStorage();
         User u = new User(username, password);
         if(l.evalLogin(u)){
-            HashMap<Integer,String> characters = search.listCharacters(username);
+            /*HashMap<Integer,String> characters = search.listCharacters(username);
 
             ArrayList<String> characterJSONs = new ArrayList<>();
             for(Integer key : characters.keySet()){
                 String characterJSON = search.searchCharacter(key,username);
                 characterJSONs.add(characterJSON);
-            }
-            return new Echo((String[])characterJSONs.toArray());
+            }*/
+            return new Echo("Login", "Successful", username);
         } else {
             return new Echo("Failure", username, password);
         }
