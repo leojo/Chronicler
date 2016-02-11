@@ -85,6 +85,12 @@ public class Lookup {
         return searchByTemplate(query_template, field, searchTerm);
     }
 
+    public OfflineResultSet skillData(){
+        // Return all skills.
+        String query = "SELECT * FROM skill;";
+        return searchRaw(query);
+    }
+
     public OfflineResultSet spell(String searchTerm){
         // This is the order in which we want to search through the fields of the spells
         String[] field = {"id","name","full_text","school","subschool","descriptor","effect"};
