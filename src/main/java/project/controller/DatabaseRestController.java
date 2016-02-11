@@ -27,9 +27,9 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Echo androidLoginPost(@ModelAttribute User user, Model model, HttpSession session) throws SQLException {
+    public Echo androidLoginPost(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) throws SQLException {
+        User user = new User(username, password);
         model.addAttribute("user", user);
-        String username = user.getUserID();
         Login login = new Login();
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
