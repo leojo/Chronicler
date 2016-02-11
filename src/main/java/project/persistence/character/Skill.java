@@ -16,7 +16,7 @@ import java.util.Map;
  *
  */
 
-class Skill {
+public class Skill {
 	String name;
 	AbilityScore baseSkill;
 	int id;
