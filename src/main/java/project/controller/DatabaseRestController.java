@@ -79,4 +79,15 @@ public class DatabaseRestController {
             this.input = strings;
         }
     }
+
+    private class loginData {
+        private String username;
+        private String password;
+        private String cookie;
+        public loginData(String username, String password, String cookie) {
+            this.username = username;
+            this.password = password;
+            this.cookie = cookie;
+        }
+    }
 }
