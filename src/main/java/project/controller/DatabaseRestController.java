@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
+import project.persistence.dbLookup.AccountStorage;
 import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.Skill;
@@ -91,6 +92,7 @@ public class DatabaseRestController {
         }
     }
 
+    //TODO: Possibly move all this to it's own Controller
     @RequestMapping("/campaignData")
     public String listCampaigns(){
         /*Lookup find = new Lookup();
@@ -118,11 +120,9 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }*/
+        AccountStorage storage = new AccountStorage();
+        String[] campaigns = storage.listPlayerCampaigns("andrea");
         ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, String> campaigns = new HashMap<>();
-        for (int i=0;i<5;i++) {
-            campaigns.put("Campaign"+i, String.valueOf(i));
-        }
         try {
             return mapper.writeValueAsString(campaigns);
         } catch (JsonProcessingException e) {
