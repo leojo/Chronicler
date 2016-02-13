@@ -24,6 +24,8 @@ public class MainController {
     public String homePage(Model model, HttpSession session) {
         // Make sure user is who we think they are, and put character bean in our model.
         User user = (User)session.getAttribute("userId");
+
+        System.out.println("THIS IS THE SESSION ID "+ session.getId());
         if(user == null) model.addAttribute("user", new User());
         else model.addAttribute("user", user);
         return "index";

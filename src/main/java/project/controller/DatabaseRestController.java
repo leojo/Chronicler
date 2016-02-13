@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.*;
 import project.persistence.account.Login;
 import project.persistence.account.User;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
@@ -31,17 +34,32 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) throws SQLException {
+    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
+        System.out.println("THIS IS THE SESSION ID " + session.getId());
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
+            Cookie userCookie = new Cookie("user", user.getUserID());
+            userCookie.setMaxAge(60*60);
+            response.addCookie(userCookie);
             return new Echo("Login", "Successful",username);
         } else {
             return new Echo("Failure", username);
         }
     }
+/*
+    @RequestMapping(value = "/campaigns", method = RequestMethod.GET)
+    public Echo getCampaigns(@RequestParam("username")) {
+
+    }
+
+    @RequestMapping(value = "/characters", method = RequestMethod.GET)
+    public Echo getCharacters(@RequestParam("username")) {
+
+    }
+*/
 
 
     @RequestMapping("/skillData")
