@@ -50,13 +50,12 @@ public class DatabaseRestController {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
-        System.out.println("THIS IS THE SESSION ID " + session.getId());
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             // Cookie user2 = new BASE64Decoder();
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             userCookie.setMaxAge(60*60);
-            response.addCookie(userCookie);
+            //response.addCookie(userCookie);
             return new Echo("Login", "Successful",username);
         } else {
             return new Echo("Failure", username);
