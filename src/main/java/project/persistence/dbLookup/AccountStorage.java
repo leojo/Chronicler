@@ -111,7 +111,7 @@ public class AccountStorage {
             rs.first();
             return rs.getString("Cookie");
         } else {
-            return "{nosession}";
+            return null;
         }
     }
 

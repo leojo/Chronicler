@@ -52,7 +52,8 @@ public class DatabaseRestController {
         Login login = new Login();
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
-            // Cookie user2 = new BASE64Decoder();
+            // If the database doesn't hold any cookie, update it:
+            if(find.getUserCookie(user.getUserID()) == null) find.updateUserCookie(user.getUserID());
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);

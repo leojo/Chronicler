@@ -29,7 +29,6 @@ public class Login {
         }
         rs.first();
         if(BCrypt.checkpw(userInfo.getPassword(), rs.getString("Password"))) {
-            find.updateUserCookie(userInfo.getUserID());
             return true;
         }
 
