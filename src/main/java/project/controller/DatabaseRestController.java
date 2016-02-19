@@ -46,7 +46,7 @@ public class DatabaseRestController {
     // GET req send með cookie parameternum, aðrir controllerar tékka hvort
     // um cookie matchar við einhvern notanda í gagnagrunni (ya?)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
+    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) throws SQLException {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
