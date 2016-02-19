@@ -107,7 +107,12 @@ public class AccountStorage {
     public String getUserCookie(String userID) {
         String query = "SELECT Cookie FROM Users WHERE UserID = \""+userID+"\";";
         OfflineResultSet rs = searchRaw(query);
-        return rs.getString("Cookie");
+        if(rs != null) {
+            rs.first();
+            return rs.getString("Cookie");
+        } else {
+            return "{nosession}";
+        }
     }
 
     public String searchCharacter(int charID, String userID) {
