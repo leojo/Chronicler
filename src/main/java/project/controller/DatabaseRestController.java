@@ -53,8 +53,8 @@ public class DatabaseRestController {
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             // Cookie user2 = new BASE64Decoder();
-            Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
-            userCookie.setMaxAge(60*60);
+            // Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
+            // userCookie.setMaxAge(60*60);
             //response.addCookie(userCookie);
             return new Echo("Login", "Successful",username);
         } else {
