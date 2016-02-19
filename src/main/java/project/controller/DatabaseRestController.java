@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
+import project.persistence.dbLookup.AccountStorage;
 import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.Skill;
@@ -71,6 +72,7 @@ public class DatabaseRestController {
     }
 */
 
+
     @RequestMapping("/skillData")
     public String skillData(){
         Lookup find = new Lookup();
@@ -94,6 +96,46 @@ public class DatabaseRestController {
         }
         try {
             return mapper.writeValueAsString(skillData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
+    //TODO: Possibly move all this to it's own Controller
+    @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
+    public String listCampaigns(@RequestParam("username") String username){
+        /*Lookup find = new Lookup();
+        OfflineResultSet rs = find.skillData();
+        HashMap<String, Skill> skillData = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        if(rs == null) return "Error fetching data!";
+        rs.beforeFirst();
+        while(rs.next()){
+            String name = rs.getString("name");
+            AbilityID abilityID = AbilityID.fromString(rs.getString("key_ability"));
+            String action = rs.getString("action");
+            String tryAgain = rs.getString("try_again");
+            String special = rs.getString("special");
+            String synergy = rs.getString("synergy");
+            boolean trained = rs.getString("trained").equalsIgnoreCase("yes");
+            boolean armor_check = rs.getString("armor_check").equalsIgnoreCase("yes");
+            String description = rs.getString("skill_check");
+            Skill s = new Skill(name, abilityID, trained, armor_check, description, synergy, action, tryAgain, special);
+            skillData.put(name, s);
+        }
+        try {
+            return mapper.writeValueAsString(skillData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }*/
+        //TODO: retrieve user data from request JSON
+        AccountStorage storage = new AccountStorage();
+        String[] campaigns = storage.listPlayerCampaigns(username);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(campaigns);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";

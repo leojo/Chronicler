@@ -1,8 +1,12 @@
 package project.persistence.dbLookup;
 
+import project.persistence.campaign.Campaign;
+
 import java.sql.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Vector;
 
 
 /**
@@ -118,6 +122,21 @@ public class AccountStorage {
         } else {
             return null;
         }
+    }
+
+    public String[] listPlayerCampaigns(String playerID) {
+        OfflineResultSet rs = null;
+        String query = "SELECT campaignName FROM Campaigns WHERE ownerID=\""+playerID+"\"";
+        rs = searchRaw(query);
+        Vector<String> vec = new Vector<>();
+        if(rs != null) {
+            while (rs.next()) {
+                vec.add(rs.getString("campaignName"));
+            }
+        } else {
+            return null;
+        }
+        return Arrays.copyOf(vec.toArray(), vec.size(), String[].class);
     }
 
 
