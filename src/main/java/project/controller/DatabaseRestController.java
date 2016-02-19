@@ -93,8 +93,8 @@ public class DatabaseRestController {
     }
 
     //TODO: Possibly move all this to it's own Controller
-    @RequestMapping("/campaignData")
-    public String listCampaigns(){
+    @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
+    public String listCampaigns(@RequestParam("username") String username){
         /*Lookup find = new Lookup();
         OfflineResultSet rs = find.skillData();
         HashMap<String, Skill> skillData = new HashMap<>();
@@ -120,8 +120,9 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }*/
+        //TODO: retrieve user data from request JSON
         AccountStorage storage = new AccountStorage();
-        String[] campaigns = storage.listPlayerCampaigns("andrea");
+        String[] campaigns = storage.listPlayerCampaigns(username);
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(campaigns);
