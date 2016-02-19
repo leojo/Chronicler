@@ -6,6 +6,7 @@ import java.sql.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.Vector;
 
 
@@ -95,6 +96,18 @@ public class AccountStorage {
 
     public int addUser(String userID, String pw_encrypted) {
         return updateRaw("INSERT INTO Users (UserID,Password) VALUES ('"+userID+"','"+pw_encrypted+"');");
+    }
+
+    public int updateUserCookie(String userID) {
+        UUID cookieID = UUID.randomUUID();
+        String query = "UPDATE Users SET Cookie=\""+ cookieID+"\" WHERE UserID = \""+userID+"\";";
+        return updateRaw(query);
+    }
+
+    public String getUserCookie(String userID) {
+        String query = "SELECT Cookie FROM Users WHERE UserID = \""+userID+"\";";
+        OfflineResultSet rs = searchRaw(query);
+        return rs.getString("Cookie");
     }
 
     public String searchCharacter(int charID, String userID) {

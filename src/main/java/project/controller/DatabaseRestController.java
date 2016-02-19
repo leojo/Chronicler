@@ -27,6 +27,8 @@ import java.util.HashMap;
 @RestController
 public class DatabaseRestController {
 
+    AccountStorage find = new AccountStorage("data/userAccounts.sqlite");
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Echo androidLoginGet(Model model, HttpSession session) {
         // Make sure user is who we think they are, and put character bean in our model.
@@ -52,7 +54,7 @@ public class DatabaseRestController {
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             // Cookie user2 = new BASE64Decoder();
-            Cookie userCookie = new Cookie("user", user.getUserID());
+            Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
             return new Echo("Login", "Successful",username);
@@ -144,7 +146,6 @@ public class DatabaseRestController {
 
     public class Echo{
         public String[] input;
-
         public Echo(String... strings){
             this.input = strings;
         }
