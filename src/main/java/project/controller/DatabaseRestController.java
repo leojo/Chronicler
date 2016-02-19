@@ -16,6 +16,8 @@ import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.Skill;
 import project.persistence.enums.AbilityID;
+import sun.misc.BASE64Decoder;
+
 import java.util.HashMap;
 
 /**
@@ -33,6 +35,13 @@ public class DatabaseRestController {
         return new Echo("GETREQUEST");
     }
 
+
+    // TODO
+    // Senda POST req  á /login með usrname og password,
+    // senda til baka cookie með user ID
+    // Cookie vistað í CookieStorage hjá notenda
+    // GET req send með cookie parameternum, aðrir controllerar tékka hvort
+    // um cookie matchar við einhvern notanda í gagnagrunni (ya?)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
@@ -41,6 +50,7 @@ public class DatabaseRestController {
         System.out.println("THIS IS THE SESSION ID " + session.getId());
         if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
+            // Cookie user2 = new BASE64Decoder();
             Cookie userCookie = new Cookie("user", user.getUserID());
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
