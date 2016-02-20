@@ -8,6 +8,7 @@ import project.persistence.account.Login;
 import project.persistence.account.User;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -67,12 +68,13 @@ public class DatabaseRestController {
     public Echo getCampaigns(@RequestParam("username")) {
 
     }
-
-    @RequestMapping(value = "/characters", method = RequestMethod.GET)
-    public Echo getCharacters(@RequestParam("username")) {
-
-    }
 */
+    @RequestMapping(value = "/characters", method = RequestMethod.GET)
+    public Echo getCharacters(HttpServletRequest req) {
+        String h = req.getHeader("Cookie");
+        return new Echo("Cookie", "Header is", h);
+    }
+
 
 
     @RequestMapping("/skillData")
