@@ -81,7 +81,7 @@ public class DatabaseRestController {
             return mapper.writeValueAsString(chars);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "Error converting to JSON");
+            return "Error converting to JSON";
         }
     }
 
