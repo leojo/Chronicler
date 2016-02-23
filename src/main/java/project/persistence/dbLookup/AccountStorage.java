@@ -115,6 +115,17 @@ public class AccountStorage {
         }
     }
 
+    public String matchUserByCookie(String cookieID) {
+        String query = "SELECT UserID FROM Users WHERE Cookie = \""+cookieID+"\";";
+        OfflineResultSet rs = searchRaw(query);
+        if(rs != null) {
+            rs.first();
+            return rs.getString("UserID");
+        } else {
+            return null;
+        }
+    }
+
     public String searchCharacter(int charID, String userID) {
         OfflineResultSet rs = null;
         String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";

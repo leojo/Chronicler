@@ -71,8 +71,18 @@ public class DatabaseRestController {
 */
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     public Echo getCharacters(HttpServletRequest req) {
-        String h = req.getHeader("Cookie");
-        return new Echo("Cookie", "Header is", h);
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return new Echo("Login Failure", "Please log in");
+
+        HashMap<Integer, String> chars = find.listCharacters(userID);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return new Echo("Characters", mapper.writeValueAsString(chars));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new Echo("Error", "Error converting to JSON");
+        }
     }
 
 
@@ -106,34 +116,9 @@ public class DatabaseRestController {
         }
     }
 
-    //TODO: Possibly move all this to it's own Controller
+    //TODO: Possibly move all this to it's own Controller - Why? Andrea 23.02.16
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
     public String listCampaigns(@RequestParam("username") String username){
-        /*Lookup find = new Lookup();
-        OfflineResultSet rs = find.skillData();
-        HashMap<String, Skill> skillData = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
-        if(rs == null) return "Error fetching data!";
-        rs.beforeFirst();
-        while(rs.next()){
-            String name = rs.getString("name");
-            AbilityID abilityID = AbilityID.fromString(rs.getString("key_ability"));
-            String action = rs.getString("action");
-            String tryAgain = rs.getString("try_again");
-            String special = rs.getString("special");
-            String synergy = rs.getString("synergy");
-            boolean trained = rs.getString("trained").equalsIgnoreCase("yes");
-            boolean armor_check = rs.getString("armor_check").equalsIgnoreCase("yes");
-            String description = rs.getString("skill_check");
-            Skill s = new Skill(name, abilityID, trained, armor_check, description, synergy, action, tryAgain, special);
-            skillData.put(name, s);
-        }
-        try {
-            return mapper.writeValueAsString(skillData);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "Error converting to JSON";
-        }*/
         //TODO: retrieve user data from request JSON
         AccountStorage storage = new AccountStorage();
         String[] campaigns = storage.listPlayerCampaigns(username);
@@ -144,6 +129,20 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }
+    }
+
+    // A function to filter the user cookie ID from a cookie in the cookie header.
+    // Will be used to identify the user when requesting data.
+    public String userIdFromCookie(String cookieHeader) {
+        String[] Cookies = cookieHeader.split(";");
+        String cookieID = null;
+        for(String val : Cookies) {
+            if(val.contains("user")) {
+                cookieID = val.split("=")[1];
+            }
+        }
+        if(cookieID == null) return null;
+        return find.matchUserByCookie(cookieID);
     }
 
     public class Echo{
