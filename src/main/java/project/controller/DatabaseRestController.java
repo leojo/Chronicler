@@ -70,18 +70,18 @@ public class DatabaseRestController {
     }
 */
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
-    public Echo getCharacters(HttpServletRequest req) {
+    public String getCharacters(HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return new Echo("Login Failure", "Please log in");
+        if(userID == null) return "Please log in";
 
         HashMap<Integer, String> chars = find.listCharacters(userID);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return new Echo("Characters", mapper.writeValueAsString(chars));
+            return mapper.writeValueAsString(chars);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return new Echo("Error", "Error converting to JSON");
+            return "Error converting to JSON");
         }
     }
 
