@@ -116,12 +116,12 @@ public class DatabaseRestController {
         }
     }
 
-    //TODO: Possibly move all this to it's own Controller - Why? Andrea 23.02.16
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
-    public String listCampaigns(@RequestParam("username") String username){
+    public String listCampaigns(HttpServletRequest req){
         //TODO: retrieve user data from request JSON
-        AccountStorage storage = new AccountStorage();
-        String[] campaigns = storage.listPlayerCampaigns(username);
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        HashMap<Integer, String> campaigns = find.getCampaigns(userID);
+
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(campaigns);
