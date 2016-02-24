@@ -118,7 +118,6 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
     public String listCampaigns(HttpServletRequest req){
-        //TODO: retrieve user data from request JSON
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         HashMap<Integer, String> campaigns = find.getCampaigns(userID);
 
@@ -129,6 +128,17 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }
+    }
+
+    @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
+    public Echo postCampaign(HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        String campaignName = req.getHeader("CampaignName");
+
+        int res = find.insertCampaign(userID, campaignName);
+
+        return new Echo("Database operation completed with code: "+res);
+
     }
 
     // A function to filter the user cookie ID from a cookie in the cookie header.
