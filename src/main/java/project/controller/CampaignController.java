@@ -30,7 +30,7 @@ public class CampaignController {
 	    }
         model.addAttribute("user", user);
 		System.err.println("Getting campaigns...");
-		HashMap<Integer, String> campaigns = storage.getCampaigns(user.getUserID());
+		HashMap<Integer, String> campaigns = storage.getDMedCampaigns(user.getUserID());
 		if(campaigns == null) return newCampaign(model,session);
 
 	    model.addAttribute("campaignList", campaigns);

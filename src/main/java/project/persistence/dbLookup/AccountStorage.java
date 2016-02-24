@@ -72,9 +72,20 @@ public class AccountStorage {
         return pairs;
     }
 
-    public HashMap<Integer, String> getCampaigns(String user) {
+    public HashMap<Integer, String> getDMedCampaigns(String user) {
         OfflineResultSet rs = null;
         String query = "SELECT campaignID, campaignName FROM Campaigns WHERE ownerID=\""+user+"\"";
+        rs = searchRaw(query);
+        return returnIntegerNames(rs, "campaignID", "campaignName");
+    }
+
+    public HashMap<Integer, String> getPlayerCampaigns(String user) {
+        OfflineResultSet rs = null;
+        //TODO: Insert real user id, this is just to make sure things work
+        String query = "SELECT Campaigns.campaignID, Campaigns.campaignName FROM Campaigns\n" +
+                               "INNER JOIN Characters\n" +
+                               "ON Campaigns.campaignID=Characters.campaignID\n" +
+                               "WHERE Campaigns.ownerID=\"user\"";
         rs = searchRaw(query);
         return returnIntegerNames(rs, "campaignID", "campaignName");
     }
@@ -151,21 +162,6 @@ public class AccountStorage {
         } else {
             return null;
         }
-    }
-
-    public String[] listPlayerCampaigns(String playerID) {
-        OfflineResultSet rs = null;
-        String query = "SELECT campaignName FROM Campaigns WHERE ownerID=\""+playerID+"\"";
-        rs = searchRaw(query);
-        Vector<String> vec = new Vector<>();
-        if(rs != null) {
-            while (rs.next()) {
-                vec.add(rs.getString("campaignName"));
-            }
-        } else {
-            return null;
-        }
-        return Arrays.copyOf(vec.toArray(), vec.size(), String[].class);
     }
 
 

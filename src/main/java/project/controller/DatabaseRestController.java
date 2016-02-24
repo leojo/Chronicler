@@ -18,8 +18,8 @@ import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.Skill;
 import project.persistence.enums.AbilityID;
-import sun.misc.BASE64Decoder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -65,7 +65,7 @@ public class DatabaseRestController {
     }
 /*
     @RequestMapping(value = "/campaigns", method = RequestMethod.GET)
-    public Echo getCampaigns(@RequestParam("username")) {
+    public Echo getDMedCampaigns(@RequestParam("username")) {
 
     }
 */
@@ -119,7 +119,12 @@ public class DatabaseRestController {
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
     public String listCampaigns(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        HashMap<Integer, String> campaigns = find.getCampaigns(userID);
+        HashMap<Integer, String> DMcampaigns = find.getDMedCampaigns(userID);
+        HashMap<Integer, String> PCcampaigns = find.getPlayerCampaigns(userID);
+
+        ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
+        campaigns.add(DMcampaigns);
+        campaigns.add(PCcampaigns);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -138,7 +143,6 @@ public class DatabaseRestController {
         int res = find.insertCampaign(userID, campaignName);
 
         return new Echo("Database operation completed with code: "+res);
-
     }
 
     // A function to filter the user cookie ID from a cookie in the cookie header.
