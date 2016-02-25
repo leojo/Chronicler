@@ -18,6 +18,7 @@ import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.Skill;
 import project.persistence.enums.AbilityID;
+import project.persistence.spell.Spell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,8 +118,21 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/spell", method = RequestMethod.GET)
-    public Echo spell(@RequestParam("s") String searchString){
-        return new Echo("requested spell search for ",searchString);
+    public String spell(@RequestParam("s") String searchString){
+        ArrayList<Spell> spells = new ArrayList<>();
+        Lookup find = new Lookup();
+        OfflineResultSet ors = find.spell(searchString);
+        ors.beforeFirst();
+        while(ors.next()){
+            spells.add(new Spell(ors));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(spells);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
     }
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
