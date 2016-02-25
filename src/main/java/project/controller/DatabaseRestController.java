@@ -122,6 +122,9 @@ public class DatabaseRestController {
         ArrayList<Spell> spells = new ArrayList<>();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.spell(searchString);
+        if(ors == null){
+            return "No spells matched your criteria";
+        }
         ors.beforeFirst();
         while(ors.next()){
             spells.add(new Spell(ors));
@@ -129,6 +132,27 @@ public class DatabaseRestController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(spells);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
+    @RequestMapping(value = "/feat", method = RequestMethod.GET)
+    public String feat(@RequestParam("s") String searchString){
+        ArrayList<Spell> feats = new ArrayList<>();
+        Lookup find = new Lookup();
+        OfflineResultSet ors = find.feat(searchString);
+        if(ors == null){
+            return "No feats matched your criteria";
+        }
+        ors.beforeFirst();
+        while(ors.next()){
+            feats.add(new Spell(ors));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(feats);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";

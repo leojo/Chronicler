@@ -21,7 +21,7 @@ public class FeatList {
         String[] featDescriptors = featString.split(";");
         for(String desc : featDescriptors){
             if(desc.equals(""))continue;
-            feats.add(new FeatSlot(desc));
+            feats.add(new FeatSlot());
         }
     }
 

@@ -307,7 +307,7 @@ public class CharacterSheet {
 			this.bean.setAvailableAbilityPoints(this.bean.getAvailableSkillPoints()+1);
 		}
 		if(this.totalClassLevel%3 == 0 && this.totalClassLevel>0){
-			this.feats.add(new FeatSlot("Any"));
+			this.feats.add(new FeatSlot());
 		}
 		if(this.hitDice == null) this.hitDice = new HashMap<Integer, Integer>();  // Initialize if needed
 		Integer hdType = Integer.parseInt(currentClass.getString("hit_die").substring(1));

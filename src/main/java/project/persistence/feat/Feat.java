@@ -9,33 +9,23 @@ import project.persistence.dbLookup.OfflineResultSet;
  * NOTE: This has yet to be connected to the front end
  */
 public class Feat {
-    private final String id;
+    private String id;
     private String name;
-    private final String type;
-    private final String multiple;
-    private final String stack;
-    private final String choice;
-    private final String prerequisite;
-    private final String benefit;
-    private final String normal;
-    private final String special;
-    private final String fullText;
-    private final String reference;
+    private String type;
+    private String multiple;
+    private String stack;
+    private String choice;
+    private String prerequisite;
+    private String benefit;
+    private String normal;
+    private String special;
+    private String fullText;
+    private String reference;
     private String selectedChoice = "Please select";
 
-    public Feat(String featDetails) {
-        String id = "";
-        if(featDetails.contains(":")){
-            // Loading a feat
-            id = featDetails.split(":")[0];
-            selectedChoice = featDetails.split(":")[1];
-        }else{
-            // creating a new feat
-            id = featDetails;
-        }
-        Lookup find = new Lookup();
-        OfflineResultSet feat = find.feat(id + "/exact");
-        feat.first();
+
+    // This constructor assumes an offline resultset with the pointer on the feat itself.
+    public Feat(OfflineResultSet feat) {
         this.id = feat.getString("id");
         this.name = feat.getString("name");
         this.type = feat.getString("type");
@@ -50,19 +40,20 @@ public class Feat {
         this.reference = feat.getString("reference");
     }
 
-    public Feat(int ID){this(ID+"");}
-
+    //<editor-fold desc="Getters and Setters">
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
-        if(choice.equalsIgnoreCase("none")) return name;
-        return name+" ["+selectedChoice+"]";
+        return name;
     }
 
     public void setName(String name) {
-        if(this.choice.equalsIgnoreCase("none")) return;
         this.name = name;
     }
 
@@ -70,41 +61,90 @@ public class Feat {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getMultiple() {
         return multiple;
+    }
+
+    public void setMultiple(String multiple) {
+        this.multiple = multiple;
     }
 
     public String getStack() {
         return stack;
     }
 
+    public void setStack(String stack) {
+        this.stack = stack;
+    }
+
     public String getChoice() {
         return choice;
+    }
+
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 
     public String getPrerequisite() {
         return prerequisite;
     }
 
+    public void setPrerequisite(String prerequisite) {
+        this.prerequisite = prerequisite;
+    }
+
     public String getBenefit() {
         return benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        this.benefit = benefit;
     }
 
     public String getNormal() {
         return normal;
     }
 
+    public void setNormal(String normal) {
+        this.normal = normal;
+    }
+
     public String getSpecial() {
         return special;
+    }
+
+    public void setSpecial(String special) {
+        this.special = special;
     }
 
     public String getFullText() {
         return fullText;
     }
 
+    public void setFullText(String fullText) {
+        this.fullText = fullText;
+    }
+
     public String getReference() {
         return reference;
     }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getSelectedChoice() {
+        return selectedChoice;
+    }
+
+    public void setSelectedChoice(String selectedChoice) {
+        this.selectedChoice = selectedChoice;
+    }
+    //</editor-fold>
 
     @Override
     public String toString() {
