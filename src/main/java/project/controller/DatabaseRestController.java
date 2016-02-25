@@ -87,7 +87,7 @@ public class DatabaseRestController {
 
 
 
-    @RequestMapping("/skillData")
+    @RequestMapping(value = "/skillData", method = RequestMethod.GET)
     public String skillData(){
         Lookup find = new Lookup();
         OfflineResultSet rs = find.skillData();
@@ -114,6 +114,11 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }
+    }
+
+    @RequestMapping(value = "/spell", method = RequestMethod.GET)
+    public Echo spell(@RequestParam("s") String searchString){
+        return new Echo("requested spell search for ",searchString);
     }
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
