@@ -8,7 +8,7 @@ import project.persistence.enums.SizeCategory;
  *
  * Abstract class for the shared properties of all equippable items.
  */
-abstract class Equipment extends Item{
+public abstract class Equipment extends Item{
     private boolean equipped;
     private boolean masterwork;
     private String slot;

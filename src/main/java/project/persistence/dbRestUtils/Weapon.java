@@ -1,6 +1,5 @@
 package project.persistence.dbRestUtils;
 
-import project.persistence.enums.DamageType;
 import project.persistence.enums.WeaponCategory;
 import project.persistence.enums.WeaponType;
 
@@ -13,7 +12,7 @@ public class Weapon extends Equipment{
 
     private int damageDie, diceCount, critMult, critRange; // critRange = 2 if it's "19-20" i.e. (upper-lower)+1
     private boolean twoHand, oneHand, ranged, thrown, finessable;
-    private DamageType[] damageTypes;
+    private String damageTypes;
     private WeaponCategory wepCategory;
     private WeaponType weaponType;
     private int rangeIncrement;
@@ -99,11 +98,11 @@ public class Weapon extends Equipment{
         this.finessable = finessable;
     }
 
-    public DamageType[] getDamageTypes() {
+    public String getDamageTypes() {
         return damageTypes;
     }
 
-    public void setDamageTypes(DamageType[] damageTypes) {
+    public void setDamageTypes(String damageTypes) {
         this.damageTypes = damageTypes;
     }
 

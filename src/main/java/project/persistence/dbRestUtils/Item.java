@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Abstract class for a single item. Each item should belong to one of the item subcategories,
  * each with it's own class.
  */
-abstract class Item implements Serializable, Comparable {
+public abstract class Item implements Serializable, Comparable {
     private String name = "";
     private String cost;
     private String weight;
