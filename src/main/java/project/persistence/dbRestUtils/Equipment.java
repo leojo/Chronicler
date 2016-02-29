@@ -1,8 +1,5 @@
 package project.persistence.dbRestUtils;
 
-
-import project.persistence.enums.SizeCategory;
-
 /**
  * Created by leo on 23.2.2016.
  *
@@ -29,9 +26,6 @@ public abstract class Equipment extends Item{
         this.masterwork = false;
         this.slot = slot;
     }
-
-    public void equip(){ equipped = true;}
-    public void unequip(){ equipped = false;}
 
     //<editor-fold desc="Getters and Setters">
     public boolean isEquipped() {
