@@ -8,6 +8,15 @@ package project.persistence.dbRestUtils;
 public class MundaneItem extends Item{
     private String description, shortDesc;
 
+    public void makeShortDesc() {
+        if (description.length() > 40){
+            shortDesc = description.substring(0, 37);
+            shortDesc = shortDesc.substring(0,shortDesc.lastIndexOf(" "))+"...";
+        }
+        else
+            shortDesc = description;
+    }
+
     //<editor-fold desc="Getters and Setters">
     public String getDescription() {
         return description;
@@ -15,6 +24,7 @@ public class MundaneItem extends Item{
 
     public void setDescription(String description) {
         this.description = description;
+        makeShortDesc();
     }
 
     public String getShortDesc() {

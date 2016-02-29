@@ -9,7 +9,8 @@ import project.persistence.enums.ArmorType;
  * A single piece of armor or shield.
  */
 public class ArmorShield extends Equipment {
-    private int ACbonus, maxDex, arcaneSpellFailure, armorCheckPen, speed30, speed20;
+    private int ACbonus, maxDex, arcaneSpellFailure, armorCheckPen;
+    private String speed20, speed30;
     private ArmorType type;
 
     //<editor-fold desc="Getters and Setters">
@@ -45,20 +46,20 @@ public class ArmorShield extends Equipment {
         this.armorCheckPen = armorCheckPen;
     }
 
-    public int getSpeed30() {
-        return speed30;
-    }
-
-    public void setSpeed30(int speed30) {
-        this.speed30 = speed30;
-    }
-
-    public int getSpeed20() {
+    public String getSpeed20() {
         return speed20;
     }
 
-    public void setSpeed20(int speed20) {
+    public void setSpeed20(String speed20) {
         this.speed20 = speed20;
+    }
+
+    public String getSpeed30() {
+        return speed30;
+    }
+
+    public void setSpeed30(String speed30) {
+        this.speed30 = speed30;
     }
 
     public ArmorType getType() {

@@ -14,8 +14,8 @@ import java.util.*;
  *
  */
 public class OfflineResultSet {
-    private final List<HashMap<String,Object>> resultSet;
-    private final HashMap<Integer,String> colNum;
+    private List<HashMap<String,Object>> resultSet;
+    private HashMap<Integer,String> colNum;
     private int currentIndex;
 
     public OfflineResultSet(ResultSet rs){
@@ -123,7 +123,7 @@ public class OfflineResultSet {
 
     public Integer getInt(String key){
         try {
-            return Integer.parseInt(getObject(key).toString());
+            return Integer.parseInt(getObject(key).toString().replaceAll("[^\\d.]", ""));
         } catch (NumberFormatException e){
             e.printStackTrace(System.err);
             return null;
@@ -174,5 +174,11 @@ public class OfflineResultSet {
         HashMap<String,Object> row = resultSet.get(currentIndex);
         Object cell = row.get(key);
         return cell;
+    }
+
+    public void append(OfflineResultSet another){
+        if(another == null) return;
+        this.resultSet.addAll(another.resultSet);
+        this.colNum.putAll(another.colNum);
     }
 }

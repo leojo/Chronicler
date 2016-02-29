@@ -141,9 +141,10 @@ public class Lookup {
         if(searchTerm.toLowerCase().endsWith("/exact")) term = searchTerm.replace('*','%').substring(0,searchTerm.lastIndexOf("/"));
         else term = "%"+searchTerm.replace('*','%')+"%"; // % is the SQL wildcard
         int i = 0;
-        while(rs == null && i<field.length) {
+        while(i<field.length) {
             String query = String.format(query_template, term, field[i]);
-            rs = searchRaw(query);
+            if(rs == null) rs = searchRaw(query);
+            else rs.append(searchRaw(query));
             i++;
         }
         return rs;

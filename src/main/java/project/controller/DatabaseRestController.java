@@ -1,25 +1,29 @@
 package project.controller;
 
-import org.springframework.ui.Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import project.persistence.account.Login;
 import project.persistence.account.User;
+import project.persistence.dbLookup.AccountStorage;
+import project.persistence.dbLookup.Lookup;
+import project.persistence.dbLookup.OfflineResultSet;
+import project.persistence.dbRestUtils.*;
+import project.persistence.enums.AbilityID;
+import project.persistence.enums.ArmorType;
+import project.persistence.enums.WeaponCategory;
+import project.persistence.feat.Feat;
+import project.persistence.spell.Spell;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
-
-import project.persistence.dbLookup.AccountStorage;
-import project.persistence.dbLookup.Lookup;
-import project.persistence.dbLookup.OfflineResultSet;
-import project.persistence.dbRestUtils.Skill;
-import project.persistence.enums.AbilityID;
-import project.persistence.spell.Spell;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -140,7 +144,7 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/feat", method = RequestMethod.GET)
     public String feat(@RequestParam("s") String searchString){
-        ArrayList<Spell> feats = new ArrayList<>();
+        ArrayList<Feat> feats = new ArrayList<>();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.feat(searchString);
         if(ors == null){
@@ -148,11 +152,115 @@ public class DatabaseRestController {
         }
         ors.beforeFirst();
         while(ors.next()){
-            feats.add(new Spell(ors));
+            feats.add(new Feat(ors));
         }
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(feats);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
+    @RequestMapping(value = "/item", method = RequestMethod.GET)
+    public String item(@RequestParam("s") String searchString){
+        HashMap<String,ArrayList<Item>> items = new HashMap<>();
+        Lookup find = new Lookup();
+        OfflineResultSet ors = find.mundaneItem(searchString);
+        if(ors == null){
+            return "No items matched your criteria";
+        }
+        ors.beforeFirst();
+        while(ors.next()){
+            Item item;
+            String name, category;
+            name = ors.getString("name");
+            String family = ors.getString("family");
+            if(family.equalsIgnoreCase("weapons")){
+                String subCat = ors.getString("subcategory").toLowerCase();
+                if(subCat.equalsIgnoreCase("ammunition")){
+                    Projectile projectile = new Projectile();
+                    String rawName = ors.getString("name");
+                    name = rawName;
+                    int quantity = 0;
+                    try {
+                        quantity = Integer.parseInt(rawName.replaceAll("[^\\d.]", ""));
+                    } catch (java.lang.NumberFormatException e){
+                        System.err.println("unable to parse a number from string :\""+rawName.replaceAll("[^\\d.]", "")+"\"");
+                    }
+                    projectile.setQuantity(quantity);
+                    category = "projectile";
+                    item = projectile;
+                } else {
+                    Weapon weapon = new Weapon();
+                    boolean twoHand, oneHand, ranged, thrown, light;
+                    twoHand = subCat.startsWith("tw");
+                    oneHand = subCat.startsWith("o");
+                    ranged = subCat.startsWith("r");
+                    thrown = subCat.startsWith("th");
+                    light = subCat.startsWith("l");
+                    weapon.setTwoHand(twoHand);
+                    weapon.setOneHand(oneHand);
+                    weapon.setRanged(ranged);
+                    weapon.setThrown(thrown);
+                    weapon.setLight(light);
+                    weapon.setWepCat(ors.getString("category"));
+                    weapon.setCrit(ors.getString("critical"));
+                    weapon.setDamage(ors.getString("dmg_m"));
+                    weapon.setDamageTypes(ors.getString("type"));
+                    weapon.setRangeIncr(ors.getString("range_increment"));
+
+                    // General Equipment stuff
+                    weapon.setDescription(ors.getString("full_text"));
+
+                    category = "weapon";
+                    item = weapon;
+                }
+            }
+            else if(family.equalsIgnoreCase("armor and shields")){
+                ArmorShield armorShield = new ArmorShield();
+
+                armorShield.setACbonus(ors.getInt("armor_shield_bonus"));
+                armorShield.setMaxDex(ors.getInt("maximum_dex_bonus"));
+                armorShield.setArcaneSpellFailure(ors.getInt("arcane_spell_failure_chance"));
+                armorShield.setArmorCheckPen(ors.getInt("armor_check_penalty"));
+                armorShield.setSpeed30(ors.getString("speed_30"));
+                armorShield.setSpeed20(ors.getString("speed_20"));
+                armorShield.setType(ArmorType.valueOf(ors.getString("subcategory").split(" ")[0]));
+
+                // General Equipment stuff
+                armorShield.setDescription(ors.getString("full_text"));
+
+                category = "armorShield";
+                item = armorShield;
+            }
+            else{
+                MundaneItem mundaneItem = new MundaneItem();
+
+                mundaneItem.setDescription(ors.getString("full_text"));
+
+                category = "mundaneItem";
+                item = mundaneItem;
+            }
+
+            // General Item stuff
+            item.setName(name);
+            item.setCost(ors.getString("cost"));
+            item.setWeight(ors.getString("weight"));
+
+            if(!items.containsKey(category)) items.put(category,new ArrayList<>());
+            items.get(category).add(item);
+        }
+        /*ors = find.specialItem(searchString);
+        ors.beforeFirst();
+        while(ors.next()){
+
+        }*/
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(items);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";
