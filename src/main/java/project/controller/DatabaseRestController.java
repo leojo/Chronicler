@@ -125,9 +125,9 @@ public class DatabaseRestController {
             JSONObject character = new JSONObject(charJSON);
 
             AccountStorage storage = new AccountStorage();
-            storage.addCharacterJSON(userID,charJSON,character.getString("name"));
+            int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
 
-            return "Succesfully added "+character.getString("name");
+            return "Return message from updateRaw is "+res;
         } catch (ParseException e) {
             e.printStackTrace();
             return "Received invalid JSON";
