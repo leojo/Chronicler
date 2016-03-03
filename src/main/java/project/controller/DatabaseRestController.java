@@ -221,10 +221,10 @@ public class DatabaseRestController {
             else if(family.equalsIgnoreCase("armor and shields")){
                 ArmorShield armorShield = new ArmorShield();
 
-                armorShield.setACbonus(ors.getInt("armor_shield_bonus"));
-                armorShield.setMaxDex(ors.getInt("maximum_dex_bonus"));
-                armorShield.setArcaneSpellFailure(ors.getInt("arcane_spell_failure_chance"));
-                armorShield.setArmorCheckPen(ors.getInt("armor_check_penalty"));
+                armorShield.setACbonus(ors.getString("armor_shield_bonus"));
+                armorShield.setMaxDex(ors.getString("maximum_dex_bonus"));
+                armorShield.setArcaneSpellFailure(ors.getString("arcane_spell_failure_chance"));
+                armorShield.setArmorCheckPen(ors.getString("armor_check_penalty"));
                 armorShield.setSpeed30(ors.getString("speed_30"));
                 armorShield.setSpeed20(ors.getString("speed_20"));
                 armorShield.setType(ArmorType.valueOf(ors.getString("subcategory").split(" ")[0]));

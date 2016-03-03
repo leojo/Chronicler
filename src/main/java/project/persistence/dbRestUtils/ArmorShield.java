@@ -9,40 +9,40 @@ import project.persistence.enums.ArmorType;
  * A single piece of armor or shield.
  */
 public class ArmorShield extends Equipment {
-    private int ACbonus, maxDex, arcaneSpellFailure, armorCheckPen;
+    private String ACbonus, maxDex, arcaneSpellFailure, armorCheckPen;
     private String speed20, speed30;
     private ArmorType type;
 
     //<editor-fold desc="Getters and Setters">
-    public int getACbonus() {
+    public String getACbonus() {
         return ACbonus;
     }
 
-    public void setACbonus(int ACbonus) {
+    public void setACbonus(String ACbonus) {
         this.ACbonus = ACbonus;
     }
 
-    public int getMaxDex() {
+    public String getMaxDex() {
         return maxDex;
     }
 
-    public void setMaxDex(int maxDex) {
+    public void setMaxDex(String maxDex) {
         this.maxDex = maxDex;
     }
 
-    public int getArcaneSpellFailure() {
+    public String getArcaneSpellFailure() {
         return arcaneSpellFailure;
     }
 
-    public void setArcaneSpellFailure(int arcaneSpellFailure) {
+    public void setArcaneSpellFailure(String arcaneSpellFailure) {
         this.arcaneSpellFailure = arcaneSpellFailure;
     }
 
-    public int getArmorCheckPen() {
+    public String getArmorCheckPen() {
         return armorCheckPen;
     }
 
-    public void setArmorCheckPen(int armorCheckPen) {
+    public void setArmorCheckPen(String armorCheckPen) {
         this.armorCheckPen = armorCheckPen;
     }
 
