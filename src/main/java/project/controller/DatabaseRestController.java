@@ -2,6 +2,7 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,6 @@ import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.*;
 import project.persistence.enums.AbilityID;
 import project.persistence.enums.ArmorType;
-import project.persistence.enums.WeaponCategory;
 import project.persistence.feat.Feat;
 import project.persistence.spell.Spell;
 
@@ -23,7 +23,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -90,7 +93,45 @@ public class DatabaseRestController {
         }
     }
 
+    @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
+    public String storeChar(HttpServletRequest req){
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
 
+        String charJSON = "";
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = null;
+        try {
+            br = req.getReader();
+            String line = null;
+            while((line = br.readLine()) != null){
+                sb.append(line);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(br != null) try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        charJSON = sb.toString();
+
+        try {
+            JSONObject character = new JSONObject(charJSON);
+
+            AccountStorage storage = new AccountStorage();
+            storage.addCharacterJSON(userID,charJSON,character.getString("name"));
+
+            return "Success";
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "Received invalid JSON";
+        }
+    }
 
     @RequestMapping(value = "/skillData", method = RequestMethod.GET)
     public String skillData(){
@@ -145,6 +186,7 @@ public class DatabaseRestController {
     @RequestMapping(value = "/feat", method = RequestMethod.GET)
     public String feat(@RequestParam("s") String searchString){
         ArrayList<Feat> feats = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.feat(searchString);
         if(ors == null){
@@ -152,9 +194,9 @@ public class DatabaseRestController {
         }
         ors.beforeFirst();
         while(ors.next()){
-            feats.add(new Feat(ors));
+            Feat newFeat = new Feat(ors);
+            feats.add(newFeat);
         }
-        ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(feats);
         } catch (JsonProcessingException e) {
