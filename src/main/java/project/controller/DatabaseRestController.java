@@ -95,8 +95,9 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
     public String storeChar(HttpServletRequest req){
-        String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";
+        /*String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";*/
+        String userID = "andrea";
 
         String charJSON = "";
         StringBuilder sb = new StringBuilder();
@@ -126,7 +127,7 @@ public class DatabaseRestController {
             AccountStorage storage = new AccountStorage();
             storage.addCharacterJSON(userID,charJSON,character.getString("name"));
 
-            return "Success";
+            return "Succesfully added "+character.getString("name");
         } catch (ParseException e) {
             e.printStackTrace();
             return "Received invalid JSON";
