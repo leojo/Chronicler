@@ -93,7 +93,7 @@ public class DatabaseRestController {
         }
     }
 
-    @RequestMapping(value = "/storeChar", method = RequestMethod.GET)
+    @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
     public String storeChar(HttpServletRequest req){
         /*String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";*/
