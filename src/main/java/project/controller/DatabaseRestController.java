@@ -93,7 +93,7 @@ public class DatabaseRestController {
         }
     }
 
-    @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeChar", method = RequestMethod.GET)
     public String storeChar(HttpServletRequest req){
         /*String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";*/
@@ -126,7 +126,7 @@ public class DatabaseRestController {
 
             AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
-
+            System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
             return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON;
         } catch (ParseException e) {
             e.printStackTrace();
