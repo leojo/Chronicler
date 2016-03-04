@@ -124,7 +124,7 @@ public class DatabaseRestController {
         try {
             JSONObject character = new JSONObject(charJSON);
 
-            AccountStorage storage = new AccountStorage();
+            AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
 
             return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON;
