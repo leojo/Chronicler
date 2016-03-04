@@ -1,14 +1,8 @@
 package project.persistence.dbLookup;
 
-import com.sun.istack.internal.Nullable;
-import project.persistence.campaign.Campaign;
-
 import java.sql.*;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.Vector;
 
 
 /**
@@ -152,7 +146,7 @@ public class AccountStorage {
 
 
     public int updateCharacterJSON(String userID, int charID, String json, String charName) {
-        return updateRaw("UPDATE Characters SET characterJSON = '" + json + "', characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";");
+        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json);
     }
     public OfflineResultSet getCampaignPlayers(String campaignID) {
         OfflineResultSet rs = null;
