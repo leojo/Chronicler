@@ -1,13 +1,8 @@
 package project.persistence.dbLookup;
 
-import project.persistence.campaign.Campaign;
-
 import java.sql.*;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.Vector;
 
 
 /**
@@ -151,7 +146,7 @@ public class AccountStorage {
 
 
     public int updateCharacterJSON(String userID, int charID, String json, String charName) {
-        return updateRaw("UPDATE Characters SET characterJSON = '" + json + "', characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";");
+        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json);
     }
     public OfflineResultSet getCampaignPlayers(String campaignID) {
         OfflineResultSet rs = null;
@@ -171,7 +166,7 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(UserID, characterJSON, characterName) VALUES('"+userID+"', '"+json+"', '"+charName+"');");
+        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, '"+charName+"');",json);
 
     }
 
@@ -208,6 +203,24 @@ public class AccountStorage {
             Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
             res = stmt.executeUpdate(query);
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch (Exception e) {
+            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    // General update function
+    public int updateRaw(String query, String JSON){
+        int res = 0;
+        try{
+            Connection c = connect(this.URL);
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1,JSON);
+            res = stmt.executeUpdate();
             stmt.close();
             c.commit();
             c.close();
