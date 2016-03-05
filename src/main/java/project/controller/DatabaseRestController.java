@@ -334,6 +334,8 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         String campaignName = req.getHeader("Campaign Name");
 
+        System.err.println("userID: "+userID+" \ncampaign name: "+campaignName);
+
         int res = find.insertCampaign(userID, campaignName);
 
         return new Echo("Database operation completed with code: "+res);
