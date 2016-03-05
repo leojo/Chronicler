@@ -330,9 +330,8 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
-    public Echo postCampaign(HttpServletRequest req) {
-        String userID = userIdFromCookie(req.getHeader("Cookie"));
-        String campaignName = req.getHeader("Campaign Name");
+    public Echo postCampaign(@RequestParam("campaign_name") String campaignName, Model model, HttpSession session, HttpServletResponse response) {
+        String userID = userIdFromCookie(response.getHeader("Cookie"));
 
         System.err.println("userID: "+userID+" \ncampaign name: "+campaignName);
 
