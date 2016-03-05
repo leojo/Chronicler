@@ -289,7 +289,7 @@ public class DatabaseRestController {
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public Echo postCampaign(HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        String campaignName = req.getHeader("CampaignName");
+        String campaignName = req.getHeader("Campaign Name");
 
         int res = find.insertCampaign(userID, campaignName);
 
