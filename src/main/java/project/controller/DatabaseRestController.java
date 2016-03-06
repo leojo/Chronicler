@@ -331,10 +331,10 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public Echo postCampaign(@RequestParam("campaign_name") String campaignName, Model model, HttpSession session, HttpServletResponse response) {
-        System.err.println(session.toString());
+        System.out.println(session.toString());
         String userID = userIdFromCookie(response.getHeader("Cookie"));
 
-        System.err.println("userID: "+userID+" \ncampaign name: "+campaignName);
+        System.out.println("userID: "+userID+" \ncampaign name: "+campaignName);
 
         int res = find.insertCampaign(userID, campaignName);
 
