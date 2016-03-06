@@ -2,6 +2,8 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -331,10 +333,11 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public Echo postCampaign(@RequestParam("campaign_name") String campaignName, Model model, HttpSession session, HttpServletResponse response) {
-        System.out.println(session.toString());
+        Log log = new SimpleLog("logger");
+        log.info(session.toString());
         String userID = userIdFromCookie(response.getHeader("Cookie"));
 
-        System.out.println("userID: "+userID+" \ncampaign name: "+campaignName);
+        System.out.println("userID: " + userID + " \ncampaign name: " + campaignName);
 
         int res = find.insertCampaign(userID, campaignName);
 
