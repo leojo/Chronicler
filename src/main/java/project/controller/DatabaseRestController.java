@@ -347,9 +347,9 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public String postCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
-        String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";
-
+        //String userID = userIdFromCookie(req.getHeader("Cookie"));
+        //if(userID == null) return "Please log in";
+        String userID = "andrea";
         //Log log = new SimpleLog("logger");
         //log.info(session.toString());
         //String userID = userIdFromCookie(req.getHeader("Cookie"));
