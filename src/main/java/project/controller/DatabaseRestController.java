@@ -163,6 +163,30 @@ public class DatabaseRestController {
         }
     }
 
+    @RequestMapping(value = "/raceList", method = RequestMethod.GET)
+    public String raceList(){
+        Lookup find = new Lookup();
+        ArrayList<String> races = find.listRaces();
+        try {
+            return (new ObjectMapper()).writeValueAsString(races);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = "/classList", method = RequestMethod.GET)
+    public String classList(){
+        Lookup find = new Lookup();
+        ArrayList<String> classes = find.listClasses();
+        try {
+            return (new ObjectMapper()).writeValueAsString(classes);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
     @RequestMapping(value = "/spell", method = RequestMethod.GET)
     public String spell(@RequestParam("s") String searchString){
         ArrayList<Spell> spells = new ArrayList<>();
