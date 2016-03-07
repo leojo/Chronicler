@@ -128,7 +128,7 @@ public class DatabaseRestController {
             AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
-            return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON;
+            return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON.substring(0,100)+"...";
         } catch (ParseException e) {
             e.printStackTrace();
             return "Received invalid JSON";
