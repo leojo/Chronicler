@@ -330,7 +330,7 @@ public class DatabaseRestController {
             return "Error converting to JSON";
         }
     }
-
+/*
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public Echo postCampaign(@RequestParam("campaign_name") String campaignName, Model model, HttpSession session, HttpServletResponse response) {
         Log log = new SimpleLog("logger");
@@ -343,7 +343,23 @@ public class DatabaseRestController {
 
         return new Echo("Database operation completed with code: "+res);
     }
+*/
 
+    @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
+    public String postCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        //Log log = new SimpleLog("logger");
+        //log.info(session.toString());
+        //String userID = userIdFromCookie(req.getHeader("Cookie"));
+
+        //System.out.println("userID: " + userID + " \ncampaign name: " + campaignName);
+
+        int res = find.insertCampaign(userID, campaignName);
+
+        return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
+    }
     // A function to filter the user cookie ID from a cookie in the cookie header.
     // Will be used to identify the user when requesting data.
     public String userIdFromCookie(String cookieHeader) {
