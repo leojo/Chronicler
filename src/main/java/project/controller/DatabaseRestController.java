@@ -97,9 +97,8 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
     public String storeChar(HttpServletRequest req){
-        /*String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";*/
-        String userID = "andrea";
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
 
         String charJSON = "";
         StringBuilder sb = new StringBuilder();
