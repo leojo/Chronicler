@@ -40,14 +40,14 @@ public class DatabaseRestController {
 
     AccountStorage find = new AccountStorage("data/userAccounts.sqlite");
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/login", method = RequestMethod.GET)
     public Echo androidLoginGet(Model model, HttpSession session) {
         // Make sure user is who we think they are, and put character bean in our model.
         User user = (User)session.getAttribute("userId");
         if(user == null) model.addAttribute("user", new User());
         else model.addAttribute("user", user);
         return new Echo("GETREQUEST");
-    }
+    }*/
 
 
     // TODO
@@ -73,12 +73,27 @@ public class DatabaseRestController {
             return new Echo("Failure", username);
         }
     }
-/*
-    @RequestMapping(value = "/campaigns", method = RequestMethod.GET)
-    public Echo getDMedCampaigns(@RequestParam("username")) {
 
+
+    @RequestMapping(value = "/androidRegister", method = RequestMethod.POST)
+    public Echo androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
+        User user = new User(username, password);
+        Login login = new Login();
+        if(find.searchUser(user.getUserID()) == null) {
+            // create the user
+            find.addUser(user.getUserID(),Login.encrypt(user.getPassword()));
+            // get that man a cookie!
+            find.updateUserCookie(user.getUserID());
+            Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
+            userCookie.setMaxAge(60*60);
+            response.addCookie(userCookie);
+            return new Echo("Register", "Successful",username);
+        } else {
+            return new Echo("Register", "Failure", "A user with that name already exists", username);
+        }
     }
-*/
+
+
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     public String getCharacters(HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
