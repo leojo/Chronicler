@@ -175,13 +175,14 @@ public class AccountStorage {
     }
 
     public int inviteToCampaign(String campaign, String user) {
-        String result = searchRaw("SELECT Invites FROM Users WHERE UserID='"+user+"';").getString("Invites");
+        OfflineResultSet result = searchRaw("SELECT Invites FROM Users WHERE UserID='"+user+"';");
+        String resultString = result.getString(0);
         JSONArray invites;
         if (result == null) {
             invites = new JSONArray();
         } else {
             try {
-                invites = new JSONArray(result);
+                invites = new JSONArray(resultString);
             } catch (ParseException e) {
                 e.printStackTrace();
                 return -1;
