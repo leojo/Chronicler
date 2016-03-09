@@ -1,6 +1,9 @@
 package project.persistence.dbLookup;
 
+import org.json.JSONArray;
+
 import java.sql.*;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -95,6 +98,7 @@ public class AccountStorage {
     }
 
 
+
     public OfflineResultSet searchUser(String userID) {
         String query = "SELECT * FROM Users WHERE UserID = \""+userID+"\";";
         return searchRaw(query);
@@ -168,6 +172,25 @@ public class AccountStorage {
     public int addCharacterJSON(String userID, String json, String charName) {
         return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, '"+charName+"');",json);
 
+    }
+
+    public int inviteToCampaign(String campaign, String user) {
+        String result = searchRaw("SELECT Invites FROM Users WHERE UserID="+user+";").getString("Invites");
+        JSONArray invites;
+        if (result == null) {
+            invites = new JSONArray();
+        } else {
+            try {
+                invites = new JSONArray(result);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
+        invites.put(campaign);
+        int res = updateRaw("UPDATE Users SET invites='"+invites.toString()+"' WHERE UserID="+user+";");
+
+        return res;
     }
 
     public int putInCampaign(int charID, int campID) {

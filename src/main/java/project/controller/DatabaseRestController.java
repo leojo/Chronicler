@@ -383,6 +383,19 @@ public class DatabaseRestController {
 
         return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
     }
+
+    @RequestMapping(value = "/inviteToCampaign", method = RequestMethod.POST)
+    public String inviteToCampaign(@RequestParam("Campaign") String campaign, @RequestParam("User") String user, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.inviteToCampaign(campaign, user);
+
+        return  "Return message from updateRaw is "+res + " after inviting "+user+" to campaign "+campaign+"";
+    }
+
+
+
     // A function to filter the user cookie ID from a cookie in the cookie header.
     // Will be used to identify the user when requesting data.
     public String userIdFromCookie(String cookieHeader) {
