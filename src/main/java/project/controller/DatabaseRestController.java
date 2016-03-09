@@ -179,6 +179,7 @@ public class DatabaseRestController {
         }
     }
 
+    // returns a list of all races in the database
     @RequestMapping(value = "/raceList", method = RequestMethod.GET)
     public String raceList(){
         Lookup find = new Lookup();
