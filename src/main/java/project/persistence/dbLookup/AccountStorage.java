@@ -188,7 +188,7 @@ public class AccountStorage {
             }
         }
         invites.put(campaign);
-        int res = updateRaw("UPDATE Users SET invites='"+invites.toString()+"' WHERE UserID="+user+";");
+        int res = updateRaw("UPDATE Users SET invites='"+invites.toString()+"' WHERE UserID='"+user+"';");
 
         return res;
     }
