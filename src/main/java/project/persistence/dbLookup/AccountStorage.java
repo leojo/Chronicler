@@ -174,8 +174,12 @@ public class AccountStorage {
 
     }
 
+    public OfflineResultSet getInviteList(String user) {
+        return searchRaw("SELECT * FROM Users WHERE UserID='" + user + "';");
+    }
+
     public int inviteToCampaign(String campaign, String user) {
-        OfflineResultSet result = searchRaw("SELECT Invites FROM Users WHERE UserID='" + user + "';");
+        OfflineResultSet result = getInviteList(user);
         JSONArray invites;
         if (result == null) {
             return 1;
