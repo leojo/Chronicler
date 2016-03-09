@@ -394,7 +394,7 @@ public class DatabaseRestController {
         return  "Return message from updateRaw is "+res + " after inviting "+user+" to campaign "+campaign+"";
     }
 
-    @RequestMapping(value = "/invites", method = RequestMethod.POST)
+    @RequestMapping(value = "/invites", method = RequestMethod.GET)
     public String listInvites(HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
