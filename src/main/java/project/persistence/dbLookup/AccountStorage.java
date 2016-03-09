@@ -176,6 +176,8 @@ public class AccountStorage {
 
     public int inviteToCampaign(String campaign, String user) {
         OfflineResultSet result = searchRaw("SELECT Invites FROM Users WHERE UserID='"+user+"';");
+        result.printCurrentRowKeys();
+        result.printCurrentRowValues();
         JSONArray invites;
         if (result == null) {
             invites = new JSONArray();
