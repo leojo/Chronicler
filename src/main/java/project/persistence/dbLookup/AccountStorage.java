@@ -183,6 +183,7 @@ public class AccountStorage {
             invites = new JSONArray();
         } else {
             try {
+                result.first();
                 invites = new JSONArray(result.getString("Invites"));
             } catch (ParseException e) {
                 e.printStackTrace();
