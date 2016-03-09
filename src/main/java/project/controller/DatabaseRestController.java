@@ -398,6 +398,45 @@ public class DatabaseRestController {
 
         return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
     }
+
+    @RequestMapping(value = "/inviteToCampaign", method = RequestMethod.POST)
+    public String inviteToCampaign(@RequestParam("Campaign") String campaign, @RequestParam("User") String user, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.inviteToCampaign(campaign, user);
+
+        return  "Return message from updateRaw is "+res + " after inviting "+user+" to campaign "+campaign+"";
+    }
+
+    @RequestMapping(value = "/invites", method = RequestMethod.GET)
+    public String listInvites(HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        OfflineResultSet invites = find.getInviteList(userID);
+        ArrayList<String> inviteList = new ArrayList<>();
+
+        if (invites == null) {
+            return "User not found";
+        } else {
+            invites.first();
+            while (invites.next()) {
+                inviteList.add(invites.getString("Invites"));
+            }
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(inviteList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
+
+
     // A function to filter the user cookie ID from a cookie in the cookie header.
     // Will be used to identify the user when requesting data.
     public String userIdFromCookie(String cookieHeader) {
