@@ -5,9 +5,12 @@ import project.persistence.spell.SpellList;
 import java.sql.*;
 import java.util.ArrayList;
 
-/*
- * Various convenience functions for accessing the content database, i.e.
- * classes, items, races, etc.
+/**
+ * Created by leo on 20.11.2015.
+ *
+ * A class to interface with (a slightly modified (and incomplete) version of) the official DnD 3.5 SRD database.
+ * This class has several functions that are not currently used but may be useful in the future. All function names
+ * should be self-explanatory.
  */
 public class Lookup {
 
