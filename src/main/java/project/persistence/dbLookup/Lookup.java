@@ -16,8 +16,10 @@ public class Lookup {
 
     private String URL;
 
+    // TODO: Maybe this class should be static?
     public Lookup() {this.URL = "data/dnd_srd.db";}
 
+    // Establish a connection to the database:
     private Connection connect(String dbUrl){
         Connection c = null;
         try {
@@ -63,6 +65,7 @@ public class Lookup {
     }
 
     public OfflineResultSet playerClass(String searchTerm){
+        // This is the order in which we want to search through the fields of the classes
         String[] field = {"id","name","full_text"}; // Priority order of search fields
         String query_template = "SELECT * FROM class WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
@@ -129,7 +132,7 @@ public class Lookup {
     }
 
     public OfflineResultSet race(String searchTerm){
-        // This is the order in which we want to search through the fields of the items
+        // This is the order in which we want to search through the fields of the races
         String[] field = {"name","full_text","family","category","cost"};
         String query_template = "SELECT * FROM race WHERE \"%2$s\" LIKE '%1$s';";
         return searchByTemplate(query_template, field, searchTerm);
@@ -137,7 +140,7 @@ public class Lookup {
 
     // Search the database using s query template where %2$s will be replaced with the field and %1$s will
     // be replaced with the search term
-    // if the search term ends with a recognized /[command] it will be implemented, otherwize discarded.
+    // if the search term ends with a recognized /[command] it will be implemented, otherwise discarded.
     private OfflineResultSet searchByTemplate(String query_template, String[] field, String searchTerm){
         OfflineResultSet rs = null;
         String term = "";
