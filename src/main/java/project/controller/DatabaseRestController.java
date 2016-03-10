@@ -40,6 +40,7 @@ public class DatabaseRestController {
 
     AccountStorage find = new AccountStorage("data/userAccounts.sqlite");
 
+
     // DEPRECATED : Should be (safely) removed
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Echo androidLoginGet(Model model, HttpSession session) {
@@ -68,6 +69,25 @@ public class DatabaseRestController {
             return new Echo("Login", "Successful",username);
         } else {
             return new Echo("Failure", username);
+        }
+    }
+
+    // TODO: Finish implementing the register controller
+    @RequestMapping(value = "/androidRegister", method = RequestMethod.POST)
+    public Echo androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
+        User user = new User(username, password);
+        Login login = new Login();
+        if(find.searchUser(user.getUserID()) == null) {
+            // create the user
+            find.addUser(user.getUserID(),Login.encrypt(user.getPassword()));
+            // get that man a cookie!
+            find.updateUserCookie(user.getUserID());
+            Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
+            userCookie.setMaxAge(60*60);
+            response.addCookie(userCookie);
+            return new Echo("Register", "Successful",username);
+        } else {
+            return new Echo("Register", "Failure", "A user with that name already exists", username);
         }
     }
 
@@ -392,6 +412,32 @@ public class DatabaseRestController {
         int res = find.inviteToCampaign(campaign, user);
 
         return  "Return message from updateRaw is "+res + " after inviting "+user+" to campaign "+campaign+"";
+    }
+
+    @RequestMapping(value = "/invites", method = RequestMethod.GET)
+    public String listInvites(HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        OfflineResultSet invites = find.getInviteList(userID);
+        ArrayList<String> inviteList = new ArrayList<>();
+
+        if (invites == null) {
+            return "User not found";
+        } else {
+            invites.first();
+            while (invites.next()) {
+                inviteList.add(invites.getString("Invites"));
+            }
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(inviteList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
     }
 
 

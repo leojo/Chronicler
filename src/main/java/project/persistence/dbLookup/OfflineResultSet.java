@@ -10,7 +10,7 @@ import java.util.*;
  *
  * Java ResultSets are live connections to a database. This was
  * inconvenient for us, so this class mines all the info from a ResultSet
- * and stores it in memory
+ * and stores it in memory since all our results should not be huge!
  *
  */
 public class OfflineResultSet {
