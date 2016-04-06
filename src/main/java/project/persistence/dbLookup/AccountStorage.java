@@ -180,7 +180,7 @@ public class AccountStorage {
     }
 
     public OfflineResultSet getInviteList(String user) {
-        return searchRaw("SELECT * FROM users WHERE UserID='" + user + "';");
+        return searchRaw("SELECT * FROM users;");
     }
 
     public int inviteToCampaign(String campaign, String user) {

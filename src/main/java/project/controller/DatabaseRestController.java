@@ -420,6 +420,7 @@ public class DatabaseRestController {
         if(userID == null) return "Please log in";
 
         OfflineResultSet invites = find.getInviteList(userID);
+
         ArrayList<String> inviteList = new ArrayList<>();
 
         String allInvites = "";
@@ -434,7 +435,7 @@ public class DatabaseRestController {
             }
         }
 
-        return "Response from /invites: "+allInvites;
+        return "Response from /invites of size "+invites.size()+" is "+allInvites;
         /*ObjectMapper mapper = new ObjectMapper();
 
         try {
