@@ -416,7 +416,7 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/invites", method = RequestMethod.GET)
     public String listInvites(HttpServletRequest req) {
-        String userID = "andrea";//userIdFromCookie(req.getHeader("Cookie"));
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
         OfflineResultSet invites = find.getInviteList(userID);
@@ -428,23 +428,20 @@ public class DatabaseRestController {
             return "User not found";
         } else {
             invites.first();
-            String inv = invites.getString("Invites");
+            inviteList.add(invites.getString("Invites"));
             while (invites.next()) {
-                inv = invites.getString("Invites");
-                allInvites += inv;
-                inviteList.add(inv);
+                inviteList.add(invites.getString("Invites"));
             }
         }
 
-        return "Response from /invites of size "+invites.size()+" is "+allInvites;
-        /*ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
             return mapper.writeValueAsString(inviteList);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";
-        }*/
+        }
 
 
     }
