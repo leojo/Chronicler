@@ -428,8 +428,9 @@ public class DatabaseRestController {
             return "User not found";
         } else {
             invites.first();
+            String inv = invites.getString("Invites");
             while (invites.next()) {
-                String inv = invites.getString("Invites");
+                inv = invites.getString("Invites");
                 allInvites += inv;
                 inviteList.add(inv);
             }
