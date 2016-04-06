@@ -423,12 +423,13 @@ public class DatabaseRestController {
 
         ArrayList<String> inviteList = new ArrayList<>();
 
-        String allInvites = "";
+        String firstInvite;
         if (invites == null) {
             return "User not found";
         } else {
             invites.first();
-            inviteList.add(invites.getString("Invites"));
+            firstInvite = invites.getString("Invites");
+            inviteList.add(firstInvite);
             while (invites.next()) {
                 inviteList.add(invites.getString("Invites"));
             }
