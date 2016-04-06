@@ -9,13 +9,18 @@ import java.util.UUID;
 
 
 /**
+ * A class to interact with the sqlite userAccounts database.
+ *
+ * It has functions to execute raw update and search statements,
+ * as well as more specific functions to get a list of user's characters,
+ * campaigns, add a character or campaign, login, set invite, etc.
+ *
+ * None of these functions need much explaining, their names should be enough.
+ *
  * Created by andrea on 28.10.2015.
  */
 public class AccountStorage {
-    /*
-     * This class has utility functions used to access the account database,
-     * e.g. to load character sheets or campaigns owned by each user
-     */
+
 
     private final String URL;
 

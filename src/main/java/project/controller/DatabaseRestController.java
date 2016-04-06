@@ -40,6 +40,8 @@ public class DatabaseRestController {
 
     AccountStorage find = new AccountStorage("data/userAccounts.sqlite");
 
+
+    // DEPRECATED : Should be (safely) removed
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public Echo androidLoginGet(Model model, HttpSession session) {
         // Make sure user is who we think they are, and put character bean in our model.
@@ -50,12 +52,7 @@ public class DatabaseRestController {
     }
 
 
-    // TODO
-    // Senda POST req  á /login með usrname og password,
-    // senda til baka cookie með user ID
-    // Cookie vistað í CookieStorage hjá notenda
-    // GET req send með cookie parameternum, aðrir controllerar tékka hvort
-    // um cookie matchar við einhvern notanda í gagnagrunni (ya?)
+    // Login post request, sends username and password -> Should hash password before sending over http.
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
@@ -66,6 +63,7 @@ public class DatabaseRestController {
             // If the database doesn't hold any cookie, update it:
             if(find.getUserCookie(user.getUserID()) == null) find.updateUserCookie(user.getUserID());
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
+            // We might want to make the cookie live longer?
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
             return new Echo("Login", "Successful",username);
@@ -73,12 +71,29 @@ public class DatabaseRestController {
             return new Echo("Failure", username);
         }
     }
-/*
-    @RequestMapping(value = "/campaigns", method = RequestMethod.GET)
-    public Echo getDMedCampaigns(@RequestParam("username")) {
 
+    // TODO: Finish implementing the register controller
+    @RequestMapping(value = "/androidRegister", method = RequestMethod.POST)
+    public Echo androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
+        User user = new User(username, password);
+        Login login = new Login();
+        if(find.searchUser(user.getUserID()) == null) {
+            // create the user
+            find.addUser(user.getUserID(),Login.encrypt(user.getPassword()));
+            // get that man a cookie!
+            find.updateUserCookie(user.getUserID());
+            Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
+            userCookie.setMaxAge(60*60);
+            response.addCookie(userCookie);
+            return new Echo("Register", "Successful",username);
+        } else {
+            return new Echo("Register", "Failure", "A user with that name already exists", username);
+        }
     }
-*/
+
+    // Gets the list of characters for the user whose cookie was sent with the request
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
     @RequestMapping(value = "/characters", method = RequestMethod.GET)
     public String getCharacters(HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
@@ -95,11 +110,19 @@ public class DatabaseRestController {
         }
     }
 
+    // Stores the character JSON sent with the request in the AccountStorage database, characters table,
+    // so the character will have its' name and owner listed as well as the JSON string that
+    // describes all aspects of the character. This JSON can be used by the android app to create a
+    // character sheet for this character.
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
     public String storeChar(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
+        // A string builder and buffered reader is needed to read the
+        // long input stream from the request and make a JSON string from it.
         String charJSON = "";
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
@@ -121,11 +144,12 @@ public class DatabaseRestController {
         }
 
         charJSON = sb.toString();
-
         try {
+            // We can now convert the string to JSONObject and use it to get the character's name
             JSONObject character = new JSONObject(charJSON);
 
             AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
+            // Store the character information in the database:
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
             return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON.substring(0,100)+"...";
@@ -135,6 +159,7 @@ public class DatabaseRestController {
         }
     }
 
+    // A Controller to request a table of all skills (their names, descriptions, etc)
     @RequestMapping(value = "/skillData", method = RequestMethod.GET)
     public String skillData(){
         Lookup find = new Lookup();
@@ -164,6 +189,8 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get a list of all available races. At the moment, there are only
+    // 3 available races but we can hopefully add more to the database later on.
     @RequestMapping(value = "/raceList", method = RequestMethod.GET)
     public String raceList(){
         Lookup find = new Lookup();
@@ -176,6 +203,7 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get the list of available classes.
     @RequestMapping(value = "/classList", method = RequestMethod.GET)
     public String classList(){
         Lookup find = new Lookup();
@@ -188,6 +216,7 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get a specific spell, searched by searchString s .
     @RequestMapping(value = "/spell", method = RequestMethod.GET)
     public String spell(@RequestParam("s") String searchString){
         ArrayList<Spell> spells = new ArrayList<>();
@@ -209,6 +238,7 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get a specific feat, searched by searchString s
     @RequestMapping(value = "/feat", method = RequestMethod.GET)
     public String feat(@RequestParam("s") String searchString){
         ArrayList<Feat> feats = new ArrayList<>();
@@ -231,6 +261,7 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get a specific item, searched by searchString s
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     public String item(@RequestParam("s") String searchString){
         HashMap<String,ArrayList<Item>> items = new HashMap<>();
@@ -245,8 +276,10 @@ public class DatabaseRestController {
             String name, category;
             name = ors.getString("name");
             String family = ors.getString("family");
+            // Categorize items to : weapons, armor/shields and mundane items
             if(family.equalsIgnoreCase("weapons")){
                 String subCat = ors.getString("subcategory").toLowerCase();
+                // Categorize weapon items by their type: ammunition or regular weapon.
                 if(subCat.equalsIgnoreCase("ammunition")){
                     Projectile projectile = new Projectile();
                     String rawName = ors.getString("name");
@@ -320,6 +353,8 @@ public class DatabaseRestController {
             if(!items.containsKey(category)) items.put(category,new ArrayList<>());
             items.get(category).add(item);
         }
+
+        // TODO: implement this
         /*ors = find.specialItem(searchString);
         ors.beforeFirst();
         while(ors.next()){
@@ -335,6 +370,9 @@ public class DatabaseRestController {
         }
     }
 
+    // Gets a list of all campaigns for a user.
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
     @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
     public String listCampaigns(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
@@ -354,19 +392,15 @@ public class DatabaseRestController {
         }
     }
 
+    // For adding a campaign with name campaignName for the user with the matching cookie.
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public String postCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        //Log log = new SimpleLog("logger");
-        //log.info(session.toString());
-        //String userID = userIdFromCookie(req.getHeader("Cookie"));
-
-        //System.out.println("userID: " + userID + " \ncampaign name: " + campaignName);
-
         int res = find.insertCampaign(userID, campaignName);
-
         return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
     }
 
@@ -422,6 +456,7 @@ public class DatabaseRestController {
         return find.matchUserByCookie(cookieID);
     }
 
+    // Generic object to 'echo' out as JSON, just for testing purposes
     public class Echo{
         public String[] input;
         public Echo(String... strings){
