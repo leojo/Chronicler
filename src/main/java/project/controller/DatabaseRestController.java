@@ -353,20 +353,6 @@ public class DatabaseRestController {
             return "Error converting to JSON";
         }
     }
-/*
-    @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
-    public Echo postCampaign(@RequestParam("campaign_name") String campaignName, Model model, HttpSession session, HttpServletResponse response) {
-        Log log = new SimpleLog("logger");
-        log.info(session.toString());
-        String userID = userIdFromCookie(response.getHeader("Cookie"));
-
-        System.out.println("userID: " + userID + " \ncampaign name: " + campaignName);
-
-        int res = find.insertCampaign(userID, campaignName);
-
-        return new Echo("Database operation completed with code: "+res);
-    }
-*/
 
     @RequestMapping(value = "/campaignData", method = RequestMethod.POST)
     public String postCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
