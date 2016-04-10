@@ -187,7 +187,7 @@ public class AccountStorage {
         OfflineResultSet result = getInviteList(user);
         JSONArray invites;
         if (result == null) {
-            return 1;
+            return -1;
         } else {
             try {
                 result.first();
@@ -207,6 +207,7 @@ public class AccountStorage {
 
         return res;
     }
+
 
     public int putInCampaign(int charID, int campID) {
         return updateRaw("UPDATE Characters SET campaignID='"+campID+"' WHERE characterID='"+charID+"';");
@@ -267,6 +268,15 @@ public class AccountStorage {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static void main(String[] args) {
+        AccountStorage find = new AccountStorage();
+        int inv_res = find.inviteToCampaign("fdas", "andrea");
+        System.out.println("Invite completed with result code: "+inv_res);
+        OfflineResultSet rs = find.getInviteList("andrea");
+        rs.first();
+        System.out.println(rs.getString("Invites"));
     }
 
 }
