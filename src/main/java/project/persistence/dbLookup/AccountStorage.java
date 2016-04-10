@@ -88,7 +88,7 @@ public class AccountStorage {
         String query = "SELECT Campaigns.campaignID, Campaigns.campaignName FROM Campaigns\n" +
                                "INNER JOIN Characters\n" +
                                "ON Campaigns.campaignID=Characters.campaignID\n" +
-                               "WHERE Campaigns.ownerID=\"user\"";
+                               "WHERE Campaigns.ownerID=\""+user+"\"";
         rs = searchRaw(query);
         return returnIntegerNames(rs, "campaignID", "campaignName");
     }
