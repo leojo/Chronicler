@@ -171,7 +171,8 @@ public class AccountStorage {
 
 
     public int insertCampaign(String user, String campaignName) {
-        return updateRaw("INSERT INTO Campaigns (campaignName,ownerID) VALUES ('"+campaignName+"','"+user+"');");
+        Integer uuid = UUID.randomUUID().hashCode();
+        return updateRaw("INSERT INTO Campaigns (campaignName,campaignID,ownerID) VALUES ('"+campaignName+"','"+uuid+"','"+user+"');");
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
