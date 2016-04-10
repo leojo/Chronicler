@@ -404,6 +404,25 @@ public class DatabaseRestController {
         return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
     }
 
+    @RequestMapping(value = "/respondToInvite", method = RequestMethod.POST)
+    public String respondToInvite(@RequestParam("CampaignIndex") Integer index,
+                                  @RequestParam(value = "Character", required = false) String character,
+                                  @RequestParam("User") String user,
+                                  HttpServletRequest req) {
+        // If no character is specified, reject invite
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res;
+        if(character == null) {
+            res = find.removeInvite(userID, index);
+        } else {
+            res = find.acceptInvite(userID, character, index);
+        }
+
+        return  "Return message from updateRaw is "+res + " after responding to invite number "+index;
+    }
+
     @RequestMapping(value = "/inviteToCampaign", method = RequestMethod.POST)
     public String inviteToCampaign(@RequestParam("Campaign") String campaign, @RequestParam("User") String user, HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
