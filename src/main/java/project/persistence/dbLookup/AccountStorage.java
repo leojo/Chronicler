@@ -209,6 +209,70 @@ public class AccountStorage {
         return res;
     }
 
+    public int acceptInvite(String user, String character, int index) {
+        OfflineResultSet result = getInviteList(user);
+        JSONArray invites;
+        if (result == null) {
+            return -1;
+        } else {
+            try {
+                result.first();
+                String resultJSON = result.getString("Invites");
+                if (resultJSON == null) {
+                   invites = new JSONArray();
+                } else {
+                    invites = new JSONArray(resultJSON);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
+        String campaignName = invites.getString(index);
+        int campaignID = getCampaignID(campaignName);
+        removeInvite(user, index);
+        return insertIntoCampaign(character, campaignID);
+    }
+
+    public int insertIntoCampaign(String character, int campaignID) {
+        return updateRaw("UPDATE Characters SET campaignID='"+campaignID+"' WHERE characterName='"+character+"';");
+    }
+
+    public int getCampaignID(String name) {
+        OfflineResultSet rs = searchRaw("SELECT campaignID FROM Campaigns WHERE campaignName='"+name+"';");
+        if (rs == null) return -1;
+        rs.first();
+        return rs.getInt("campaignID");
+    }
+
+    public int removeInvite(String user, int index) {
+        OfflineResultSet result = getInviteList(user);
+        JSONArray invites;
+        if (result == null) {
+            return -1;
+        } else {
+            try {
+                result.first();
+                String resultJSON = result.getString("Invites");
+                if (resultJSON == null) {
+                   invites = new JSONArray();
+                } else {
+                    invites = new JSONArray(resultJSON);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
+        JSONArray newInvList = new JSONArray();
+        for (int i=0; i<invites.length(); i++) {
+            if (i != index) newInvList.put(invites.getString(i));
+        }
+        int res = updateRaw("UPDATE Users SET invites='"+newInvList.toString()+"' WHERE UserID='"+user+"';");
+
+        return res;
+    }
+
 
     public int putInCampaign(int charID, int campID) {
         return updateRaw("UPDATE Characters SET campaignID='"+campID+"' WHERE characterID='"+charID+"';");
@@ -273,8 +337,10 @@ public class AccountStorage {
 
     public static void main(String[] args) {
         AccountStorage find = new AccountStorage();
-        int inv_res = find.inviteToCampaign("fdas", "andrea");
-        System.out.println("Invite completed with result code: "+inv_res);
+        //find.inviteToCampaign("Minnie", "andrea");
+        int inv_res = find.acceptInvite("andrea", "sdfs", 0);
+        System.out.println("Accept completed with result code: "+inv_res);
+        find.removeInvite("andrea", 0);
         OfflineResultSet rs = find.getInviteList("andrea");
         rs.first();
         System.out.println(rs.getString("Invites"));
