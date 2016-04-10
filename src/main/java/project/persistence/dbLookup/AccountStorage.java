@@ -84,10 +84,9 @@ public class AccountStorage {
 
     public HashMap<Integer, String> getPlayerCampaigns(String user) {
         OfflineResultSet rs = null;
-        //TODO: Insert real user id, this is just to make sure things work
-        String query = "SELECT Campaigns.campaignID, Campaigns.campaignName FROM Campaigns\n" +
-                               "INNER JOIN Characters\n" +
-                               "ON Campaigns.campaignID=Characters.campaignID\n" +
+        String query = "SELECT Campaigns.campaignID, Campaigns.campaignName FROM Campaigns " +
+                               "INNER JOIN Characters " +
+                               "ON Campaigns.campaignID=Characters.campaignID " +
                                "WHERE Campaigns.ownerID=\""+user+"\"";
         rs = searchRaw(query);
         return returnIntegerNames(rs, "campaignID", "campaignName");
