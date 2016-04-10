@@ -407,7 +407,6 @@ public class DatabaseRestController {
     @RequestMapping(value = "/respondToInvite", method = RequestMethod.POST)
     public String respondToInvite(@RequestParam("CampaignIndex") Integer index,
                                   @RequestParam(value = "Character", required = false) String character,
-                                  @RequestParam("User") String user,
                                   HttpServletRequest req) {
         // If no character is specified, reject invite
         String userID = userIdFromCookie(req.getHeader("Cookie"));
