@@ -118,7 +118,7 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        String charJSON = find.searchCharacter(charID,userID);
+        String charJSON = find.searchCharacter(charID, userID);
 
         return charJSON;
     }
@@ -411,9 +411,9 @@ public class DatabaseRestController {
     // Will only respond to a request with a cookie that matches a cookie for some user
     // in the database.
     @RequestMapping(value = "/campaignDetails", method = RequestMethod.GET)
-    public String getCampaignDetails(HttpServletRequest req){
+    public String getCampaignDetails(@RequestParam("campaign_name") String campaignName, HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        HashMap<Integer, String> characters = find.getPlayerCampaigns(userID);
+        HashMap<Integer, String> characters = find.getCampaignPlayers(campaignName);
         if (characters == null) {
             characters = new HashMap<>();
         }

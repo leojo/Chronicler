@@ -156,8 +156,10 @@ public class AccountStorage {
     public int updateCharacterJSON(String userID, int charID, String json, String charName) {
         return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json);
     }
-    public HashMap<Integer, String> getCampaignPlayers(String campaignID) {
+
+    public HashMap<Integer, String> getCampaignPlayers(String campaignName) {
         OfflineResultSet rs = null;
+        int campaignID = getCampaignID(campaignName);
         String query = "SELECT * FROM Characters WHERE campaignID=\""+campaignID+"\"";
         rs = searchRaw(query);
         return returnIntegerNames(rs, "characterID", "characterName");
