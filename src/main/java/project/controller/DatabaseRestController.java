@@ -79,7 +79,7 @@ public class DatabaseRestController {
         Login login = new Login();
         if(find.searchUser(user.getUserID()) == null) {
             // create the user
-            find.addUser(user.getUserID(),Login.encrypt(user.getPassword()));
+            find.addUser(user.getUserID(), Login.encrypt(user.getPassword()));
             // get that man a cookie!
             find.updateUserCookie(user.getUserID());
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
@@ -108,6 +108,19 @@ public class DatabaseRestController {
             e.printStackTrace();
             return "Error converting to JSON";
         }
+    }
+
+    // Gets the list of characters for the user whose cookie was sent with the request
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
+    @RequestMapping(value = "/getCharacterJSON", method = RequestMethod.GET)
+    public String getCharacter(HttpServletRequest req, @RequestParam("id") int charID) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        String charJSON = find.searchCharacter(charID,userID);
+
+        return charJSON;
     }
 
     // Stores the character JSON sent with the request in the AccountStorage database, characters table,

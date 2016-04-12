@@ -66,7 +66,7 @@ public class AccountStorage {
 
     private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs, String intName, String stringName){
         if(rs == null) return null;
-        HashMap<Integer, String> pairs = new HashMap<Integer, String>();
+        HashMap<Integer, String> pairs = new HashMap<>();
         while(rs.next()){
             String name = rs.getString(stringName);
             Integer id = rs.getInt(intName);
