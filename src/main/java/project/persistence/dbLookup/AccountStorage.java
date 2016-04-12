@@ -67,11 +67,12 @@ public class AccountStorage {
     private HashMap<Integer, String> returnIntegerNames(OfflineResultSet rs, String intName, String stringName){
         if(rs == null) return null;
         HashMap<Integer, String> pairs = new HashMap<>();
-        while(rs.next()){
+        rs.first();
+        do {
             String name = rs.getString(stringName);
             Integer id = rs.getInt(intName);
             pairs.put(id,name);
-        }
+        } while(rs.next());
         return pairs;
     }
 
@@ -334,13 +335,7 @@ public class AccountStorage {
 
     public static void main(String[] args) {
         AccountStorage find = new AccountStorage();
-        //find.inviteToCampaign("Minnie", "andrea");
-        int inv_res = find.acceptInvite("andrea", "sdfs", 0);
-        System.out.println("Accept completed with result code: "+inv_res);
-        find.removeInvite("andrea", 0);
-        OfflineResultSet rs = find.getInviteList("andrea");
-        rs.first();
-        System.out.println(rs.getString("Invites"));
+        System.out.println(find.getCampaignPlayers("Lord of the Rings"));
     }
 
 }
