@@ -410,8 +410,8 @@ public class DatabaseRestController {
     // Gets a list of all campaigns for a user.
     // Will only respond to a request with a cookie that matches a cookie for some user
     // in the database.
-    @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
-    public String getCharactersInCampaign(HttpServletRequest req){
+    @RequestMapping(value = "/campaignDetails", method = RequestMethod.GET)
+    public String getCampaignDetails(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         HashMap<Integer, String> characters = find.getPlayerCampaigns(userID);
         if (characters == null) {
