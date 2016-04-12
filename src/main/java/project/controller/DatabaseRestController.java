@@ -391,10 +391,35 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         HashMap<Integer, String> DMcampaigns = find.getDMedCampaigns(userID);
         HashMap<Integer, String> PCcampaigns = find.getPlayerCampaigns(userID);
+        if (DMcampaigns == null) DMcampaigns = new HashMap<>();
+        if (PCcampaigns == null) PCcampaigns = new HashMap<>();
 
         ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
         campaigns.add(DMcampaigns);
         campaigns.add(PCcampaigns);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(campaigns);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
+    // Gets a list of all campaigns for a user.
+    // Will only respond to a request with a cookie that matches a cookie for some user
+    // in the database.
+    @RequestMapping(value = "/campaignData", method = RequestMethod.GET)
+    public String getCharactersInCampaign(HttpServletRequest req){
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        HashMap<Integer, String> characters = find.getPlayerCampaigns(userID);
+        if (characters == null) {
+            characters = new HashMap<>();
+        }
+
+        ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
+        campaigns.add(characters);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
