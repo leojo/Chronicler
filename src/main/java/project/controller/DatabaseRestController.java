@@ -277,7 +277,7 @@ public class DatabaseRestController {
     // A controller to get a specific item, searched by searchString s
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     public String item(@RequestParam("s") String searchString){
-        HashMap<String,ArrayList<Item>> items = new HashMap<>();
+        ArrayList<Item> items = new ArrayList<>();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.mundaneItem(searchString);
         if(ors == null){
@@ -341,7 +341,7 @@ public class DatabaseRestController {
                 armorShield.setArmorCheckPen(ors.getString("armor_check_penalty"));
                 armorShield.setSpeed30(ors.getString("speed_30"));
                 armorShield.setSpeed20(ors.getString("speed_20"));
-                armorShield.setType(ArmorType.valueOf(ors.getString("subcategory").split(" ")[0]));
+                armorShield.setType(ors.getString("subcategory").split(" ")[0]);
 
                 // General Equipment stuff
                 armorShield.setDescription(ors.getString("full_text"));
@@ -363,8 +363,7 @@ public class DatabaseRestController {
             item.setCost(ors.getString("cost"));
             item.setWeight(ors.getString("weight"));
 
-            if(!items.containsKey(category)) items.put(category,new ArrayList<>());
-            items.get(category).add(item);
+            items.add(item);
         }
 
         // TODO: implement this

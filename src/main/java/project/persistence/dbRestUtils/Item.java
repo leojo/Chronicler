@@ -1,5 +1,11 @@
 package project.persistence.dbRestUtils;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +14,14 @@ import java.io.Serializable;
  * Abstract class for a single item. Each item should belong to one of the item subcategories,
  * each with it's own class.
  */
-public abstract class Item implements Serializable, Comparable {
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @Type(value = Equipment.class),
+        @Type(value = MundaneItem.class),
+        @Type(value = Projectile.class),
+        @Type(value = Reagent.class)
+})
+public abstract class Item  extends SheetObject implements Serializable, Comparable {
     private String name = "";
     private String cost;
     private String weight;

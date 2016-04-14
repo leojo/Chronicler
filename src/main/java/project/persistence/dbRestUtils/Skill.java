@@ -1,11 +1,8 @@
 package project.persistence.dbRestUtils;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import project.persistence.enums.AbilityID;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

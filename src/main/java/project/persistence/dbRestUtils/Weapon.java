@@ -5,7 +5,7 @@ package project.persistence.dbRestUtils;
  *
  * A weapon
  */
-public class Weapon extends Equipment{
+public class Weapon extends Equipment {
 
     private boolean twoHand, oneHand, ranged, thrown, light;
     private String damageTypes, damage, crit, wepCat, type, rangeIncr;
@@ -108,4 +108,3 @@ public class Weapon extends Equipment{
 
     //</editor-fold>
 }
-
