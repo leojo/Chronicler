@@ -279,9 +279,10 @@ public class AccountStorage {
     }
 
     public JSONArray getPublicNotes(int campID) {
-        OfflineResultSet rs = searchRaw("SELECT publicNotes FROM Campaigns WHERE campID=\""+campID+"\";");
+        OfflineResultSet rs = searchRaw("SELECT publicNotes FROM Campaigns WHERE campaignID=\""+campID+"\";");
 
         try {
+            rs.first();
             return new JSONArray(rs.getString("publicNotes"));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -301,10 +302,26 @@ public class AccountStorage {
         return res;
     }
 
+    public int removePublicNote(int index, int campID) {
+        JSONArray notesJSON = getPublicNotes(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET publicNotes='"+newNotes+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
     public JSONArray getPrivateNotes(int campID) {
-        OfflineResultSet rs = searchRaw("SELECT privateNotes FROM Campaigns WHERE campID=\""+campID+"\";");
+        OfflineResultSet rs = searchRaw("SELECT privateNotes FROM Campaigns WHERE campaignID=\""+campID+"\";");
 
         try {
+            rs.first();
             return new JSONArray(rs.getString("privateNotes"));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -324,11 +341,27 @@ public class AccountStorage {
         return res;
     }
 
+    public int removePrivateNote(int index, int campID) {
+        JSONArray notesJSON = getPrivateNotes(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET privateNotes='"+newNotes+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
     public JSONArray getJournalEntries(int campID) {
-        OfflineResultSet rs = searchRaw("SELECT privateNotes FROM Campaigns WHERE campID=\""+campID+"\";");
+        OfflineResultSet rs = searchRaw("SELECT journalEntries FROM Campaigns WHERE campaignID=\""+campID+"\";");
 
         try {
-            return new JSONArray(rs.getString("privateNotes"));
+            rs.first();
+            return new JSONArray(rs.getString("journalEntries"));
         } catch (ParseException e) {
             e.printStackTrace();
             return new JSONArray();
@@ -342,7 +375,22 @@ public class AccountStorage {
         JSONArray result = getJournalEntries(campID);
         result.put(note);
 
-        int res = updateRaw("UPDATE Campaigns SET privateNotes='"+result+"' WHERE campaignID='"+campID+"';");
+        int res = updateRaw("UPDATE Campaigns SET journalEntries='"+result+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public int removeJournalEntry(int index, int campID) {
+        JSONArray notesJSON = getJournalEntries(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET journalEntries='"+newNotes+"' WHERE campaignID='"+campID+"';");
 
         return res;
     }
@@ -406,8 +454,9 @@ public class AccountStorage {
 
     public static void main(String[] args) {
         AccountStorage find = new AccountStorage();
-        find.addPrivateNote("This is a new note", 7);
-        System.out.println(find.getPrivateNotes(7));
+        System.out.println(find.getJournalEntries(7));
+        find.removeJournalEntry(0, 7);
+        System.out.println(find.getJournalEntries(7));
     }
 
 }
