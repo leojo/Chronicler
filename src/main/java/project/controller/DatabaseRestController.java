@@ -2,8 +2,6 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.SimpleLog;
 import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,6 @@ import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.*;
 import project.persistence.enums.AbilityID;
-import project.persistence.enums.ArmorType;
 import project.persistence.feat.Feat;
 import project.persistence.spell.Spell;
 
@@ -286,7 +283,7 @@ public class DatabaseRestController {
         ors.beforeFirst();
         while(ors.next()){
             Item item;
-            String name, category;
+            String name;
             name = ors.getString("name");
             String family = ors.getString("family");
             // Categorize items to : weapons, armor/shields and mundane items
@@ -304,7 +301,6 @@ public class DatabaseRestController {
                         System.err.println("unable to parse a number from string :\""+rawName.replaceAll("[^\\d.]", "")+"\"");
                     }
                     projectile.setQuantity(quantity);
-                    category = "projectile";
                     item = projectile;
                 } else {
                     Weapon weapon = new Weapon();
@@ -328,7 +324,6 @@ public class DatabaseRestController {
                     // General Equipment stuff
                     weapon.setDescription(ors.getString("full_text"));
 
-                    category = "weapon";
                     item = weapon;
                 }
             }
@@ -346,7 +341,6 @@ public class DatabaseRestController {
                 // General Equipment stuff
                 armorShield.setDescription(ors.getString("full_text"));
 
-                category = "armorShield";
                 item = armorShield;
             }
             else{
@@ -354,7 +348,6 @@ public class DatabaseRestController {
 
                 mundaneItem.setDescription(ors.getString("full_text"));
 
-                category = "mundaneItem";
                 item = mundaneItem;
             }
 
