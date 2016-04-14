@@ -410,11 +410,11 @@ public class DatabaseRestController {
             characters = new HashMap<>();
         }
 
-        ArrayList<Object> campaignInfo = new ArrayList<>();
-        campaignInfo.add(characters);
-        campaignInfo.add(find.getPublicNotes(find.getCampaignID(campaignName)));
-        campaignInfo.add(find.getPrivateNotes(find.getCampaignID(campaignName)));
-        campaignInfo.add(find.getJournalEntries(find.getCampaignID(campaignName)));
+        HashMap<String, Object> campaignInfo = new HashMap<>();
+        campaignInfo.put("Players", characters);
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)));
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)));
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)));
 
         ObjectMapper mapper = new ObjectMapper();
         try {
