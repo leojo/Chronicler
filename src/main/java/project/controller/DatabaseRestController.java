@@ -277,7 +277,7 @@ public class DatabaseRestController {
     // A controller to get a specific item, searched by searchString s
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     public String item(@RequestParam("s") String searchString){
-        HashMap<String,ArrayList<Item>> items = new HashMap<>();
+        ArrayList<Item> items = new ArrayList<>();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.mundaneItem(searchString);
         if(ors == null){
@@ -362,9 +362,7 @@ public class DatabaseRestController {
             item.setName(name);
             item.setCost(ors.getString("cost"));
             item.setWeight(ors.getString("weight"));
-
-            if(!items.containsKey(category)) items.put(category,new ArrayList<>());
-            items.get(category).add(item);
+            items.add(item);
         }
 
         // TODO: implement this

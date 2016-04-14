@@ -1,51 +1,32 @@
 package project.persistence.item;
 
-import project.persistence.dbLookup.Lookup;
-import project.persistence.dbLookup.OfflineResultSet;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+import java.io.Serializable;
 
 /**
  * Created by leo on 28.11.2015.
  *
- * A single item
+ * Abstract class for a single item. Each item should belong to one of the item subcategories,
+ * each with it's own class.
  */
-public class Item {
-    private final String id;
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @Type(value = Equipment.class),
+        @Type(value = MundaneItem.class),
+        @Type(value = Projectile.class),
+        @Type(value = Reagent.class)
+})
+public abstract class Item  extends SheetObject implements Serializable, Comparable {
     private String name = "";
-    private final String category;
-    private final String subcategory;
-    private final String cost;
-    private final String weight;
-    private final String fullText;
-    private final String reference;
-    private final boolean special;
-    private boolean equipped = false;
+    private String cost;
+    private String weight;
 
-    public Item(String desc, boolean special){
-        this.special = special;
-        String[] info = desc.split(":");
-        String id = info[0];
-
-        Lookup find = new Lookup();
-        OfflineResultSet item;
-
-        if(special) item = find.specialItem(id + "/exact");
-        else item = find.mundaneItem(id + "/exact");
-
-        item.first();
-        this.id = item.getString("id");
-        this.name = item.getString("name");
-        this.category = item.getString("category");
-        this.subcategory = item.getString("subcategory");
-        this.cost = item.getString("cost");
-        this.weight = item.getString("weight");
-        this.fullText = item.getString("full_text");
-        this.reference = item.getString("reference");
-    }
-
-    public String getId() {
-        return id;
-    }
-
+    //<editor-fold desc="Getters and Setters">
     public String getName() {
         return name;
     }
@@ -54,48 +35,28 @@ public class Item {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public String getSubcategory() {
-        return subcategory;
-    }
-
     public String getCost() {
         return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
     }
 
     public String getWeight() {
         return weight;
     }
 
-    public String getFullText() {
-        return fullText;
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public boolean isSpecial() {
-        return special;
-    }
-
-    public boolean isEquipped() {
-        return equipped;
-    }
-
-    public void setEquipped(boolean equipped) {
-        this.equipped = equipped;
-    }
-
-    public String getShortDescription(){
-        return "You should not be seeing this, it should be handled in subclasses (short description)";
-    }
+    //</editor-fold>
 
     @Override
-    public String toString() {
-        return "You should not be seeing this, it should be handled in subclasses (to string)";
+    public int compareTo(Object another) {
+        if(another instanceof Item){
+            return name.compareTo(((Item) another).getName());
+        }
+        return 0;
     }
 }
