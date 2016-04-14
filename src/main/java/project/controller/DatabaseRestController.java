@@ -410,12 +410,12 @@ public class DatabaseRestController {
             characters = new HashMap<>();
         }
 
-        ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
-        campaigns.add(characters);
+        ArrayList<HashMap<Integer, String>> campaignInfo = new ArrayList<>();
+        campaignInfo.add(characters);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.writeValueAsString(campaigns);
+            return mapper.writeValueAsString(campaignInfo);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";
