@@ -1,9 +1,12 @@
 package project.persistence.dbLookup;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 
 import java.sql.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -237,6 +240,7 @@ public class AccountStorage {
     }
 
     public int getCampaignID(String name) {
+        // TODO: Refactor all code to use campaignIDs by default
         OfflineResultSet rs = searchRaw("SELECT campaignID FROM Campaigns WHERE campaignName='"+name+"';");
         if (rs == null) return -1;
         rs.first();
@@ -274,6 +278,123 @@ public class AccountStorage {
 
     public int putInCampaign(int charID, int campID) {
         return updateRaw("UPDATE Characters SET campaignID='"+campID+"' WHERE characterID='"+charID+"';");
+    }
+
+    public JSONArray getPublicNotes(int campID) {
+        OfflineResultSet rs = searchRaw("SELECT publicNotes FROM Campaigns WHERE campaignID=\""+campID+"\";");
+
+        try {
+            rs.first();
+            return new JSONArray(rs.getString("publicNotes"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
+
+    public int addPublicNote(String note, int campID) {
+        JSONArray result = getPublicNotes(campID);
+        result.put(note);
+
+        int res = updateRaw("UPDATE Campaigns SET publicNotes='"+result+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public int removePublicNote(int index, int campID) {
+        JSONArray notesJSON = getPublicNotes(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET publicNotes='"+newNotes+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public JSONArray getPrivateNotes(int campID) {
+        OfflineResultSet rs = searchRaw("SELECT privateNotes FROM Campaigns WHERE campaignID=\""+campID+"\";");
+
+        try {
+            rs.first();
+            return new JSONArray(rs.getString("privateNotes"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
+
+    public int addPrivateNote(String note, int campID) {
+        JSONArray result = getPrivateNotes(campID);
+        result.put(note);
+
+        int res = updateRaw("UPDATE Campaigns SET privateNotes='"+result+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public int removePrivateNote(int index, int campID) {
+        JSONArray notesJSON = getPrivateNotes(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET privateNotes='"+newNotes+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public JSONArray getJournalEntries(int campID) {
+        OfflineResultSet rs = searchRaw("SELECT journalEntries FROM Campaigns WHERE campaignID=\""+campID+"\";");
+
+        try {
+            rs.first();
+            return new JSONArray(rs.getString("journalEntries"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
+
+    public int addJournalEntry(String note, int campID) {
+        JSONArray result = getJournalEntries(campID);
+        result.put(note);
+
+        int res = updateRaw("UPDATE Campaigns SET journalEntries='"+result+"' WHERE campaignID='"+campID+"';");
+
+        return res;
+    }
+
+    public int removeJournalEntry(int index, int campID) {
+        JSONArray notesJSON = getJournalEntries(campID);
+        JSONArray newNotes = new JSONArray();
+
+        for (int i=0; i<notesJSON.length(); i++) {
+            if (i != index) {
+                newNotes.put(notesJSON.getString(i));
+            }
+        }
+
+        int res = updateRaw("UPDATE Campaigns SET journalEntries='"+newNotes+"' WHERE campaignID='"+campID+"';");
+
+        return res;
     }
 
     // General search function, that query's the database with any select statement and gives back the resultset
@@ -333,9 +454,21 @@ public class AccountStorage {
         return res;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         AccountStorage find = new AccountStorage();
-        System.out.println(find.getCampaignPlayers("Lord of the Rings"));
+        String campaignName = "Lord of the Rings";
+
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> campaignInfo = new HashMap<>();
+        campaignInfo.put("Players", mapper.writeValueAsString(find.getCampaignPlayers(campaignName)));
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
+        try {
+            System.out.println(mapper.writeValueAsString(campaignInfo));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

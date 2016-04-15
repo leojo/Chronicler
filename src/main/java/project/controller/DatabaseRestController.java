@@ -449,12 +449,19 @@ public class DatabaseRestController {
             characters = new HashMap<>();
         }
 
-        ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
-        campaigns.add(characters);
-
         ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> campaignInfo = new HashMap<>();
         try {
-            return mapper.writeValueAsString(campaigns);
+            campaignInfo.put("Players", mapper.writeValueAsString(characters));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
+
+        try {
+            return mapper.writeValueAsString(campaignInfo);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";
