@@ -85,7 +85,7 @@ public class Lookup {
     }
 
     public OfflineResultSet advTable(String className){
-        String query= "select * from \"class_table\" WHERE name LIKE \""+className+"\"AND \"level\" < 21;";
+        String query= "select * from \"class_table\" WHERE name LIKE \""+className+"\" AND CAST(\"level\" AS INTEGER) < 21;";
         return searchRaw(query);
     }
 
