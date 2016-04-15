@@ -226,6 +226,45 @@ public class DatabaseRestController {
         }
     }
 
+    // A controller to get the advancement table for a specified class
+    @RequestMapping(value = "/classData", method = RequestMethod.GET)
+    public String classData(@RequestParam("s") String className){
+        Lookup find = new Lookup();
+        OfflineResultSet ors = find.advTable(className);
+        ArrayList<Integer> relevantColumns = new ArrayList<>();
+        for(int i=3; i<ors.colCount(); i++) {
+            ors.beforeFirst();
+            boolean isRelevant = false;
+            while (ors.next()) {
+                if(!ors.getString(i).equalsIgnoreCase("none")) isRelevant = true;
+            }
+            if(isRelevant) relevantColumns.add(i);
+        }
+
+        ArrayList<String> colNames = new ArrayList<>();
+        for(Integer colNum : relevantColumns){
+            colNames.add(ors.getColName(colNum));
+        }
+
+        ArrayList<ArrayList<String>> tableData = new ArrayList<>();
+        tableData.add(colNames);
+        ors.beforeFirst();
+        while (ors.next()){
+            ArrayList<String> row = new ArrayList<>();
+            for(Integer colNum : relevantColumns){
+                row.add(ors.getString(colNum));
+            }
+            tableData.add(row);
+        }
+
+        try {
+            return (new ObjectMapper()).writeValueAsString(tableData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
     // A controller to get a specific spell, searched by searchString s .
     @RequestMapping(value = "/spell", method = RequestMethod.GET)
     public String spell(@RequestParam("s") String searchString){
