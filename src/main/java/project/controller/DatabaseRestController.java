@@ -410,13 +410,17 @@ public class DatabaseRestController {
             characters = new HashMap<>();
         }
 
-        HashMap<String, Object> campaignInfo = new HashMap<>();
-        campaignInfo.put("Players", characters);
-        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)));
-        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)));
-        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)));
-
         ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> campaignInfo = new HashMap<>();
+        try {
+            campaignInfo.put("Players", mapper.writeValueAsString(find.getCampaignPlayers(campaignName)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
+
         try {
             return mapper.writeValueAsString(campaignInfo);
         } catch (JsonProcessingException e) {

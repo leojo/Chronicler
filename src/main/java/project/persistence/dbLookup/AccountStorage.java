@@ -1,5 +1,7 @@
 package project.persistence.dbLookup;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 
 import java.sql.*;
@@ -452,11 +454,21 @@ public class AccountStorage {
         return res;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         AccountStorage find = new AccountStorage();
-        System.out.println(find.getJournalEntries(7));
-        find.removeJournalEntry(0, 7);
-        System.out.println(find.getJournalEntries(7));
+        String campaignName = "Lord of the Rings";
+
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> campaignInfo = new HashMap<>();
+        campaignInfo.put("Players", mapper.writeValueAsString(find.getCampaignPlayers(campaignName)));
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
+        try {
+            System.out.println(mapper.writeValueAsString(campaignInfo));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }
