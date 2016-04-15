@@ -2,6 +2,7 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.util.Pair;
 import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -242,6 +243,9 @@ public class DatabaseRestController {
         //</editor-fold>
 
         Lookup find = new Lookup();
+        String HD = find.classHitDie(className)+"";
+
+
         OfflineResultSet ors = find.advTable(className);
         ArrayList<String> relevantColumns = new ArrayList<>();
         for(int i=3; i<ors.colCount(); i++) {
@@ -263,6 +267,7 @@ public class DatabaseRestController {
         for(int i=0; i<relevantColumns.size(); i++){
             header.put(relevantColumns.get(i),properColNames.get(i));
         }
+        header.put("hit_die",HD);
         tableData.add(header);
         ors.beforeFirst();
         while (ors.next()){
