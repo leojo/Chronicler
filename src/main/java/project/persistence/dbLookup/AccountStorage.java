@@ -177,10 +177,10 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, '"+charName+"');",json);
+        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) OUTPUT Inserted.characterID VALUES('"+userID+"',?, '"+charName+"');",json);
 
     }
-
+/*
     public int findCharId(String userID, String json, String charName) {
         OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\";");
         if (rs == null) {
@@ -190,7 +190,7 @@ public class AccountStorage {
             return rs.getInt("characterID");
         }
     }
-
+*/
     public OfflineResultSet getInviteList(String user) {
         return searchRaw("SELECT * FROM users WHERE UserID=\""+user+"\";");
     }
