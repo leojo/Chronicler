@@ -54,7 +54,7 @@ public class DatabaseRestController {
 
     // Login post request, sends username and password -> Should hash password before sending over http.
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
+    public Response androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
@@ -66,15 +66,15 @@ public class DatabaseRestController {
             // We might want to make the cookie live longer?
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
-            return new Echo("Login", "Successful",username);
+            return new Response("success", "");
         } else {
-            return new Echo("Failure", username);
+            return new Response("failure", "This user does not exist. Would you like to register?");
         }
     }
 
     // TODO: Finish implementing the register controller
     @RequestMapping(value = "/androidRegister", method = RequestMethod.POST)
-    public Echo androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
+    public Response androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
         Login login = new Login();
         if(find.searchUser(user.getUserID()) == null) {
@@ -85,9 +85,9 @@ public class DatabaseRestController {
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
-            return new Echo("Register", "Successful",username);
+            return new Response("success", "Registered user "+user);
         } else {
-            return new Echo("Register", "Failure", "A user with that name already exists", username);
+            return new Response("failure", "Failed to register user.");
         }
     }
 
@@ -521,9 +521,22 @@ public class DatabaseRestController {
 
     // Generic object to 'echo' out as JSON, just for testing purposes
     public class Echo{
-        public String[] input;
+        public String[] message;
         public Echo(String... strings){
-            this.input = strings;
+            this.message = strings;
+        }
+    }
+
+    // Generic object to 'echo' out as JSON, for example
+    // {"code": "success", "message":""}
+    // or instead
+    // {"code": "failure", "Username and password don't match"}
+    public class Response {
+        private String code = "";
+        public String message = "";
+        public Response(String c, String m){
+            this.code = c;
+            this.message = m;
         }
     }
 }
