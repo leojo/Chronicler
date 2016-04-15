@@ -124,14 +124,15 @@ public class DatabaseRestController {
 
     // Deletes a character
     @RequestMapping(value = "/deleteChar", method = RequestMethod.GET)
-    public int deleteCharacter(HttpServletRequest req, @RequestParam("charID") int charID) {
+    public Response deleteCharacter(HttpServletRequest req, @RequestParam("charID") int charID) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return 0;
+        if(userID == null) return new Response("failure", "User needs to login");
 
         if(!find.searchCharacter(charID, userID).equals("{empty}"))
-            return find.deleteCharacter(charID);
+            if(find.deleteCharacter(charID) == 1) return new Response("success", "character deleted");
+            else return new Response("failure", "Failed to execute SQL delete statement");
 
-        return 0;
+        return new Response("failure", "No such character");
     }
 
     // Stores the character JSON sent with the request in the AccountStorage database, characters table,
