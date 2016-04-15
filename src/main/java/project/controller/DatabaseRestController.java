@@ -128,9 +128,10 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return 0;
 
-        int res = find.deleteCharacter(charID);
+        if(!find.searchCharacter(charID, userID).equals("{empty}"))
+            return find.deleteCharacter(charID);
 
-        return res;
+        return 0;
     }
 
     // Stores the character JSON sent with the request in the AccountStorage database, characters table,
