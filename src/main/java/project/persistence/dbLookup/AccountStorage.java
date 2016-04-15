@@ -182,7 +182,7 @@ public class AccountStorage {
     }
 
     public int findCharId(String userID, String json, String charName) {
-        OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\" AND characterJSON=?;",json);
+        OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\";");
         if (rs == null) {
             return -1;
         } else {
