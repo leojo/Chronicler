@@ -229,30 +229,46 @@ public class DatabaseRestController {
     // A controller to get the advancement table for a specified class
     @RequestMapping(value = "/classData", method = RequestMethod.GET)
     public String classData(@RequestParam("s") String className){
+        HashMap<String,String> colNameReplace = new HashMap<>();
+
+        //<editor-fold desc="Populate Replacements">
+        String[] original = {"level","base_attack_bonus","fort_save","ref_save","will_save","caster_level","points_per_day","ac_bonus","flurry_of_blows","bonus_spells","powers_known","unarmored_speed_bonus","unarmed_damage","power_level","special","slots_0","slots_1","slots_2","slots_3","slots_4","slots_5","slots_6","slots_7","slots_8","slots_9","spells_known_0","spells_known_1","spells_known_2","spells_known_3","spells_known_4","spells_known_5","spells_known_6","spells_known_7","spells_known_8","spells_known_9"};
+        String[] replacement = {"Level","Base Attack Bonus","Fortitude Save","Reflex Save","Will Save","Caster Level","Power Points per Day","AC Bonus","Flurry of Blows Attack Bonus","Bonus Spells","Powers Known","Unarmored Speed Bonus","Unarmed Damage","Maximum Power Level Known","Special","Spells per Day 0","Spells per Day 1st","Spells per Day 2nd","Spells per Day 3rd","Spells per Day 4th","Spells per Day 5th","Spells per Day 6th","Spells per Day 7th","Spells per Day 8th","Spells per Day 9th","Spells Known 0","Spells Known 1st","Spells Known 2nd","Spells Known 3rd","Spells Known 4th","Spells Known 5th","Spells Known 6th","Spells Known 7th","Spells Known 8th","Spells Known 9th"};
+        for (int i = 0; i < original.length; i++) {
+            colNameReplace.put(original[i],replacement[i]);
+        }
+        //</editor-fold>
+
         Lookup find = new Lookup();
         OfflineResultSet ors = find.advTable(className);
-        ArrayList<Integer> relevantColumns = new ArrayList<>();
+        ArrayList<String> relevantColumns = new ArrayList<>();
         for(int i=3; i<ors.colCount(); i++) {
             ors.beforeFirst();
             boolean isRelevant = false;
             while (ors.next()) {
                 if(!ors.getString(i).equalsIgnoreCase("none")) isRelevant = true;
             }
-            if(isRelevant) relevantColumns.add(i);
+            if(isRelevant) relevantColumns.add(ors.getColName(i));
         }
 
-        ArrayList<String> colNames = new ArrayList<>();
-        for(Integer colNum : relevantColumns){
-            colNames.add(ors.getColName(colNum));
+        ArrayList<String> properColNames = new ArrayList<>();
+        for(String colName : relevantColumns){
+            properColNames.add(colNameReplace.get(colName));
         }
 
-        ArrayList<ArrayList<String>> tableData = new ArrayList<>();
-        tableData.add(colNames);
+        ArrayList<HashMap<String,String>> tableData = new ArrayList<>();
+        HashMap<String,String> header = new HashMap<>();
+        for(int i=0; i<relevantColumns.size(); i++){
+            header.put(relevantColumns.get(i),properColNames.get(i));
+        }
+        tableData.add(header);
         ors.beforeFirst();
         while (ors.next()){
-            ArrayList<String> row = new ArrayList<>();
-            for(Integer colNum : relevantColumns){
-                row.add(ors.getString(colNum));
+            HashMap<String,String> row = new HashMap<>();
+            for(String colName : relevantColumns){
+                String val = ors.getString(colName);
+                val = val.equalsIgnoreCase("none")?"-":val;
+                row.put(colName,val);
             }
             tableData.add(row);
         }
