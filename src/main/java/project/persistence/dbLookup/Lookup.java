@@ -84,6 +84,11 @@ public class Lookup {
         return searchRaw(query);
     }
 
+    public OfflineResultSet advTable(String className){
+        String query= "select * from \"class_table\" WHERE name LIKE \""+className+"\"AND \"level\" < 21;";
+        return searchRaw(query);
+    }
+
     public OfflineResultSet skill(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
         String[] field = {"id","name","full_text","skill_check","action","special","synergy","untrained"};

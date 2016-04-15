@@ -15,11 +15,12 @@ import java.util.*;
  */
 public class OfflineResultSet {
     private List<HashMap<String,Object>> resultSet;
-    private HashMap<Integer,String> colNum;
+    private HashMap<Integer,String> colName;
+    private int colCount;
     private int currentIndex;
 
     public OfflineResultSet(ResultSet rs){
-        this.colNum = getColumnNumbers(rs);
+        this.colName = getColumnNumbers(rs);
         this.resultSet = resultSetToArrayList(rs);
         this.currentIndex = -1;
     }
@@ -27,7 +28,7 @@ public class OfflineResultSet {
     private HashMap<Integer,String> getColumnNumbers (ResultSet rs){
         try {
             ResultSetMetaData md = rs.getMetaData();
-            int colCount = md.getColumnCount();
+            colCount = md.getColumnCount();
             HashMap<Integer,String> colNum = new HashMap<Integer,String>();
             for(int i=1; i<=colCount; i++){
                 colNum.put(i,md.getColumnName(i));
@@ -82,10 +83,17 @@ public class OfflineResultSet {
 
     }
 
-    public int size(){
-        return this.resultSet.size();
+    public int lineCount(){
+        return resultSet.size();
     }
 
+    public int colCount(){
+        return colCount;
+    }
+
+    public String getColName(int i){
+        return colName.get(i);
+    }
     //Cursor movements
 
     public boolean next(){
@@ -117,7 +125,7 @@ public class OfflineResultSet {
     // get's
 
     public Integer getInt(int index){
-        String key = colNum.get(index);
+        String key = colName.get(index);
         return getInt(key);
     }
 
@@ -133,7 +141,7 @@ public class OfflineResultSet {
     }
 
     public Double getDouble(int index){
-        String key = colNum.get(index);
+        String key = colName.get(index);
         return getDouble(key);
     }
 
@@ -147,7 +155,7 @@ public class OfflineResultSet {
     }
 
     public Boolean getBoolean(int index){
-        String key = colNum.get(index);
+        String key = colName.get(index);
         return getBoolean(key);
     }
 
@@ -156,7 +164,7 @@ public class OfflineResultSet {
     }
 
     public String getString(int index){
-        String key = colNum.get(index);
+        String key = colName.get(index);
         return getString(key);
     }
 
@@ -166,7 +174,7 @@ public class OfflineResultSet {
     }
 
     public Object getObject(int index){
-        String key = colNum.get(index);
+        String key = colName.get(index);
         return getObject(key);
     }
 
@@ -179,6 +187,6 @@ public class OfflineResultSet {
     public void append(OfflineResultSet another){
         if(another == null) return;
         this.resultSet.addAll(another.resultSet);
-        this.colNum.putAll(another.colNum);
+        this.colName.putAll(another.colName);
     }
 }
