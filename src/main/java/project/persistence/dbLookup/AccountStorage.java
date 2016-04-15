@@ -182,7 +182,7 @@ public class AccountStorage {
     }
 
     public int findCharId(String userID, String json, String charName) {
-        OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID LIKE \""+userID+"\" AND characterName LIKE \""+charName+"\" AND characterJSON LIKE \""+json+"\");");
+        OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\" AND characterJSON=?);",json);
         if (rs == null) {
             return -1;
         } else {
@@ -412,6 +412,29 @@ public class AccountStorage {
         try{
             Connection c = connect(this.URL);
             Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.next()){
+                rs.close();
+                c.close();
+                return null; // return null if the ResultSet is empty
+            }
+            OfflineResultSet ors = new OfflineResultSet(rs);
+            rs.close();
+            c.close();
+            return ors;
+        } catch (Exception e) {
+            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // General search function, that query's the database with any select statement and gives back the resultset
+    public OfflineResultSet searchRaw(String query, String JSON){
+        try{
+            Connection c = connect(this.URL);
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1,JSON);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.next()){
                 rs.close();
