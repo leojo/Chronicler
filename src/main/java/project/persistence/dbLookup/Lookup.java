@@ -89,6 +89,13 @@ public class Lookup {
         return searchRaw(query);
     }
 
+    public int classHitDie(String className) {
+        String query="SELECT hit_die FROM \"class\" WHERE name LIKE \""+className+"\";";
+        OfflineResultSet ors = searchRaw(query);
+        ors.first();
+        return ors.getInt("hit_die");
+    }
+
     public OfflineResultSet skill(String searchTerm){
         // This is the order in which we want to search through the fields of the skills
         String[] field = {"id","name","full_text","skill_check","action","special","synergy","untrained"};
