@@ -177,7 +177,7 @@ public class DatabaseRestController {
             // Store the character information in the database:
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
-            if(res == 1) return new Response("success", "character added");
+            if(res == 1) return new Response("success", ""+find.findCharId(userID, charJSON, character.getString("name")));
             else return new Response("failure", "Failed to execute SQL insert statement");
         } catch (ParseException e) {
             e.printStackTrace();

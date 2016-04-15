@@ -181,6 +181,16 @@ public class AccountStorage {
 
     }
 
+    public int findCharId(String userID, String json, String charName) {
+        OfflineResultSet rs = searchRaw("SELECT ID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\" AND characterJSON=\""+json+"\");");
+        if (rs == null) {
+            return -1;
+        } else {
+            rs.first();
+            return rs.getInt("ID");
+        }
+    }
+
     public OfflineResultSet getInviteList(String user) {
         return searchRaw("SELECT * FROM users WHERE UserID=\""+user+"\";");
     }
