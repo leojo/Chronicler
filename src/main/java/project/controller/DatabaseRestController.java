@@ -413,7 +413,7 @@ public class DatabaseRestController {
         ObjectMapper mapper = new ObjectMapper();
         HashMap<String, String> campaignInfo = new HashMap<>();
         try {
-            campaignInfo.put("Players", mapper.writeValueAsString(find.getCampaignPlayers(campaignName)));
+            campaignInfo.put("Players", mapper.writeValueAsString(characters));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
