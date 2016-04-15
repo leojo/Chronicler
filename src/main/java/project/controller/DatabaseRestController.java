@@ -588,7 +588,7 @@ public class DatabaseRestController {
     // or instead
     // {"code": "failure", "Username and password don't match"}
     public class Response {
-        private String code = "";
+        public String code = "";
         public String message = "";
         public Response(String c, String m){
             this.code = c;
