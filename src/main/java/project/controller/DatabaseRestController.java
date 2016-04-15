@@ -142,9 +142,9 @@ public class DatabaseRestController {
     // Will only respond to a request with a cookie that matches a cookie for some user
     // in the database.
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
-    public String storeChar(HttpServletRequest req){
+    public Response storeChar(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";
+        if(userID == null) return new Response("failure", "User needs to login");
 
         // A string builder and buffered reader is needed to read the
         // long input stream from the request and make a JSON string from it.
@@ -177,10 +177,11 @@ public class DatabaseRestController {
             // Store the character information in the database:
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
-            return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON.substring(0,100)+"...";
+            if(res == 1) return new Response("success", "character added");
+            else return new Response("failure", "Failed to execute SQL insert statement");
         } catch (ParseException e) {
             e.printStackTrace();
-            return "Received invalid JSON";
+            return new Response("failure", "Invalid JSON");
         }
     }
 
