@@ -16,4 +16,4 @@ gradle/
 
 # Databases #
 #############
-**data/
+data/*

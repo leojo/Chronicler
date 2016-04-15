@@ -2,8 +2,6 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.SimpleLog;
 import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +15,6 @@ import project.persistence.dbLookup.Lookup;
 import project.persistence.dbLookup.OfflineResultSet;
 import project.persistence.dbRestUtils.*;
 import project.persistence.enums.AbilityID;
-import project.persistence.enums.ArmorType;
 import project.persistence.feat.Feat;
 import project.persistence.spell.Spell;
 
@@ -277,7 +274,7 @@ public class DatabaseRestController {
     // A controller to get a specific item, searched by searchString s
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     public String item(@RequestParam("s") String searchString){
-        HashMap<String,ArrayList<Item>> items = new HashMap<>();
+        ArrayList<Item> items = new ArrayList<>();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.mundaneItem(searchString);
         if(ors == null){
@@ -286,7 +283,7 @@ public class DatabaseRestController {
         ors.beforeFirst();
         while(ors.next()){
             Item item;
-            String name, category;
+            String name;
             name = ors.getString("name");
             String family = ors.getString("family");
             // Categorize items to : weapons, armor/shields and mundane items
@@ -304,7 +301,6 @@ public class DatabaseRestController {
                         System.err.println("unable to parse a number from string :\""+rawName.replaceAll("[^\\d.]", "")+"\"");
                     }
                     projectile.setQuantity(quantity);
-                    category = "projectile";
                     item = projectile;
                 } else {
                     Weapon weapon = new Weapon();
@@ -328,7 +324,6 @@ public class DatabaseRestController {
                     // General Equipment stuff
                     weapon.setDescription(ors.getString("full_text"));
 
-                    category = "weapon";
                     item = weapon;
                 }
             }
@@ -341,12 +336,11 @@ public class DatabaseRestController {
                 armorShield.setArmorCheckPen(ors.getString("armor_check_penalty"));
                 armorShield.setSpeed30(ors.getString("speed_30"));
                 armorShield.setSpeed20(ors.getString("speed_20"));
-                armorShield.setType(ArmorType.valueOf(ors.getString("subcategory").split(" ")[0]));
+                armorShield.setType(ors.getString("subcategory").split(" ")[0]);
 
                 // General Equipment stuff
                 armorShield.setDescription(ors.getString("full_text"));
 
-                category = "armorShield";
                 item = armorShield;
             }
             else{
@@ -354,7 +348,6 @@ public class DatabaseRestController {
 
                 mundaneItem.setDescription(ors.getString("full_text"));
 
-                category = "mundaneItem";
                 item = mundaneItem;
             }
 
@@ -363,8 +356,7 @@ public class DatabaseRestController {
             item.setCost(ors.getString("cost"));
             item.setWeight(ors.getString("weight"));
 
-            if(!items.containsKey(category)) items.put(category,new ArrayList<>());
-            items.get(category).add(item);
+            items.add(item);
         }
 
         // TODO: implement this
@@ -418,12 +410,19 @@ public class DatabaseRestController {
             characters = new HashMap<>();
         }
 
-        ArrayList<HashMap<Integer, String>> campaigns = new ArrayList<>();
-        campaigns.add(characters);
-
         ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> campaignInfo = new HashMap<>();
         try {
-            return mapper.writeValueAsString(campaigns);
+            campaignInfo.put("Players", mapper.writeValueAsString(characters));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
+        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
+
+        try {
+            return mapper.writeValueAsString(campaignInfo);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";

@@ -1,8 +1,5 @@
 package project.persistence.dbRestUtils;
 
-
-import project.persistence.enums.ArmorType;
-
 /**
  * Created by leo on 23.2.2016.
  *
@@ -11,7 +8,7 @@ import project.persistence.enums.ArmorType;
 public class ArmorShield extends Equipment {
     private String ACbonus, maxDex, arcaneSpellFailure, armorCheckPen;
     private String speed20, speed30;
-    private ArmorType type;
+    private String type;
 
     //<editor-fold desc="Getters and Setters">
     public String getACbonus() {
@@ -62,11 +59,11 @@ public class ArmorShield extends Equipment {
         this.speed30 = speed30;
     }
 
-    public ArmorType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ArmorType type) {
+    public void setType(String type) {
         this.type = type;
     }
     //</editor-fold>
