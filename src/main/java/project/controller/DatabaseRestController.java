@@ -2,7 +2,6 @@ package project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.util.Pair;
 import org.json.JSONObject;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
