@@ -177,20 +177,10 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) OUTPUT Inserted.characterID VALUES('"+userID+"',?, '"+charName+"');",json);
+        return updateRawGetID("INSERT INTO Characters(userID, characterJSON, characterName) OUTPUT Inserted.characterID VALUES('" + userID + "',?, '" + charName + "');", json);
 
     }
-/*
-    public int findCharId(String userID, String json, String charName) {
-        OfflineResultSet rs = searchRaw("SELECT characterID FROM Characters WHERE userID=\""+userID+"\" AND characterName=\""+charName+"\";");
-        if (rs == null) {
-            return -1;
-        } else {
-            rs.first();
-            return rs.getInt("characterID");
-        }
-    }
-*/
+
     public OfflineResultSet getInviteList(String user) {
         return searchRaw("SELECT * FROM users WHERE UserID=\""+user+"\";");
     }
@@ -477,6 +467,30 @@ public class AccountStorage {
             PreparedStatement stmt = c.prepareStatement(query);
             stmt.setString(1,JSON);
             res = stmt.executeUpdate();
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch (Exception e) {
+            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    // General update function
+    public int updateRawGetID(String query, String JSON){
+        int res = 0;
+        try{
+            Connection c = connect(this.URL);
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1,JSON);
+            res = stmt.executeUpdate();
+            if(res==0) return res;
+            ResultSet rs = stmt.executeQuery("SELECT last_insert_rowid();");
+            if(rs.next()){
+                res = rs.getInt(1);
+            } else res = -1;
+            rs.close();
             stmt.close();
             c.commit();
             c.close();
