@@ -55,7 +55,9 @@ public class DatabaseRestController {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
-        if(login.evalLogin(user)) {
+        if(!login.userExists(user)) {
+            return new Response("nouser", "This user does not exist. Do you wish to register this user?");
+        }else if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             // If the database doesn't hold any cookie, update it:
             if(find.getUserCookie(user.getUserID()) == null) find.updateUserCookie(user.getUserID());
@@ -65,7 +67,7 @@ public class DatabaseRestController {
             response.addCookie(userCookie);
             return new Response("success", "");
         } else {
-            return new Response("failure", "This user does not exist. Would you like to register?");
+            return new Response("failure", "Wrong password");
         }
     }
 

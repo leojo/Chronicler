@@ -20,6 +20,11 @@ public class Login {
         this.find = new AccountStorage("data/userAccounts.sqlite");
     }
 
+    public boolean userExists(User userInfo) {
+        OfflineResultSet rs = find.searchUser(userInfo.getUserID());
+        return (rs != null);
+    }
+
     public boolean evalLogin(User userInfo){
         System.out.println("user ID:"+userInfo.getUserID());
         OfflineResultSet rs = find.searchUser(userInfo.getUserID());
