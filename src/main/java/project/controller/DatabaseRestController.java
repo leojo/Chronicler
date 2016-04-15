@@ -122,6 +122,17 @@ public class DatabaseRestController {
         return charJSON;
     }
 
+    // Deletes a character
+    @RequestMapping(value = "/deleteChar", method = RequestMethod.GET)
+    public int deleteCharacter(HttpServletRequest req, @RequestParam("charID") int charID) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return 0;
+
+        int res = find.deleteCharacter(charID);
+
+        return res;
+    }
+
     // Stores the character JSON sent with the request in the AccountStorage database, characters table,
     // so the character will have its' name and owner listed as well as the JSON string that
     // describes all aspects of the character. This JSON can be used by the android app to create a
@@ -170,6 +181,8 @@ public class DatabaseRestController {
             return "Received invalid JSON";
         }
     }
+
+
 
     // A Controller to request a table of all skills (their names, descriptions, etc)
     @RequestMapping(value = "/skillData", method = RequestMethod.GET)
