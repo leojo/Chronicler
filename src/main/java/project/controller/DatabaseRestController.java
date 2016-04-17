@@ -485,7 +485,7 @@ public class DatabaseRestController {
         if(userID == null) return "Please log in";
 
         int id = find.getCampaignID(campaignName);
-        int res = find.deleteCampaign(campaignName);
+        int res = find.deleteCampaign(id);
         return "DELETE returned result "+res+". Deleted campaign "+id+".";
     }
 
