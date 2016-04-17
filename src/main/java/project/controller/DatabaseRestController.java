@@ -484,8 +484,9 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.deleteCampaign(find.getCampaignID(campaignName));
-        return "DELETE returned result "+res;
+        int id = find.getCampaignID(campaignName);
+        int res = find.deleteCampaign(id);
+        return "DELETE returned result "+res+". Deleted campaign "+id+".";
     }
 
     @RequestMapping(value = "/leaveCampaign", method = RequestMethod.POST)
