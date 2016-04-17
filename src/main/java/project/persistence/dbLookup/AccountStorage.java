@@ -3,6 +3,7 @@ package project.persistence.dbLookup;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -358,24 +359,24 @@ public class AccountStorage {
         return res;
     }
 
-    public JSONArray getJournalEntries(int campID) {
+    public JSONObject getJournalEntries(int campID) {
         OfflineResultSet rs = searchRaw("SELECT journalEntries FROM Campaigns WHERE campaignID=\""+campID+"\";");
 
         try {
             rs.first();
-            return new JSONArray(rs.getString("journalEntries"));
+            return new JSONObject(rs.getString("journalEntries"));
         } catch (ParseException e) {
             e.printStackTrace();
-            return new JSONArray();
+            return new JSONObject();
         } catch (NullPointerException e) {
             e.printStackTrace();
-            return new JSONArray();
+            return new JSONObject();
         }
     }
 
-    public int addJournalEntry(String note, int campID) {
-        JSONArray result = getJournalEntries(campID);
-        result.put(note);
+    public int addJournalEntry(String title, String note, int campID) {
+        JSONObject result = getJournalEntries(campID);
+        result.put(title, note);
 
         int res = updateRaw("UPDATE Campaigns SET journalEntries='"+result+"' WHERE campaignID='"+campID+"';");
 
@@ -383,12 +384,13 @@ public class AccountStorage {
     }
 
     public int removeJournalEntry(int index, int campID) {
-        JSONArray notesJSON = getJournalEntries(campID);
-        JSONArray newNotes = new JSONArray();
+        JSONObject notesJSON = getJournalEntries(campID);
+        JSONObject newNotes = new JSONObject();
+        JSONArray noteNames = notesJSON.names();
 
-        for (int i=0; i<notesJSON.length(); i++) {
+        for (int i=0; i<noteNames.length(); i++) {
             if (i != index) {
-                newNotes.put(notesJSON.getString(i));
+                newNotes.put(noteNames.getString(i), notesJSON.get(noteNames.getString(i)));
             }
         }
 
@@ -458,17 +460,8 @@ public class AccountStorage {
         AccountStorage find = new AccountStorage();
         String campaignName = "Lord of the Rings";
 
-        ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, String> campaignInfo = new HashMap<>();
-        campaignInfo.put("Players", mapper.writeValueAsString(find.getCampaignPlayers(campaignName)));
-        campaignInfo.put("Public Notes", find.getPublicNotes(find.getCampaignID(campaignName)).toString());
-        campaignInfo.put("Private Notes", find.getPrivateNotes(find.getCampaignID(campaignName)).toString());
-        campaignInfo.put("Journal Entries", find.getJournalEntries(find.getCampaignID(campaignName)).toString());
-        try {
-            System.out.println(mapper.writeValueAsString(campaignInfo));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        find.removeJournalEntry(0, find.getCampaignID(campaignName));
+        System.out.println("Journal entry: "+find.getJournalEntries(find.getCampaignID(campaignName)));
     }
 
 }
