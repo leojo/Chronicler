@@ -142,7 +142,7 @@ public class DatabaseRestController {
     // Will only respond to a request with a cookie that matches a cookie for some user
     // in the database.
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
-    public Response storeChar(HttpServletRequest req){
+    public Response storeChar(HttpServletRequest req, @RequestParam("new") boolean newChar,@RequestParam("id") int charID){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return new Response("failure", "User needs to login");
 
@@ -175,8 +175,10 @@ public class DatabaseRestController {
 
             AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
             // Store the character information in the database:
-            int charID = storage.getNextID("Characters");
-            int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
+            if(newChar) charID = storage.getNextID("Characters");
+            int res;
+            if(newChar) res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
+            else res = storage.updateCharacterJSON(userID, charID, charJSON, character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
             if(res==1) return new Response("success", ""+charID);
             else return new Response("failure", "Failed to execute SQL insert statement");
