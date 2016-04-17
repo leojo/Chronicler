@@ -63,7 +63,7 @@ public class DatabaseRestController {
             if(find.getUserCookie(user.getUserID()) == null) find.updateUserCookie(user.getUserID());
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             // We might want to make the cookie live longer?
-            userCookie.setMaxAge(60*60);
+            userCookie.setMaxAge(7*24*60*60);
             response.addCookie(userCookie);
             return new Response("success", "");
         } else {
