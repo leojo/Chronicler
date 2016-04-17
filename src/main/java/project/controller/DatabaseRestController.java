@@ -481,9 +481,9 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/deleteCampaign", method = RequestMethod.POST)
     public String deleteCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
-        //String userID = userIdFromCookie(req.getHeader("Cookie"));
-        //if(userID == null) return "Please log in";
-        String userID = "andrea";
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
         int id = find.getCampaignID(campaignName);
         int res = find.deleteCampaign(id);
         return "DELETE for campaign name "+campaignName+" and campaign id "+id+" returned result "+res+".";
