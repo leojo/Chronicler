@@ -496,7 +496,7 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if (userID == null) return "Please log in";
 
-        int res = find.leaveCampaign(characterName, find.getCampaignID(campaignName));
+        int res = find.leaveCampaign(userID, find.getCampaignID(campaignName));
 
         return "DELETE return result "+res;
     }

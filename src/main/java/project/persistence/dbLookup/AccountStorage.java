@@ -240,8 +240,10 @@ public class AccountStorage {
         return insertIntoCampaign(character, campaignID);
     }
 
-    public int leaveCampaign(String character, int campaignID) {
-        return updateRaw("UPDATE Characters SET campaignID='"+campaignID+"' WHERE characterName='"+character+"';");
+    public int leaveCampaign(String userID, int campaignID) {
+        return updateRaw("UPDATE Characters SET campaignID=null " +
+                                 "WHERE userID='"+userID+"' " +
+                                 "AND campaignID='"+campaignID+";");
     }
 
     public int insertIntoCampaign(String character, int campaignID) {
