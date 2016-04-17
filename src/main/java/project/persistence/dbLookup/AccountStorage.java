@@ -296,9 +296,13 @@ public class AccountStorage {
         }
     }
 
-    public int addPublicNote(String note, int campID) {
+    public int addPublicNote(int index, String note, int campID) {
         JSONArray result = getPublicNotes(campID);
-        result.put(note);
+        if (index >= result.length()) {
+            result.put(note);
+        } else {
+            result.put(index, note);
+        }
 
         int res = updateRaw("UPDATE Campaigns SET publicNotes='"+result+"' WHERE campaignID='"+campID+"';");
 
@@ -335,9 +339,13 @@ public class AccountStorage {
         }
     }
 
-    public int addPrivateNote(String note, int campID) {
+    public int addPrivateNote(int index, String note, int campID) {
         JSONArray result = getPrivateNotes(campID);
-        result.put(note);
+        if (index >= result.length()) {
+            result.put(note);
+        } else {
+            result.put(index, note);
+        }
 
         int res = updateRaw("UPDATE Campaigns SET privateNotes='"+result+"' WHERE campaignID='"+campID+"';");
 

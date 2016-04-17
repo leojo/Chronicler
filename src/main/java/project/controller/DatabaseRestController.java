@@ -522,20 +522,26 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/savePublicNotes", method = RequestMethod.POST)
-    public String postPublicNote(@RequestParam("note") String note, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+    public String postPublicNote(@RequestParam("note") String note,
+                                 @RequestParam("campaign_name") String campaignName,
+                                 @RequestParam("index") int index,
+                                 HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.addPublicNote(note, find.getCampaignID("campaign_name"));
+        int res = find.addPublicNote(index, note, find.getCampaignID("campaign_name"));
         return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
     }
 
     @RequestMapping(value = "/savePrivateNotes", method = RequestMethod.POST)
-    public String postPrivateNote(@RequestParam("note") String note, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+    public String postPrivateNote(@RequestParam("note") String note,
+                                  @RequestParam("campaign_name") String campaignName,
+                                  @RequestParam("index") int index,
+                                  HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.addPrivateNote(note, find.getCampaignID("campaign_name"));
+        int res = find.addPrivateNote(index, note, find.getCampaignID("campaign_name"));
         return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
     }
 
