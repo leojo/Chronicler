@@ -421,6 +421,29 @@ public class AccountStorage {
         return null;
     }
 
+    // General search function, that query's the database with any select statement and gives back the resultset
+    public OfflineResultSet searchRaw(String query, String JSON){
+        try{
+            Connection c = connect(this.URL);
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1,JSON);
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.next()){
+                rs.close();
+                c.close();
+                return null; // return null if the ResultSet is empty
+            }
+            OfflineResultSet ors = new OfflineResultSet(rs);
+            rs.close();
+            c.close();
+            return ors;
+        } catch (Exception e) {
+            System.err.println("Error in searchClass: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // General update function
     public int updateRaw(String query){
         int res = 0;

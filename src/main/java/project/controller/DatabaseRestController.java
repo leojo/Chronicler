@@ -51,11 +51,13 @@ public class DatabaseRestController {
 
     // Login post request, sends username and password -> Should hash password before sending over http.
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Echo androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
+    public Response androidLoginPost(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session, HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
         model.addAttribute("user", user);
         Login login = new Login();
-        if(login.evalLogin(user)) {
+        if(!login.userExists(user)) {
+            return new Response("nouser", "This user does not exist. Do you wish to register this user?");
+        }else if(login.evalLogin(user)) {
             session.setAttribute("userId", user);
             // If the database doesn't hold any cookie, update it:
             if(find.getUserCookie(user.getUserID()) == null) find.updateUserCookie(user.getUserID());
@@ -63,15 +65,15 @@ public class DatabaseRestController {
             // We might want to make the cookie live longer?
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
-            return new Echo("Login", "Successful",username);
+            return new Response("success", "");
         } else {
-            return new Echo("Failure", username);
+            return new Response("failure", "Wrong password");
         }
     }
 
     // TODO: Finish implementing the register controller
     @RequestMapping(value = "/androidRegister", method = RequestMethod.POST)
-    public Echo androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
+    public Response androidRegisterPost(@RequestParam("username") String username, @RequestParam("password") String password,HttpServletResponse response) throws SQLException {
         User user = new User(username, password);
         Login login = new Login();
         if(find.searchUser(user.getUserID()) == null) {
@@ -82,9 +84,9 @@ public class DatabaseRestController {
             Cookie userCookie = new Cookie("user", find.getUserCookie(user.getUserID()));
             userCookie.setMaxAge(60*60);
             response.addCookie(userCookie);
-            return new Echo("Register", "Successful",username);
+            return new Response("success", "Registered user "+user);
         } else {
-            return new Echo("Register", "Failure", "A user with that name already exists", username);
+            return new Response("failure", "Failed to register user.");
         }
     }
 
@@ -120,6 +122,19 @@ public class DatabaseRestController {
         return charJSON;
     }
 
+    // Deletes a character
+    @RequestMapping(value = "/deleteChar", method = RequestMethod.GET)
+    public Response deleteCharacter(HttpServletRequest req, @RequestParam("charID") int charID) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return new Response("failure", "User needs to login");
+
+        if(!find.searchCharacter(charID, userID).equals("{empty}"))
+            if(find.deleteCharacter(charID) == 1) return new Response("success", "character deleted");
+            else return new Response("failure", "Failed to execute SQL delete statement");
+
+        return new Response("failure", "No such character");
+    }
+
     // Stores the character JSON sent with the request in the AccountStorage database, characters table,
     // so the character will have its' name and owner listed as well as the JSON string that
     // describes all aspects of the character. This JSON can be used by the android app to create a
@@ -127,9 +142,9 @@ public class DatabaseRestController {
     // Will only respond to a request with a cookie that matches a cookie for some user
     // in the database.
     @RequestMapping(value = "/storeChar", method = RequestMethod.POST)
-    public String storeChar(HttpServletRequest req){
+    public Response storeChar(HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";
+        if(userID == null) return new Response("failure", "User needs to login");
 
         // A string builder and buffered reader is needed to read the
         // long input stream from the request and make a JSON string from it.
@@ -160,14 +175,18 @@ public class DatabaseRestController {
 
             AccountStorage storage = new AccountStorage("data/userAccounts.sqlite");
             // Store the character information in the database:
+            int charID = storage.getNextID("Characters");
             int res = storage.addCharacterJSON(userID,charJSON,character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
-            return "Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON.substring(0,100)+"...";
+            if(res==1) return new Response("success", ""+charID);
+            else return new Response("failure", "Failed to execute SQL insert statement");
         } catch (ParseException e) {
             e.printStackTrace();
-            return "Received invalid JSON";
+            return new Response("failure", "Invalid JSON");
         }
     }
+
+
 
     // A Controller to request a table of all skills (their names, descriptions, etc)
     @RequestMapping(value = "/skillData", method = RequestMethod.GET)
@@ -220,6 +239,65 @@ public class DatabaseRestController {
         ArrayList<String> classes = find.listClasses();
         try {
             return (new ObjectMapper()).writeValueAsString(classes);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    // A controller to get the advancement table for a specified class
+    @RequestMapping(value = "/classData", method = RequestMethod.GET)
+    public String classData(@RequestParam("s") String className){
+        HashMap<String,String> colNameReplace = new HashMap<>();
+
+        //<editor-fold desc="Populate Replacements">
+        String[] original = {"level","base_attack_bonus","fort_save","ref_save","will_save","caster_level","points_per_day","ac_bonus","flurry_of_blows","bonus_spells","powers_known","unarmored_speed_bonus","unarmed_damage","power_level","special","slots_0","slots_1","slots_2","slots_3","slots_4","slots_5","slots_6","slots_7","slots_8","slots_9","spells_known_0","spells_known_1","spells_known_2","spells_known_3","spells_known_4","spells_known_5","spells_known_6","spells_known_7","spells_known_8","spells_known_9"};
+        String[] replacement = {"Level","Base Attack Bonus","Fortitude Save","Reflex Save","Will Save","Caster Level","Power Points per Day","AC Bonus","Flurry of Blows Attack Bonus","Bonus Spells","Powers Known","Unarmored Speed Bonus","Unarmed Damage","Maximum Power Level Known","Special","Spells per Day 0","Spells per Day 1st","Spells per Day 2nd","Spells per Day 3rd","Spells per Day 4th","Spells per Day 5th","Spells per Day 6th","Spells per Day 7th","Spells per Day 8th","Spells per Day 9th","Spells Known 0","Spells Known 1st","Spells Known 2nd","Spells Known 3rd","Spells Known 4th","Spells Known 5th","Spells Known 6th","Spells Known 7th","Spells Known 8th","Spells Known 9th"};
+        for (int i = 0; i < original.length; i++) {
+            colNameReplace.put(original[i],replacement[i]);
+        }
+        //</editor-fold>
+
+        Lookup find = new Lookup();
+        String HD = find.classHitDie(className)+"";
+
+
+        OfflineResultSet ors = find.advTable(className);
+        ArrayList<String> relevantColumns = new ArrayList<>();
+        for(int i=3; i<ors.colCount(); i++) {
+            ors.beforeFirst();
+            boolean isRelevant = false;
+            while (ors.next()) {
+                if(!ors.getString(i).equalsIgnoreCase("none")) isRelevant = true;
+            }
+            if(isRelevant) relevantColumns.add(ors.getColName(i));
+        }
+
+        ArrayList<String> properColNames = new ArrayList<>();
+        for(String colName : relevantColumns){
+            properColNames.add(colNameReplace.get(colName));
+        }
+
+        ArrayList<HashMap<String,String>> tableData = new ArrayList<>();
+        HashMap<String,String> header = new HashMap<>();
+        for(int i=0; i<relevantColumns.size(); i++){
+            header.put(relevantColumns.get(i),properColNames.get(i));
+        }
+        header.put("hit_die",HD);
+        tableData.add(header);
+        ors.beforeFirst();
+        while (ors.next()){
+            HashMap<String,String> row = new HashMap<>();
+            for(String colName : relevantColumns){
+                String val = ors.getString(colName);
+                val = val.equalsIgnoreCase("none")?"-":val;
+                row.put(colName,val);
+            }
+            tableData.add(row);
+        }
+
+        try {
+            return (new ObjectMapper()).writeValueAsString(tableData);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return e.getMessage();
@@ -577,9 +655,22 @@ public class DatabaseRestController {
 
     // Generic object to 'echo' out as JSON, just for testing purposes
     public class Echo{
-        public String[] input;
+        public String[] message;
         public Echo(String... strings){
-            this.input = strings;
+            this.message = strings;
+        }
+    }
+
+    // Generic object to 'echo' out as JSON, for example
+    // {"code": "success", "message":""}
+    // or instead
+    // {"code": "failure", "Username and password don't match"}
+    public class Response {
+        public String code = "";
+        public String message = "";
+        public Response(String c, String m){
+            this.code = c;
+            this.message = m;
         }
     }
 }
