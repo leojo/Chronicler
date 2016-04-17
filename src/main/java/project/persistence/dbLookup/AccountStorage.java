@@ -491,7 +491,6 @@ public class AccountStorage {
         AccountStorage find = new AccountStorage();
         String campaignName = "Lord of the Rings";
 
-        find.removeJournalEntry(0, find.getCampaignID(campaignName));
         System.out.println("Journal entry: "+find.getJournalEntries(find.getCampaignID(campaignName)));
     }
 

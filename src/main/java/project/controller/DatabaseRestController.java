@@ -529,7 +529,7 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.addPublicNote(index, note, find.getCampaignID("campaign_name"));
+        int res = find.addPublicNote(index, note, find.getCampaignID(campaignName));
         return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
     }
 
@@ -541,7 +541,7 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.addPrivateNote(index, note, find.getCampaignID("campaign_name"));
+        int res = find.addPrivateNote(index, note, find.getCampaignID(campaignName));
         return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
     }
 
@@ -553,7 +553,7 @@ public class DatabaseRestController {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if(userID == null) return "Please log in";
 
-        int res = find.addJournalEntry(title, entry, find.getCampaignID("campaign_name"));
+        int res = find.addJournalEntry(title, entry, find.getCampaignID(campaignName));
         return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
     }
 
