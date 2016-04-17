@@ -106,6 +106,10 @@ public class AccountStorage {
         return updateRaw("DELETE FROM Characters WHERE characterID="+ID+";");
     }
 
+    public int deleteCampaign(String name) {
+        return updateRaw("DELETE FROM Campaigns WHERE campaignName="+name+";");
+    }
+
 
 
     public OfflineResultSet searchUser(String userID) {
