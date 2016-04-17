@@ -481,12 +481,12 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/deleteCampaign", method = RequestMethod.POST)
     public String deleteCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
-        String userID = userIdFromCookie(req.getHeader("Cookie"));
-        if(userID == null) return "Please log in";
-
+        //String userID = userIdFromCookie(req.getHeader("Cookie"));
+        //if(userID == null) return "Please log in";
+        String userID = "andrea";
         int id = find.getCampaignID(campaignName);
         int res = find.deleteCampaign(id);
-        return "DELETE returned result "+res+". Deleted campaign "+id+".";
+        return "DELETE for campaign name "+campaignName+" and campaign id "+id+" returned result "+res+".";
     }
 
     @RequestMapping(value = "/leaveCampaign", method = RequestMethod.POST)
