@@ -521,6 +521,63 @@ public class DatabaseRestController {
         return  "Return message from updateRaw is "+res + " after adding "+campaignName+" for user "+userID+" (with  no JSON) ";
     }
 
+    @RequestMapping(value = "/savePublicNotes", method = RequestMethod.POST)
+    public String postPublicNote(@RequestParam("note") String note, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.addPublicNote(note, find.getCampaignID("campaign_name"));
+        return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
+    }
+
+    @RequestMapping(value = "/savePrivateNotes", method = RequestMethod.POST)
+    public String postPrivateNote(@RequestParam("note") String note, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.addPrivateNote(note, find.getCampaignID("campaign_name"));
+        return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
+    }
+
+    @RequestMapping(value = "/saveJournalEntry", method = RequestMethod.POST)
+    public String postPrivateNote(@RequestParam("title") String title,
+                                  @RequestParam("entry") String entry,
+                                  @RequestParam("campaign_name") String campaignName,
+                                  HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.addJournalEntry(title, entry, find.getCampaignID("campaign_name"));
+        return  "Return message from updateRaw is "+res + " after adding note to campaign "+campaignName+" (with  no JSON) ";
+    }
+
+    @RequestMapping(value = "/deletePublicNote", method = RequestMethod.POST)
+    public String deletePublicNote(@RequestParam("index") int index, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.removePublicNote(index, find.getCampaignID(campaignName));
+        return  "Return message from updateRaw is "+res + " after removing note from campaign "+campaignName+" (with  no JSON) ";
+    }
+
+    @RequestMapping(value = "/deletePrivateNote", method = RequestMethod.POST)
+    public String deletePrivateNote(@RequestParam("index") int index, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.removePrivateNote(index, find.getCampaignID(campaignName));
+        return  "Return message from updateRaw is "+res + " after removing note from campaign "+campaignName+" (with  no JSON) ";
+    }
+
+    @RequestMapping(value = "/deleteJournalEntry", method = RequestMethod.POST)
+    public String deleteJournalEntry(@RequestParam("index") int index, @RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.removeJournalEntry(index, find.getCampaignID(campaignName));
+        return  "Return message from updateRaw is "+res + " after removing note from campaign "+campaignName+" (with  no JSON) ";
+    }
+
     @RequestMapping(value = "/respondToInvite", method = RequestMethod.POST)
     public String respondToInvite(@RequestParam("CampaignIndex") Integer index,
                                   @RequestParam(value = "Character", required = false) String character,
