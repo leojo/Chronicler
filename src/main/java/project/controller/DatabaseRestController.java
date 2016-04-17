@@ -479,12 +479,32 @@ public class DatabaseRestController {
         }
     }
 
-    // Gets a list of all campaigns for a user.
-    // Will only respond to a request with a cookie that matches a cookie for some user
-    // in the database.
+    @RequestMapping(value = "/deleteCampaign", method = RequestMethod.POST)
+    public String deleteCampaign(@RequestParam("campaign_name") String campaignName, HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
+        int res = find.deleteCampaign(find.getCampaignID(campaignName));
+        return "DELETE returned result "+res;
+    }
+
+    @RequestMapping(value = "/leaveCampaign", method = RequestMethod.POST)
+    public String leaveCampaign(@RequestParam("campaign_name") String campaignName,
+                                @RequestParam("character_name") String characterName,
+                                HttpServletRequest req) {
+        String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if (userID == null) return "Please log in";
+
+        int res = find.leaveCampaign(characterName, find.getCampaignID(campaignName));
+
+        return "DELETE return result "+res;
+    }
+
     @RequestMapping(value = "/campaignDetails", method = RequestMethod.GET)
     public String getCampaignDetails(@RequestParam("campaign_name") String campaignName, HttpServletRequest req){
         String userID = userIdFromCookie(req.getHeader("Cookie"));
+        if(userID == null) return "Please log in";
+
         HashMap<Integer, String> characters = find.getCampaignPlayers(campaignName);
         if (characters == null) {
             characters = new HashMap<>();
@@ -546,7 +566,7 @@ public class DatabaseRestController {
     }
 
     @RequestMapping(value = "/saveJournalEntry", method = RequestMethod.POST)
-    public String postPrivateNote(@RequestParam("title") String title,
+    public String postJournalEntry(@RequestParam("title") String title,
                                   @RequestParam("entry") String entry,
                                   @RequestParam("campaign_name") String campaignName,
                                   HttpServletRequest req) {
