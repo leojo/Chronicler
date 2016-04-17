@@ -491,7 +491,6 @@ public class DatabaseRestController {
 
     @RequestMapping(value = "/leaveCampaign", method = RequestMethod.POST)
     public String leaveCampaign(@RequestParam("campaign_name") String campaignName,
-                                @RequestParam("character_name") String characterName,
                                 HttpServletRequest req) {
         String userID = userIdFromCookie(req.getHeader("Cookie"));
         if (userID == null) return "Please log in";
