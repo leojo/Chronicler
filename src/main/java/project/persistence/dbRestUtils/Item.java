@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Abstract class for a single item. Each item should belong to one of the item subcategories,
  * each with it's own class.
  */
-@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "ItemSubClass")
 @JsonSubTypes({
         @Type(value = Equipment.class),
         @Type(value = MundaneItem.class),

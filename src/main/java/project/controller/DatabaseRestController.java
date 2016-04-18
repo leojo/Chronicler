@@ -354,7 +354,7 @@ public class DatabaseRestController {
     // A controller to get a specific item, searched by searchString s
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     public String item(@RequestParam("s") String searchString){
-        ArrayList<Item> items = new ArrayList<>();
+        Inventory items = new Inventory();
         Lookup find = new Lookup();
         OfflineResultSet ors = find.mundaneItem(searchString);
         if(ors == null){
@@ -448,7 +448,8 @@ public class DatabaseRestController {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.writeValueAsString(items);
+            String JSON = mapper.writeValueAsString(items);
+            return JSON;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Error converting to JSON";
