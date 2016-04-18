@@ -151,7 +151,8 @@ public class AccountStorage {
 
     public String searchCharacter(int charID, String userID) {
         OfflineResultSet rs = null;
-        String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";
+        //String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\" AND UserID = \""+userID+"\";";
+        String query = "SELECT * FROM Characters WHERE characterID=\""+charID+"\";";
         rs = searchRaw(query);
         if(rs != null) {
             rs.first();
