@@ -481,14 +481,12 @@ public class AccountStorage {
     }
 
     // General update function
-    public int updateRaw(String query, String... parameters){
+    public int updateRaw(String query, String JSON){
         int res = 0;
         try{
             Connection c = connect(this.URL);
             PreparedStatement stmt = c.prepareStatement(query);
-            for (int i = 0; i < parameters.length; i++) {
-                stmt.setString(i,parameters[i]);
-            }
+            stmt.setString(1,JSON);
             res = stmt.executeUpdate();
             stmt.close();
             c.commit();
