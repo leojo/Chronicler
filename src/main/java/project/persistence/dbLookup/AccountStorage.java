@@ -163,7 +163,7 @@ public class AccountStorage {
 
 
     public int updateCharacterJSON(String userID, int charID, String json, String charName) {
-        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= '" + charName + "' WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json);
+        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= ? WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json, charName);
     }
 
     public HashMap<Integer, String> getCampaignPlayers(String campaignName) {
@@ -182,7 +182,7 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, '"+charName+"');",json);
+        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, ?);",json,charName);
 
     }
 
@@ -480,12 +480,14 @@ public class AccountStorage {
     }
 
     // General update function
-    public int updateRaw(String query, String JSON){
+    public int updateRaw(String query, String... parameters){
         int res = 0;
         try{
             Connection c = connect(this.URL);
             PreparedStatement stmt = c.prepareStatement(query);
-            stmt.setString(1,JSON);
+            for (int i = 0; i < parameters.length; i++) {
+                stmt.setString(i,parameters[i]);
+            }
             res = stmt.executeUpdate();
             stmt.close();
             c.commit();
