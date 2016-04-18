@@ -183,7 +183,7 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, \""+charName+"\");",json);
+        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, '"+charName+"');",json);
 
     }
 
