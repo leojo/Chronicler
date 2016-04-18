@@ -164,7 +164,7 @@ public class AccountStorage {
 
 
     public int updateCharacterJSON(String userID, int charID, String json, String charName) {
-        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= ? WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json, charName);
+        return updateRaw("UPDATE Characters SET characterJSON = ?, characterName= \""+charName+"\" WHERE characterID=\"" + charID + "\" AND UserID = \"" + userID + "\";",json);
     }
 
     public HashMap<Integer, String> getCampaignPlayers(String campaignName) {
@@ -183,7 +183,7 @@ public class AccountStorage {
     }
 
     public int addCharacterJSON(String userID, String json, String charName) {
-        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, ?);",json,charName);
+        return updateRaw("INSERT INTO Characters(userID, characterJSON, characterName) VALUES('"+userID+"',?, \""+charName+"\");",json);
 
     }
 
