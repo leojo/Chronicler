@@ -181,7 +181,7 @@ public class DatabaseRestController {
             else res = storage.updateCharacterJSON(userID, charID, charJSON, character.getString("name"));
             System.out.println("Return message from updateRaw is "+res + " after adding "+character.getString("name")+" for user "+userID+" with JSON "+charJSON);
             if(res==1) return new Response("success", ""+charID);
-            else return new Response("failure", "Failed to execute SQL insert statement");
+            else return new Response("failure", "Failed to execute SQL insert statement for charID "+charID);
         } catch (ParseException e) {
             e.printStackTrace();
             return new Response("failure", "Invalid JSON");
