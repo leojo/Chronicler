@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
  *
  * Abstract class for the shared properties of all equippable items.
  */
-@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type")
+@JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "EquipmentSubClass")
 @JsonSubTypes({
         @Type(value = ArmorShield.class),
         @Type(value = Weapon.class)
